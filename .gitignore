@@ -9,6 +9,10 @@ DungeonDepths/[Bb]uild/
 DungeonDepths/[Bb]uilds/
 DungeonDepths/[Ll]ogs/
 DungeonDepths/[Mm]emoryCaptures/
+DungeonDepths/[Uu]ser[Ss]ettings/
+
+# Recordings can get excessive in size
+DungeonDepths/[Rr]ecordings/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !DungeonDepths/[Aa]ssets/**/*.meta
@@ -54,6 +58,8 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.aab
+*.app
 
 # Crashlytics generated file
 crashlytics-build.properties
@@ -61,3 +67,10 @@ crashlytics-build.properties
 # Ignore EternalResources
 ExternalResources/*
 ExternalResources/**/*
+
+# Packed Addressables
+DungeonDepths/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android Assets
+DungeonDepths/[Aa]ssets/[Ss]treamingAssets/aa.meta
+DungeonDepths/[Aa]ssets/[Ss]treamingAssets/aa/*
