@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Potal : MonoBehaviour
+public class Portal : MonoBehaviour
 {
-    private static Potal instance = null;
+    private static Portal instance = null;
 
     [SerializeField]
      GameObject _player = null;
@@ -45,7 +45,7 @@ public class Potal : MonoBehaviour
 
 
 
-    public static Potal Instance
+    public static Portal Instance
     {
         get
         {
