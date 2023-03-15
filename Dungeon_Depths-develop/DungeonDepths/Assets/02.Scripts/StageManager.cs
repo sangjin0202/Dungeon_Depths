@@ -18,6 +18,8 @@ public class StageManager : MonoBehaviour
     public bool IsClear = false;
     [SerializeField]
     GameObject _player = null;
+    [SerializeField]
+    bool isAproPotal=false;// 포탈에 접근 했는지
 
     public static StageManager Instance
     {
@@ -34,28 +36,13 @@ public class StageManager : MonoBehaviour
 
 
 
-    public void MoveToStage()
-    {
-        BackToVillage();
-        switch (StageIdx)
-        {
-            case 0:
-                MoveToStage1();
-                break;
-            case 1:
-                MoveToStage2();
-                break;
-            case 2:
-                break;
-        }
-
-    }
+    
 
 
 
     public void clear()
     {
-        BackToVillage();
+       
         switch (StageIdx)
         {
             case 0:
@@ -69,23 +56,5 @@ public class StageManager : MonoBehaviour
         
     }
 
-    public void BackToVillage()
-    {
-        _player.transform.position = new Vector3(0, 0, 0);
-    }
-
-    public void MoveToStage1()
-    {
-        _player.transform.position = new Vector3(0, 0, 0);
-    }
-
-
-    public void MoveToStage2()
-    {
-        _player.transform.position = new Vector3(0, 0, 0);
-    }
-    public void MoveToStage3()
-    {
-        _player.transform.position = new Vector3(0, 0, 0);
-    }
+   
 }
