@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 박상진입니다 ^^ 메롱
 [System.Serializable]
 public class ObjectData // 나중에 리소스매니저나 폴더에서 가져오기
 {
@@ -11,16 +10,13 @@ public class ObjectData // 나중에 리소스매니저나 폴더에서 가져오기
     public int count;   // 미리만들어둘 오브젝트 수
     public Transform parent;    // 모아둘 오브젝트 부모설정
 }
-public class PoolManager : MonoBehaviour
+public class PoolManager : MonoSingleton<PoolManager>
 {
-    #region sigleton
-    public static PoolManager ins;
+    
     private void Awake()
     {
-        ins = this;
         Init();
     }
-    #endregion
 
     public List<ObjectData> objList = new List<ObjectData>();
     public bool willGrow = true; // 미리 생성한 오브젝트가 모자를경우 사용할 변수
