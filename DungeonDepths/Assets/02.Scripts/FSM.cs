@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public abstract class State<T> where T : class // T에 올 수 있는 타입은 class만 가능하도록
 {
@@ -18,13 +17,13 @@ public abstract class State<T> where T : class // T에 올 수 있는 타입은 class만 
     public abstract void Exit(T _entity);
 }
 
-
 public class StateMachine<T> where T : class
 {
-    T ownerEntity;          //StateMachine 소유주
+    T ownerEntity;    //StateMachine 소유주
     public Dictionary<int, State<T>> states = new Dictionary<int, State<T>>(); //Key값: 상태 enum형 | value값: 행동 함수들 구현된 상태 클래스
     State<T> previousState; 
     State<T> currentState;  
+
     public void InitState(T _owner, State<T> _entryState)   //첫 매개변수는 this
     {
         ownerEntity = _owner;
@@ -51,7 +50,6 @@ public class StateMachine<T> where T : class
         }
         else
         {
-            State<T> state = _state;
             states.Add(_enumState, _state);
         }
     }
@@ -80,6 +78,7 @@ public class StateMachine<T> where T : class
         currentState = _newState;
         currentState.Enter(ownerEntity);
     }
+
     public void RevertToPreviousState()
     {
         ChangeState(previousState);
