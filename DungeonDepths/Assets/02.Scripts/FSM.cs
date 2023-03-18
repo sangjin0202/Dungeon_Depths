@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Threading;
-using PlayerStates;
 
 public abstract class State<T> where T : class // T에 올 수 있는 타입은 class만 가능하도록
 {
