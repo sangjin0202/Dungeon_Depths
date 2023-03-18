@@ -99,8 +99,8 @@ public class PlayerBase : MonoBehaviour {
     float xRot, yRot;
 
     bool runKey, jumpKey, attackKey, dodgeKey, skillOneKey, skillTwoKey;
-    public bool AttackKey{
-        get{return attackKey ;}
+    public bool AttackKey {
+        get { return attackKey; }
     }
     public bool DodgeKey {
         get { return dodgeKey; }
@@ -128,10 +128,6 @@ public class PlayerBase : MonoBehaviour {
 
         skillOneKey = Input.GetButtonDown("Skill1");
         skillTwoKey = Input.GetButtonDown("Skill2");
-
-        if(hDir != 0 || vDir != 0 || runKey && jumpKey) {
-            
-        }
     }
 
     public void CharacterRotate() {
@@ -140,7 +136,7 @@ public class PlayerBase : MonoBehaviour {
 
     public void Move() {
         moveDir = new Vector3(hDir, 0f, vDir).normalized;
-        transform.position += moveDir * moveSpeed * ( runKey ? 2f : 1f) * Time.deltaTime;
+        transform.position += moveDir * moveSpeed * (runKey ? 2f : 1f) * Time.deltaTime;
     }
 
     public void Jump() {
@@ -181,4 +177,8 @@ interface ISkill {
 
 interface IDodge {
     public void Dodge();
+}
+
+interface IHit {
+    public void Hit();
 }

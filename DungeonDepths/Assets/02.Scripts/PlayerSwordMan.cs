@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSwordMan : PlayerBase , IAttack, ISkill, IDodge{
+public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge, IHit{
 
     //구본혁
     //TODO: 공격, 스킬, 방어(회피) 애니메이션 적용, 히트박스 적용
     Animator animator;
     void Awake()
     {
+        Debug.Log("시작");
         HpMax = 100f;
         HpCur = 100f;
         AttackPower = 5f;
@@ -34,23 +35,37 @@ public class PlayerSwordMan : PlayerBase , IAttack, ISkill, IDodge{
         Dodge();
     }
 
-    public void Attack() {
-        if (AttackKey) {
+    public void Attack() 
+    {
+        if (AttackKey) 
+        {
             Debug.Log("공격하기"); 
         }
     }
 
-    public void UseSkill() {
-        if (SkillOneKey) {
+    public void UseSkill()
+    {
+        if (SkillOneKey) 
+        {
             Debug.Log("스킬1 쓰기");
-        }else if (SkillTwoKey) {
+        }
+        else if (SkillTwoKey) 
+        {
             Debug.Log("스킬2 쓰기");
         }
     }
 
-    public void Dodge() {
-        if (DodgeKey) {
+    public void Dodge() 
+    {
+        if (DodgeKey) 
+        {
             Debug.Log("방어(회피)하기");
         }
     }
+
+    public void Hit() 
+    {
+
+    }
+ 
 }

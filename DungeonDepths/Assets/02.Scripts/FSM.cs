@@ -1,34 +1,35 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public abstract class State<T> where T : class // T¿¡ ¿Ã ¼ö ÀÖ´Â Å¸ÀÔÀº class¸¸ °¡´ÉÇÏµµ·Ï
+public abstract class State<T> where T : class // Tï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ classï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½
 {
     /// <summary>
-    /// ÇØ´ç »óÅÂ¸¦ ½ÃÀÛÇÒ ¶§ 1È¸ È£Ãâ
+    /// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 1È¸ È£ï¿½ï¿½
     /// </summary>
     public abstract void Enter(T _entity);
     /// <summary>
-    /// ÇØ´ç »óÅÂ¸¦ ¾÷µ¥ÀÌÆ®ÇÒ ¶§ ¸Å ÇÁ·¹ÀÓ È£Ãâ
+    /// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     /// </summary>
     public abstract void Execute(T _entity);
     /// <summary>
-    /// ÇØ´ç »óÅÂ¸¦ Á¾·áÇÒ ¶§ 1È¸ È£Ãâ
+    /// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 1È¸ È£ï¿½ï¿½
     /// </summary>
     public abstract void Exit(T _entity);
 }
 
+
 public class StateMachine<T> where T : class
 {
-    T ownerEntity;    //StateMachine ¼ÒÀ¯ÁÖ
-    public Dictionary<int, State<T>> states = new Dictionary<int, State<T>>(); //Key°ª: »óÅÂ enumÇü | value°ª: Çàµ¿ ÇÔ¼öµé ±¸ÇöµÈ »óÅÂ Å¬·¡½º
+    T ownerEntity;          //StateMachine ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Dictionary<int, State<T>> states = new Dictionary<int, State<T>>(); //Keyï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ enumï¿½ï¿½ | valueï¿½ï¿½: ï¿½àµ¿ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
     State<T> previousState; 
     State<T> currentState;  
-
-    public void InitState(T _owner, State<T> _entryState)   //Ã¹ ¸Å°³º¯¼ö´Â this
+    public void InitState(T _owner, State<T> _entryState)   //Ã¹ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ this
     {
         ownerEntity = _owner;
         currentState = null;
-        //entryState »óÅÂ·Î »óÅÂ º¯°æ
+        //entryState ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         ChangeState(_entryState);
     }
     public State<T> GetState(int _enumState)
@@ -50,11 +51,12 @@ public class StateMachine<T> where T : class
         }
         else
         {
+            State<T> state = _state;
             states.Add(_enumState, _state);
         }
     }
 
-    public void Execute()   //Update: AgentÀÇ Çàµ¿À» ¸ÅÇÁ·¹ÀÓ Àç»ýÇÏ±â À§ÇØ AgentÀÇ Update¿¡¼­ È£Ãâ
+    public void Execute()   //Update: Agentï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ Agentï¿½ï¿½ Updateï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     {
         if (currentState != null)
         {
@@ -78,7 +80,6 @@ public class StateMachine<T> where T : class
         currentState = _newState;
         currentState.Enter(ownerEntity);
     }
-
     public void RevertToPreviousState()
     {
         ChangeState(previousState);
