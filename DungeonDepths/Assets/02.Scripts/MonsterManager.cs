@@ -76,15 +76,15 @@ public class MonsterManager : MonoSingleton<MonsterManager>{
         }
         
         CheckFinish();
-        if (stateMachine.currentState == stateMachine.GetState((int)MonsterManagerStates.Finish)) {
+        if (stateMachine.CurrentState == stateMachine.GetState((int)MonsterManagerStates.Finish)) {
             stateMachine.ChangeState(stateMachine.GetState((int)MonsterManagerStates.Wait));
         }
     }
     void CheckFinish() {
         if (isGameOver || isPlayerDead) {
-            Debug.Log(stateMachine.currentState);
+            Debug.Log(stateMachine.CurrentState);
             stateMachine.ChangeState(stateMachine.GetState((int)MonsterManagerStates.Finish));
-            Debug.Log(stateMachine.currentState + "sasdasd");
+            Debug.Log(stateMachine.CurrentState + "sasdasd");
         }
     }
   

@@ -27,7 +27,7 @@ namespace MonsterManagerState {
         private static void SpawnAtStart(MonsterManager m) {
             for (int i = 0; i < m.totalMeleeNum; i++) {
                 int index = Random.Range(0, m.spawnPoints.Count);
-                var newMonster = PoolManager.ins.Instantiate("Enemy", m.spawnPoints[index].position, Quaternion.identity);
+                var newMonster = PoolManager.Instance.Instantiate("Enemy", m.spawnPoints[index].position, Quaternion.identity);
                 m.meleeMonsters.Add(newMonster);
 
                 //for(int i = 0; i < totalRangeNum; i++) {
@@ -40,7 +40,7 @@ namespace MonsterManagerState {
         public override void Execute(MonsterManager m) {
             int index = m.deadSpots.Count;
             for (int i = 0; i < index; i++) {
-                var newMonster = PoolManager.ins.Instantiate("Enemy", m.deadSpots[0], Quaternion.identity);
+                var newMonster = PoolManager.Instance.Instantiate("Enemy", m.deadSpots[0], Quaternion.identity);
                 m.deadSpots.Remove(m.deadSpots[0]);
                 m.meleeMonsters.Add(newMonster);
             }
