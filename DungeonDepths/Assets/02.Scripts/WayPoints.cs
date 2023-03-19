@@ -33,16 +33,15 @@ public class WayPoints : MonoBehaviour
 		}
     }
 
-    public Vector3 MoveNextPoint()
+    public void MoveNextPoint()
     {
         index = (index + 1) % worldList.Count;
         destinationPoint = worldList[index];
-        return destinationPoint;
     }
 
     public bool CheckDestination(float _stopDistance) // 도달지점검사
 	{
-        float _stopDistanceDouble = _stopDistance + _stopDistance;
+        float _stopDistanceDouble = _stopDistance * _stopDistance;
         Vector3 _dir = destinationPoint - transform.position;
 
 		if (_dir.sqrMagnitude < _stopDistanceDouble)
