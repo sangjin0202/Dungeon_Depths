@@ -11,14 +11,16 @@ public class Stage1 : MonoBehaviour
     public GameObject bossMonsterPrefab;
     public float createTime;
     public int maxMonster = 10;
-    public float dist = 5f;
-    public Vector3 playerDist;
-    public float portalRange = 3f;
-    public Transform[] Portals;
-    private int clearCnt;
+    public float dist; // 플레이어와 포탈과의 거리
+    public Transform playerTr;
+    public float portalRange = 3f; // 포탈생성하기 위한 허용범위
+    public Transform []portalsTr;
+   // private int clearCnt;
     public bool isStageClear = false;
     public GameObject portal;
-    public ParticleSystem particles;
+    public ParticleSystem portalParticles;
+    public Transform thisTr;
+    
     public struct NodeInfo
     {
         public bool isClear;
@@ -38,25 +40,33 @@ public class Stage1 : MonoBehaviour
 
     void Awake()
     {
-        playerDist = GameObject.FindWithTag("Player").transform.position;
-        particles = GameObject.Find("Portal").GetComponent<ParticleSystem>();
-        particles.Stop();
+        playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        //portalParticles = GameObject.FindWithTag("Portal1").GetComponent<ParticleSystem>();
+        portalsTr = GameObject.Find("PortalsHouse").GetComponentsInChildren<Transform>();
         
+
+        //portalParticles.Stop();
+        thisTr = GetComponent<Transform>();
         
     }
    
     void Update()
     {
-        if (clearCnt == 4)
-        {
-            CallBossMonster();
+        //if (clearCnt == 4)
+        //{
+        //   CallBossMonster();
             
-        }
-        if (isStageClear)
+        //}
+
+        // if (isStageClear)
         {
             CallPortal();
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StageManager.Instance.Move(thisTr.position);
+        }
     }
     public void  CallBossMonster()
     {                                                 
@@ -65,14 +75,20 @@ public class Stage1 : MonoBehaviour
 
     public void CallPortal()
     {
-        particles.Play();
-        foreach (Transform i in Portals)
-        {
-            float dist = Vector3.Distance(playerDist, i.position);
-        }
-        if (dist < portalRange)
-        {
-            StageManager.Instance.isAporPortal = true;// 포탈에 접근하면
-        }
+       
+
+         float dist = Vector3.Distance(playerTr.position, portalsTr[1].position);
+
+        
+            if (dist < portalRange)
+            {
+                // StageManager.Instance.isAporPortal = true;// 포탈에 접근하면
+           
+                // portalParticles.Play();
+            }
+          //  else
+              //  portalParticles.Stop();
+        
+        
     }
 }
