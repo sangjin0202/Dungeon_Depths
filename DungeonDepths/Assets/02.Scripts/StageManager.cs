@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageManager : MonoBehaviour
+public class StageManager  : MonoBehaviour 
 {
 
     private static StageManager instance = null;
+
  
     [HideInInspector]
     public int stageIdx = 0; //  스테이지 인덱스
@@ -21,12 +22,23 @@ public class StageManager : MonoBehaviour
 
     public static StageManager Instance
     {
+        
         get
         {
-            if (null == instance)
-            {   
-                return null;
+            if (instance==null)
+            {
+                var obj = FindObjectOfType<StageManager>();
+                if (obj != null)
+                {
+                    instance = obj;
+                }
+                else
+                {
+                    var newObj = new GameObject().AddComponent<StageManager>();
+                    instance = newObj;
+                }
             }
+            
             return instance;
         }
 
@@ -36,6 +48,16 @@ public class StageManager : MonoBehaviour
 
     public void Awake()
     {
+        var objs = FindObjectsOfType<StageManager>();
+        if (objs.Length != 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+
+
+
         portal = GameObject.Find("Portal");
 
         _player=GameObject.FindWithTag("Player");
@@ -44,7 +66,7 @@ public class StageManager : MonoBehaviour
     }
 
 
-
+    
 
     public void Move(Vector3  Target)
     {
