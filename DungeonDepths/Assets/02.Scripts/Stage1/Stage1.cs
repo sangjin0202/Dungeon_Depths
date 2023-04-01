@@ -41,11 +41,11 @@ public class Stage1 : MonoBehaviour
     void Awake()
     {
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        //portalParticles = GameObject.FindWithTag("Portal1").GetComponent<ParticleSystem>();
+       portalParticles = GameObject.FindWithTag("Portal1").GetComponent<ParticleSystem>();
         portalsTr = GameObject.Find("PortalsHouse").GetComponentsInChildren<Transform>();
         
 
-        //portalParticles.Stop();
+        portalParticles.Stop();
         thisTr = GetComponent<Transform>();
         
     }
@@ -54,13 +54,13 @@ public class Stage1 : MonoBehaviour
     {
         //if (clearCnt == 4)
         //{
-        //   CallBossMonster();
+        //  CallBossMonster();
             
         //}
 
         // if (isStageClear)
         {
-            CallPortal();
+           CallPortal();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -82,13 +82,15 @@ public class Stage1 : MonoBehaviour
         
             if (dist < portalRange)
             {
-                // StageManager.Instance.isAporPortal = true;// 포탈에 접근하면
+                 StageManager.Instance.isAporPortal = true;// 포탈에 접근하면
            
-                // portalParticles.Play();
+                 portalParticles.Play();
             }
-          //  else
-              //  portalParticles.Stop();
+          else
+              portalParticles.Stop();
         
         
     }
+
+    
 }
