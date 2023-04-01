@@ -14,7 +14,7 @@ public class Stage1 : MonoBehaviour
     public float dist; // 플레이어와 포탈과의 거리
     public Transform playerTr;
     public float portalRange = 3f; // 포탈생성하기 위한 허용범위
-    public Transform []portalsTr;
+    public Transform portalsTr;
    // private int clearCnt;
     public bool isStageClear = false;
     public GameObject portal;
@@ -42,7 +42,7 @@ public class Stage1 : MonoBehaviour
     {
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
        portalParticles = GameObject.FindWithTag("Portal1").GetComponent<ParticleSystem>();
-        portalsTr = GameObject.Find("PortalsHouse").GetComponentsInChildren<Transform>();
+        portalsTr = GameObject.Find("Portal").GetComponent<Transform>();
         
 
         portalParticles.Stop();
@@ -77,7 +77,7 @@ public class Stage1 : MonoBehaviour
     {
        
 
-         float dist = Vector3.Distance(playerTr.position, portalsTr[1].position);
+         float dist = Vector3.Distance(playerTr.position, portalsTr.position);
 
         
             if (dist < portalRange)
