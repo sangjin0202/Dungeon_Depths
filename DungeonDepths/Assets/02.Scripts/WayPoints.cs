@@ -9,7 +9,7 @@ public class WayPoints : MonoBehaviour
 {
     //local Point -> world Point
     public List<Vector3> localList = new List<Vector3>(); // 인스펙터창에서 설정한 좌표
-    List<Vector3> worldList = new List<Vector3>(); // 인스펙터 창에서 설정한 좌표를 월드로 고정시키기 위한 리스트
+    List<Vector3> worldList = new List<Vector3>();        // 인스펙터 창에서 설정한 좌표를 월드로 고정시키기 위한 리스트
     int index = -1;
     public Vector3 destinationPoint; // 좌표 도달값
     void Start()
@@ -39,11 +39,10 @@ public class WayPoints : MonoBehaviour
         destinationPoint = worldList[index];
     }
 
-    public bool CheckDestination(float _stopDistance) // 도달지점검사
+    public bool CheckDestination(float _stopDistance, Vector3 _targetPos) // 도달지점검사
 	{
         float _stopDistanceDouble = _stopDistance * _stopDistance;
-        Vector3 _dir = destinationPoint - transform.position;
-
+        Vector3 _dir = destinationPoint - _targetPos;
 		if (_dir.sqrMagnitude < _stopDistanceDouble)
 		{
             return true;
