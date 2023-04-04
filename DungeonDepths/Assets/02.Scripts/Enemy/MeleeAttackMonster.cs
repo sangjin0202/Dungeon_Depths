@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class meleeAttackMonster : MonsterBase
+public class MeleeAttackMonster : MonsterBase
 {
     protected override void Awake()
     {
