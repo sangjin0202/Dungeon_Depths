@@ -44,7 +44,7 @@ public class Node1 : Stage1
 
     void Update()
     {
-
+      
     }
     public void Clear()
     {
