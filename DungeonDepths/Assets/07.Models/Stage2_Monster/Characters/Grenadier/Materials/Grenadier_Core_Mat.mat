@@ -4,7 +4,7 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Grenadier_Core_Mat
   m_Shader: {fileID: 4800000, guid: 3cd42a876a23c5941928ebc1f21ee020, type: 3}
@@ -111,7 +111,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ramp:
-        m_Texture: {fileID: 2800000, guid: 60da32e447f278b44aed3835491cf713, type: 3}
+        m_Texture: {fileID: 2800000, guid: 184401f9f92df5c48943f146749e938c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ramp2:
@@ -135,7 +135,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _noiseTex:
-        m_Texture: {fileID: 2800000, guid: baea65a7abf3c5a4095956327ddb1122, type: 3}
+        m_Texture: {fileID: 2800000, guid: 039619e8304ca2642abd7f060be738f4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
