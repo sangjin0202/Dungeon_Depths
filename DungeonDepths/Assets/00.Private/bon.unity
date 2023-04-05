@@ -123,41 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 432c921072bb0a34586d340d2256d199, type: 2}
---- !u!1 &279454338 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1261775026914103202, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
-  m_PrefabInstance: {fileID: 731723641}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &279454342
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279454338}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.4
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
---- !u!54 &279454343
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279454338}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!1001 &280284109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -475,14 +440,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerSwordMan
       objectReference: {fileID: 0}
-    - target: {fileID: 1261775026914103202, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1261775026914103202, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 1930189498027398424, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -525,14 +482,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1930189498027398424, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2108758171085431849, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
-      propertyPath: nextFireTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5487994362168151906, guid: 9ffd31a47930a81419a215db9321d01f, type: 3}
-      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
