@@ -6,17 +6,31 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
 {
 
     // 구본혁
-    // TODO: 히트박스 적용
+    // TODO:
+    // 히트박스 적용
     // 더블점프 모션, 피격 모션 해결해야함
+    // 공격모션에서 Collider On/Off 구현
     // 찌르기 모션 , 방어 모션, 점프모션 찾을수 있다면 찾기 
     //Animator animator;
-    public float nextFireTime = 0f;
-    static int numberOfClicks = 0;
-    float lastClickedTime = 0f;
-    float maxComboDelay = 1f;
+    public enum SwordManStates { None, Start, Combo, Finish };
+    public StateMachine<PlayerSwordMan> stateMachine;
+    public int numOfClicks;
+    public float stateDuration;
+    public float prevAtkTime;
+    //public bool shouldCombo;
+    public int attackIndex;
+    public bool isFinishAttack;
     void Awake()
     {
         Debug.Log("시작");
+        stateMachine = new StateMachine<PlayerSwordMan>();
+        stateMachine.AddState((int)SwordManStates.None, new SwordManState.None());
+        stateMachine.AddState((int)SwordManStates.Start, new SwordManState.Start());
+        stateMachine.AddState((int)SwordManStates.Combo, new SwordManState.Combo());
+        stateMachine.AddState((int)SwordManStates.Finish, new SwordManState.Finish());
+
+        stateMachine.InitState(this, stateMachine.GetState((int)SwordManStates.None));
+
         HpMax = 100f;
         HpCur = 100f;
         AttackPower = 5f;
@@ -37,8 +51,10 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         CharacterRotate();
         Move();
         Jump();
-        CheckTrigger();
-        CheckAttack();
+
+        CheckAttackKey();
+        stateMachine.Execute();
+
         UseSkill();
         Dodge();
     }
@@ -47,111 +63,26 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         base.GetInput();
         dodgeKey = Input.GetMouseButton(1);
     }
-
-    //protected override void Land()
-    //{
-    //    isLand = true;
-    //    animator.SetTrigger("Land");
-    //    StartCoroutine(FinishLand());
-    //}
-
-    //IEnumerator FinishLand()
-    //{
-    //    yield return new WaitForSeconds(1.0f);
-    //    isLand = false;
-    //}
-
-    // 첫번째 공격 모션이 끝나기도 전에 클릭 카운트는 3이 될수도 있음
-    // 공격키를 눌러도 아무런 반응이 없는 상황이 발생
-    // 이런경우 대부분 Idle모션을 유지하므로 바로 공격 애니메이터 bool값과 클릭카운트를 초기화 시켜줌 
-    private void CheckTrigger()
-    {
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            if(animator.GetBool("Hit1"))
-            {
-                numberOfClicks = 0;
-                animator.SetBool("Hit1", false);
-            }
-            else if(animator.GetBool("Hit2"))
-            {
-                numberOfClicks = 0;
-                animator.SetBool("Hit2", false);
-            }
-            else if(animator.GetBool("Hit3"))
-            {
-                numberOfClicks = 0;
-                animator.SetBool("Hit3", false);
-            }
-        }
-    }
-
-    private void CheckAttack()
-    {
-        //현재 실행중인 애니메이션의 길이중 7할을 넘었고, 그 애니메이션의 이름이 hit1 이라면
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
-        {
-            isAttack = false;
-            Debug.Log("공격1 끝");
-            animator.SetBool("Hit1", false);
-
-        }
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
-        {
-            isAttack = false;
-            Debug.Log("공격2 끝");
-            animator.SetBool("Hit2", false);
-        }
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetCurrentAnimatorStateInfo(0).IsName("attack3"))
-        {
-            isAttack = false;
-            Debug.Log("공격3 끝");
-            animator.SetBool("Hit3", false);
-            numberOfClicks = 0; // 마지막 공격이 실행됐으므로 초기화
-        }
-        // 마지막 클릭시간으로부터 너무 오래 지났다면
-        if(Time.time - lastClickedTime > maxComboDelay)
-            numberOfClicks = 0;
-
-        // 다음번 공격가능한 시간이 됐다면
-        if(Time.time > nextFireTime)
-        {
-            if(attackKey)
-            { //입력 확인
-                Debug.Log("공격키 확인");
-                Debug.Log(numberOfClicks);
-                Attack(); // 공격 실행
-            }
-        }
-    }
-
-    // 공격 실행
-    public void Attack()
+    void CheckAttackKey()
     {
         if(isMove || isJump || isDodge || isCast) return;
-        lastClickedTime = Time.time;
-        numberOfClicks++;
-        numberOfClicks = Mathf.Clamp(numberOfClicks, 0, 3);
 
-        if(numberOfClicks == 1)
+        if(attackKey)
         {
-            Debug.Log("공격1 실행");
-            isAttack = true;
+            //공격 시작
+            Attack();
+        }
 
-            animator.SetBool("Hit1", true);
-        }
-        else if(numberOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+    }
+
+    public void Attack()
+    {
+        if(numOfClicks == 0)
         {
-            Debug.Log("공격2 실행");
-            isAttack = true;
-            animator.SetBool("Hit2", true);
+            stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
         }
-        else if(numberOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
-        {
-            Debug.Log("공격3 실행");
-            isAttack = true;
-            animator.SetBool("Hit3", true);
-        }
+        numOfClicks++;
+        numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
     }
 
     public void UseSkill()
@@ -207,5 +138,4 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
             animator.SetBool("Block", false);
         }
     }
-
 }
