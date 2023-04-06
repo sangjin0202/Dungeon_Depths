@@ -34,7 +34,7 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         HpMax = 100f;
         HpCur = 100f;
         AttackPower = 5f;
-        MoveSpeed = 1f;
+        MoveSpeed = 3.5f;
         //moveSpeed = MoveSpeed;
         AttackDelay = 1f;
         AttackRange = 2f;
@@ -47,6 +47,7 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
 
     void Update()
     {
+        
         GetInput();
         CharacterRotate();
         Move();
