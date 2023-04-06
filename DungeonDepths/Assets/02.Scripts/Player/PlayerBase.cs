@@ -4,7 +4,7 @@ using UnityEngine;
 //using PlayerState;
 public class PlayerBase : MonoBehaviour
 {
-
+    
     //구본혁
     /*TODO
      * 특성카드 적용 구현
@@ -12,7 +12,6 @@ public class PlayerBase : MonoBehaviour
     public Animator animator;
 
     #region 상태관련
-    public bool isLoad;
     public bool isAttack { get; set; }
     public bool isMove { get; set; }
     public bool isDodge { get; set; }
@@ -57,6 +56,7 @@ public class PlayerBase : MonoBehaviour
 
     string floorTag = "Floor";
 
+    
     #region 입력 받기
     public virtual void GetInput()
     {
@@ -75,6 +75,7 @@ public class PlayerBase : MonoBehaviour
     #region 행동:회전
     protected void CharacterRotate()
     {
+        if(isAttack || isDodge || isJump) return;
         transform.LookAt(transform.position + moveDir);
     }
     #endregion
@@ -89,7 +90,6 @@ public class PlayerBase : MonoBehaviour
         if(isAttack || isDodge || isCast) return;
         moveDir = new Vector3(hDir, 0, vDir).normalized;
         moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
-        Debug.Log(moveSpeed);
         if(moveDir == Vector3.zero)
         {
             animator.SetBool("Move", false);
