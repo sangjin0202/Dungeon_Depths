@@ -4,7 +4,7 @@ using UnityEngine;
 //using PlayerState;
 public class PlayerBase : MonoBehaviour
 {
-
+    
     //구본혁
     /*TODO
      * 특성카드 적용 구현
@@ -12,7 +12,6 @@ public class PlayerBase : MonoBehaviour
     public Animator animator;
 
     #region 상태관련
-    public bool isLoad;
     public bool isAttack { get; set; }
     public bool isMove { get; set; }
     public bool isDodge { get; set; }
@@ -29,7 +28,9 @@ public class PlayerBase : MonoBehaviour
     public float HpMax { get; set; }
     public float HpCur { get; set; }
     public float AttackPower { get; set; }
-    private float moveSpeed; public float MoveSpeed { get; set; }
+    
+    private float moveSpeed; 
+    public float MoveSpeed { get; set; }
     public float AttackDelay { get; set; }
     public float AttackRange { get; set; }
     #endregion
@@ -57,6 +58,7 @@ public class PlayerBase : MonoBehaviour
 
     string floorTag = "Floor";
 
+    
     #region 입력 받기
     public virtual void GetInput()
     {
@@ -75,6 +77,7 @@ public class PlayerBase : MonoBehaviour
     #region 행동:회전
     protected void CharacterRotate()
     {
+        if(isAttack || isDodge || isJump) return;
         transform.LookAt(transform.position + moveDir);
     }
     #endregion
@@ -87,9 +90,10 @@ public class PlayerBase : MonoBehaviour
         //animator.SetBool("Move", true);
 
         if(isAttack || isDodge || isCast) return;
+        Debug.Log("플레이어 이동속도 : " + MoveSpeed);
         moveDir = new Vector3(hDir, 0, vDir).normalized;
         moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
-        Debug.Log(moveSpeed);
+        
         if(moveDir == Vector3.zero)
         {
             animator.SetBool("Move", false);
@@ -100,7 +104,7 @@ public class PlayerBase : MonoBehaviour
             isMove = true;
             if(!isJump)
                 animator.SetBool("Move", true);
-            MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 2f);
+            MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
             transform.position += moveDir * moveSpeed * Time.deltaTime;
         }
