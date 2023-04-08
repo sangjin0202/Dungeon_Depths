@@ -4,68 +4,33 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
- 
-    [SerializeField]
-    Vector3 _delta = new Vector3(0.0f, 2.0f, -7.0f);
-    [SerializeField]
-    GameObject _player = null;
+    public Vector3 _delta = new Vector3(0f, 3f, 5f);    // 카메라 offset 값 : 위치 조절용
+    public GameObject _player = null;
+    public Camera mainCamera;
+    Vector3 offset;
+    float zoomSpeed = 10f;
+    float rotationX = 0.0f;         // X축 회전값
+    float rotationY = 0.0f;         // Y축 회전값
+    float speed = 100.0f;           // 회전속도
 
-
-    public float zoomSpeed = 10.0f;
-
-    private Camera mainCamera;
-
-
-    private Vector3 point = Vector3.zero;
-    public Transform cameraTr;
-
-    private float yRotateMove;
-  
-
-    public Vector3 prePos;
-
-
-
-
-    [SerializeField, Range(0f, 100f)]
-    private float hRotationSpeed = 50f;  // 좌우 회전 속도
-
-    [SerializeField, Range(0f, 100f)]
-    private float vRotationSpeed = 100f; // 상하 회전 속도
-
-    [SerializeField, Range(-60f, 0f)]
-    private float lookUpAngleLimit = -45f;  // 최소 회전각(올려다보기 제한)
-
-    [SerializeField, Range(15f, 60f)]
-    private float lookDownAngleLimit = 45f; // 최대 회전각(내려다보기 제한)
-    void Start()
+    void Awake()
     {
         mainCamera = GetComponent<Camera>();
-        point = _player.transform.position;
-        transform.position = _player.transform.position + _delta;
-        prePos = _player.transform.position;
-        cameraTr=GetComponent<Transform>();
-        
     }
-
-
-
+    void Start()
+    {
+        transform.position = _player.transform.position + _delta;
+        transform.LookAt(_player.transform);
+        offset = transform.position - _player.transform.position;
+    }
     void Update()
     {
-
-        if (prePos != _player.transform.position)
-        {
-            var disPos = _player.transform.position - prePos;
-
-            cameraTr.position = Vector3.MoveTowards(cameraTr.position, cameraTr.position + disPos, 5f);// player 속도와 동일
-            prePos = _player.transform.position;
-            
-        }
-        Zoom();
+        transform.position = _player.transform.position + offset;
         Rotate();
+        Zoom();
+        offset = transform.position - _player.transform.position;
     }
-
-    private void Zoom()
+    void Zoom()
     {
         float distance = Input.GetAxis("Mouse ScrollWheel") * -1 * zoomSpeed;
         if (distance != 0)
@@ -73,37 +38,20 @@ public class CameraController : MonoBehaviour
             mainCamera.fieldOfView += distance;
         }
     }
-
-    private void Rotate()
+    void Rotate()
     {
+        // 마우스가 눌러지면,
 
+        // 마우스 변화량을 얻고, 그 값에 델타타임과 속도를 곱해서 회전값 구하기
+        rotationX = Input.GetAxis("Mouse X") * Time.deltaTime * speed;
+        rotationY = Input.GetAxis("Mouse Y") * Time.deltaTime * speed;
 
+        // 각 축으로 회전
+        // Y축은 마우스를 내릴때 카메라는 올라가야 하므로 반대로 적용
+        transform.RotateAround(_player.transform.position, Vector3.right, -rotationY);
+        transform.RotateAround(_player.transform.position, Vector3.up, rotationX);
 
-        float t = Time.deltaTime;
-
-        // 마우스 움직임 감지
-        float h = Input.GetAxisRaw("Mouse X") * hRotationSpeed * t;
-        float v = -Input.GetAxisRaw("Mouse Y") * vRotationSpeed * t;
-
-        // [1] 좌우 회전 : 월드 Y축 기준
-        Quaternion hRot = Quaternion.AngleAxis(h, Vector3.up);
-        transform.rotation = hRot * transform.rotation;
-
-        // [2] 상하 회전 : 로컬 X축 기준
-        // 다음 프레임 각도 예측
-        float xNext = transform.eulerAngles.x + v;
-        if (xNext > 180f)
-            xNext -= 360f;
-
-        // 상하 회전 각도 제한
-        if (lookUpAngleLimit < xNext && xNext < lookDownAngleLimit)
-        {
-            transform.rotation *= Quaternion.AngleAxis(v, Vector3.right);
-        }
-
-
-
+        // 회전후 타겟 바라보기
+        transform.LookAt(_player.transform.position);
     }
-
-    
 }
