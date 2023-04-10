@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //using PlayerState;
-public class PlayerBase : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
     
     //구본혁
@@ -60,7 +60,7 @@ public class PlayerBase : MonoBehaviour
 
     
     #region 입력 받기
-    public virtual void GetInput()
+    protected virtual void GetInput()
     {
         hDir = Input.GetAxisRaw("Horizontal");
         vDir = Input.GetAxisRaw("Vertical");
@@ -90,7 +90,6 @@ public class PlayerBase : MonoBehaviour
         //animator.SetBool("Move", true);
 
         if(isAttack || isDodge || isCast) return;
-        Debug.Log("플레이어 이동속도 : " + MoveSpeed);
         moveDir = new Vector3(hDir, 0, vDir).normalized;
         moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
         
@@ -158,22 +157,13 @@ public class PlayerBase : MonoBehaviour
         }
     }
     #endregion
-    
+
     #region 행동:피격
-    //protected void GetHit(float damage) {
-    //    animator.SetTrigger("Hit");
-    //    HpCur -= damage;
-    //    HpCur = Mathf.Clamp(HpCur, 0, HpMax);
-    //    if(HpCur <= 0) Die();
-    //}
+    public abstract void GetHit(float _damage);
     #endregion
 
     #region 행동:사망
-    //protected void Die()
-    //{
-    //    animator.SetTrigger("Die");
-    //    isDead = true;
-    //}
+    protected abstract void Die();
     #endregion
     public void GetCard()
     { // 선택한 특성카드 적용
