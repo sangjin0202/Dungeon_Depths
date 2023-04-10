@@ -11,6 +11,7 @@ public class BossBase : MonoBehaviour
      * 원거리 공격은 거리가 긴 만큼 각도를 좁게, 근거리 공격은 거리가 짧은대신 조금 넓게 
      * 플레이어와의 거리가 일정량 이상 벌어지면 빠르게 추격하도록 할 것 
      */
+
     public enum BossStates { Idle, Trace, FastTrace, MeleeAttack, RangeAttack, Die };
     public BossStates state;
 
@@ -148,21 +149,21 @@ public class BossBase : MonoBehaviour
 
     protected void TraceTarget(float _speed)
     {
-        //Agent.destination = TargetTransform.position;
-        //Animator.SetFloat("MoveSpeed", _speed);
-        //if(_speed > MoveSpeed)
-        //{
-        //    Animator.SetBool("FastTrace", true);
-        //    Agent.speed = _speed;
-        //}
-        //else
-        //{
-        //    Animator.SetBool("Trace", true);
-        //    Agent.speed = _speed;
-        //}
-        Search();
-        Rotate();
-        Move();
+        Agent.destination = TargetTransform.position;
+        Animator.SetFloat("MoveSpeed", _speed);
+        if(_speed > MoveSpeed)
+        {
+            Animator.SetBool("FastTrace", true);
+            Agent.speed = _speed;
+        }
+        else
+        {
+            Animator.SetBool("Trace", true);
+            Agent.speed = _speed;
+        }
+        //Search();
+        //Rotate();
+        //Move();
     }
 
     void Search()

@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
 {
-
     // 구본혁
     // TODO:
     // 히트박스 적용
     // 더블점프 모션, 피격 모션 해결해야함
     // 공격모션에서 Collider On/Off 구현
     // 찌르기 모션 , 방어 모션, 점프모션 찾을수 있다면 찾기 
-    //Animator animator;
+    
     public enum SwordManStates { None, Start, Combo, Finish };
     public StateMachine<PlayerSwordMan> stateMachine;
+    [Tooltip("히트 박스")] public GameObject hitBox;
     public int numOfClicks;
     public float stateDuration;
     public float prevAtkTime;
-    //public bool shouldCombo;
     public int attackIndex;
-    public bool isFinishAttack;
     void Awake()
     {
-        Debug.Log("시작");
+        hitBox = transform.GetChild(6).gameObject;
+        hitBox.SetActive(false);
         stateMachine = new StateMachine<PlayerSwordMan>();
         stateMachine.AddState((int)SwordManStates.None, new SwordManState.None());
         stateMachine.AddState((int)SwordManStates.Start, new SwordManState.Start());
@@ -43,11 +42,12 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         enableMultipleJump = true; // 다중 점프 가능
         rbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+
+        Debug.Log("공격력 : "+ AttackPower);
     }
 
     void Update()
     {
-        
         GetInput();
         CharacterRotate();
         Move();
@@ -59,7 +59,8 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         UseSkill();
         Dodge();
     }
-    public override void GetInput()
+
+    protected override void GetInput()
     {
         base.GetInput();
         dodgeKey = Input.GetMouseButton(1);
@@ -85,7 +86,10 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
         numOfClicks++;
         numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
     }
-
+    public void OnAttackCollision()
+    {
+        hitBox.SetActive(true);
+    }
     public void UseSkill()
     {
         if(isMove || isJump || isDodge || isCast || isAttack) return;
@@ -138,5 +142,21 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
             isDodge = false;
             animator.SetBool("Block", false);
         }
+    }
+
+    public override void GetHit(float _damage)
+    {
+        //animator.SetTrigger("Hit");
+        HpCur -= _damage;
+        HpCur = Mathf.Clamp(HpCur, 0, HpMax);
+        Debug.Log("현재 체력 : " + HpCur);
+        if(HpCur <= 0) Die();
+    }
+
+    protected override void Die()
+    {
+        //animator.SetTrigger("Die");
+        Debug.Log("플레이어 사망!");
+        isDead = true;
     }
 }
