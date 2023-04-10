@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    public string playerTag = "Player";
+    string playerTag = "Player";
     // Start is called before the first frame update
-    public Transform moveTr;
     private void Awake()
     {
-        moveTr = GameObject.FindWithTag("stage1").GetComponent<Transform>();
+
     }
 
-    private void OnCollisionEnter(Collision col)
+    private void OnCollisionEnter(Collision _col)
     {
-        if (col.gameObject.tag == playerTag)
+        if (_col.gameObject.CompareTag(playerTag))
         {
-
-            StageManager.Instance.Move(moveTr.position);
-            // 여기서 Map UI 발생
+            // Map UI 발생
+            // 이동함수
         }
     }
+
+    public void MoveStage()
+	{
+
+	}
 }

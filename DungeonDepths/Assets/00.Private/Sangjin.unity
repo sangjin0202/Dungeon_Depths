@@ -379,6 +379,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &689307676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 689307678}
+  - component: {fileID: 689307677}
+  m_Layer: 0
+  m_Name: CardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &689307677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689307676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3f44f0c9426a24db23cc9cacbc6550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardObjList: []
+  parent: {fileID: 709471936}
+  cardList: []
+  cardDatas: {fileID: 11400000, guid: e1e2673d696c6534eab8f33025bb7d09, type: 2}
+--- !u!4 &689307678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689307676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 848.07117, y: 645.7699, z: 8.2729025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &697510387
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +524,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &709471936 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1490050315, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
+  m_PrefabInstance: {fileID: 4565005969704340510}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &779974813
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +563,10 @@ MonoBehaviour:
     prefab: {fileID: 697510387}
     count: 4
     parent: {fileID: 883085323}
+  - name: Card
+    prefab: {fileID: 3873407540520952760, guid: 72cf66dd2806f4d4391d80be77ccc1be, type: 3}
+    count: 4
+    parent: {fileID: 4565005969704340511}
   willGrow: 1
 --- !u!4 &779974815
 Transform:
@@ -1026,6 +1083,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541262164}
     m_Modifications:
+    - target: {fileID: 159231390, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 159231391, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1049,6 +1110,10 @@ PrefabInstance:
     - target: {fileID: 159231391, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1490050315, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
+      propertyPath: m_Name
+      value: Panel_Card
       objectReference: {fileID: 0}
     - target: {fileID: 4565005968888554733, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1184,6 +1249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
+--- !u!224 &4565005969704340511 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1490050316, guid: b509ed567b0ea6942808e870fb3a3225, type: 3}
+  m_PrefabInstance: {fileID: 4565005969704340510}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4867637708426936284 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2807896974412541516, guid: 29197e3d9f400e44a9d40d9fb0688690, type: 3}
