@@ -10,6 +10,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected float traceDistance;          public float TraceDistance { get { return traceDistance; } }
     protected float traceDisOffset = 2f;
     protected float stopDistance = 0.2f;
+
     protected float moveSpeed;              public float MoveSpeed { get { return moveSpeed; } }
     protected float rotSpeed;               public float RotSpeed { get { return rotSpeed; } }
     protected float attackSpeed = 2f;       public float AttackSpeed { get { return attackSpeed; } }    // °ø°Ý Äð
