@@ -20,19 +20,24 @@ public abstract class MonsterBase : MonoBehaviour
     #endregion
     #region state관련 변수
     public enum eMonsterState { Idle, Patrol, Trace, Attack, Die } // 접근 제한자 설정
-    protected StateMachine<MonsterBase> sm;
     public WayPoints wayPoints;
+
+    private GameObject target;
+
+    protected StateMachine<MonsterBase> sm;
+    protected GameObject curTarget;
+    protected Animator anim;
+
     public float PrevTime { get; set; } = 0f;
     public float IdleTime { get; set; } = 0f;
     public float LastAttackTime { get; set; } = 0f;
     public float LastSearchTime { get; set; } = 0f;
-    protected Animator anim;                public Animator Anim { get { return anim; } }
-    GameObject target;
-    protected GameObject curTarget;
+    public Animator Anim { get => anim; }
+       
     #endregion
     protected virtual void Awake()
     {
-        wayPoints = GameObject.Find("WayPoints").GetComponent<WayPoints>();
+        wayPoints = GetComponent<WayPoints>();
         target = GameObject.Find("Player");
         anim = GetComponent<Animator>();
         #region state 설정
