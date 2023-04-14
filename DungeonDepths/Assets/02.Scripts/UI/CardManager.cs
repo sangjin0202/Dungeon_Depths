@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum CardRarity { NOMAL, RARE };
-public class CardManager : MonoSingleton<CardManager>
+public class CardManager : MonoBehaviour
 {
 	public List<GameObject> cardObjList = new List<GameObject>(); // 프리팹 리스트
 	public GameObject parent; // 프리팹 부모
@@ -26,11 +26,12 @@ public class CardManager : MonoSingleton<CardManager>
 		for (int i = 0; i < cardList.Count; i++)
 		{
 			GameObject _list = parent.transform.GetChild(i).gameObject;
-			var _cardObjList = _list.GetComponent<CardInfo>();
-			_cardObjList.CardName = cardList[i].CardName;
-			_cardObjList.CardDesc = cardList[i].CardDesc;
-			_cardObjList.Rarity = cardList[i].Rarity;
-			_cardObjList.Sprite = cardList[i].Sprite;
+			var _cardObjList = _list.GetComponent<Card>();
+			_cardObjList.cardData.CardName = cardList[i].CardName;
+			_cardObjList.cardData.CardDesc = cardList[i].CardDesc;
+			_cardObjList.cardData.Rarity = cardList[i].Rarity;
+			_cardObjList.cardData.Value = cardList[i].Value;
+			_cardObjList.cardData.Sprite = cardList[i].Sprite;
 			cardObjList.Add(_list);
 		}
 	}
