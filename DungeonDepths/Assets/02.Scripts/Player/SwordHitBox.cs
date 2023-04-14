@@ -12,13 +12,14 @@ public class SwordHitBox : MonoBehaviour
     public delegate void EnemiesDamageHandler(float _swordDamage);
     public static EnemiesDamageHandler OnEnemiesHit;
     //This function is called when the object becomes enabled and active.
+    
     private void OnEnable()
     {
         StartCoroutine(AutoDisable());
     }
     private void Start()
     {
-        boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
+        //boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         swordDamage = GameObject.FindWithTag("Player").GetComponent<PlayerSwordMan>().AttackPower;
         Debug.Log("Ä® °ø°Ý·Â : " + swordDamage);
         this.gameObject.SetActive(false);
@@ -38,7 +39,8 @@ public class SwordHitBox : MonoBehaviour
         }
         else if(other.CompareTag("Boss"))
         {
-            boss.GetHit(swordDamage);
+            //boss.GetHit(swordDamage);
+            OnEnemiesHit(swordDamage);
         }
         
     }

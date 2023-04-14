@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Vector3 _delta = new Vector3(0f, 3f, 5f);    // 카메라 offset 값 : 위치 조절용
+    public Vector3 _delta = new Vector3(0f, 2f, 5f);    // 카메라 offset 값 : 위치 조절용
     public GameObject _player = null;
     public Camera mainCamera;
     Vector3 offset;
@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
     void Awake()
     {
         mainCamera = GetComponent<Camera>();
+        _player = GameObject.FindWithTag("Player").gameObject;
     }
     void Start()
     {

@@ -14,14 +14,12 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
     public enum SwordManStates { None, Start, Combo, Finish };
     public StateMachine<PlayerSwordMan> stateMachine;
     [Tooltip("히트 박스")] public GameObject hitBox;
-    public int numOfClicks;
-    public float stateDuration;
-    public float prevAtkTime;
-    public int attackIndex;
+    [HideInInspector] public int numOfClicks;
+    [HideInInspector] public float stateDuration;
+    [HideInInspector] public float prevAtkTime;
+    [HideInInspector] public int attackIndex;
     void Awake()
     {
-        hitBox = transform.GetChild(6).gameObject;
-        hitBox.SetActive(false);
         stateMachine = new StateMachine<PlayerSwordMan>();
         stateMachine.AddState((int)SwordManStates.None, new SwordManState.None());
         stateMachine.AddState((int)SwordManStates.Start, new SwordManState.Start());
@@ -49,7 +47,7 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
     void Update()
     {
         GetInput();
-        CharacterRotate();
+        
         Move();
         Jump();
 
