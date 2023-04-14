@@ -30,6 +30,10 @@ public class BossGolem : BossBaseFSM
         BeamRange = 20f;
 
     }
+    private void OnEnable()
+    {
+        SwordHitBox.OnEnemiesHit += this.GetHit;
+    }
     public void OnMeleeAttackOneCollision()
     {
         MeleeHitBox1.SetActive(true);

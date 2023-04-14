@@ -5,7 +5,7 @@ namespace MonsterManagerState {
     #region Wait 상태 : 플레이어가 처음 스테이지(노드)에 입장한 상태
     class Wait : State<MonsterManager> {
         public override void Enter(MonsterManager m) {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             MonsterManager.Instance.isGameClear = false; // ?
             //m.isPlayerDead = false;
 

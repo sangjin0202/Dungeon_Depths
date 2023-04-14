@@ -4,13 +4,15 @@ using UnityEngine;
 //using PlayerState;
 public abstract class PlayerBase : MonoBehaviour
 {
-    
+
     //구본혁
     /*TODO
      * 특성카드 적용 구현
+     * 카메라가 바라보는 방향이 캐릭터의 z축이 되게끔
+     * 카메라가 바라보는 방향이 플레이어의 forward 방향이 아니라면 플레이어의 축을 바꿔줌
      */
-    public Animator animator;
 
+    public Animator animator;
     #region 상태관련
     public bool isAttack { get; set; }
     public bool isMove { get; set; }
@@ -28,8 +30,8 @@ public abstract class PlayerBase : MonoBehaviour
     public float HpMax { get; set; }
     public float HpCur { get; set; }
     public float AttackPower { get; set; }
-    
-    private float moveSpeed; 
+
+    private float moveSpeed;
     public float MoveSpeed { get; set; }
     public float AttackDelay { get; set; }
     public float AttackRange { get; set; }
@@ -58,13 +60,12 @@ public abstract class PlayerBase : MonoBehaviour
 
     string floorTag = "Floor";
 
-    
+
     #region 입력 받기
     protected virtual void GetInput()
     {
         hDir = Input.GetAxisRaw("Horizontal");
         vDir = Input.GetAxisRaw("Vertical");
-
         runKey = Input.GetButton("Run");
         jumpKey = Input.GetButtonDown("Jump");
 
@@ -74,25 +75,44 @@ public abstract class PlayerBase : MonoBehaviour
         skillTwoKey = Input.GetButtonDown("Skill2");
     }
     #endregion
+
     #region 행동:회전
-    protected void CharacterRotate()
+    /// <summary>
+    /// 함수가 호출되면 카메라의 local좌표계와 플레이어의 local좌표계를 맞춰준다.
+    /// </summary>
+    protected void CharacterAxisRotate()
     {
-        if(isAttack || isDodge || isJump) return;
-        transform.LookAt(transform.position + moveDir);
+        //if(isAttack || isDodge || isJump) return;
+
+        // 카메라의 회전값을 가져온다
+        Quaternion cameraRot = Camera.main.transform.rotation;
+        // y축 회전값만 필요하므로 x,z 회전량은 0으로 만든다.
+        cameraRot.x = cameraRot.z = 0;
+
+        //캐릭터의 회전값에 카메라의 회전값을 대입한다.
+        transform.rotation = cameraRot;
+
+        moveDir = transform.TransformDirection(moveDir);
+        //transform.LookAt(transform.position + moveDir);
     }
     #endregion
     #region 행동:이동
     public void Move()
     {
-        //moveDir = new Vector3(hDir, 0f, vDir).normalized; // 플레이어가 움직일 방향 설정
-        //if(runKey) MoveSpeed *= 2f; //뛰기 키를 누르면 2배
-        //transform.position += moveDir * MoveSpeed * (runKey ? 2f : 1f) * Time.deltaTime;
-        //animator.SetBool("Move", true);
-
         if(isAttack || isDodge || isCast) return;
-        moveDir = new Vector3(hDir, 0, vDir).normalized;
-        moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
         
+        // x축과 z축의 입력값을 방향으로 설정한다.
+        moveDir = new Vector3(hDir, 0, vDir).normalized;
+
+        if(vDir != 0 || hDir != 0)
+        {
+            CharacterAxisRotate();
+        }
+
+        // 플레이어 캐릭터는 키보드로 받은 방향을 바라본다.
+        transform.LookAt(transform.position + moveDir);
+        moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
+
         if(moveDir == Vector3.zero)
         {
             animator.SetBool("Move", false);
