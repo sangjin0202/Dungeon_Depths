@@ -952,11 +952,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   comboDuration: 2.5
   moveSpeed: 9
-  rotationSpeed: 2
+  rotationSpeed: 3
   finalBossTransform: {fileID: 0}
   targetTransform: {fileID: 0}
   isDead: 0
-  shouldCombo: 0
 --- !u!54 &1168352584
 Rigidbody:
   m_ObjectHideFlags: 0

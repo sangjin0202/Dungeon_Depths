@@ -15,7 +15,7 @@ namespace FinalBossState
 
             Debug.Log("대기 상태 시작");
             if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle))
-                stateDuration = 2f;
+                stateDuration = 1.5f;
             else
                 stateDuration = 3f;
             
@@ -45,14 +45,19 @@ namespace FinalBossState
     {
         int comboIndex;
         float firstAtkTime;
+        float decisionTime;
         public override void Enter(FinalBoss f)
         {
             firstAtkTime = Time.time;
+            if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack1))
+                decisionTime = 0.7f;
+            else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack2))
+                decisionTime = 0.5f;
         }
         public override void Execute(FinalBoss f)
         {
             // 0.7초 + @ 동안 딜레이
-            if(Time.time - firstAtkTime < 0.8f) return;
+            if(Time.time - firstAtkTime < decisionTime) return;
 
             //f.Rotation();
 

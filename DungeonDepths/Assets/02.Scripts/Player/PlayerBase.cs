@@ -20,7 +20,6 @@ public abstract class PlayerBase : MonoBehaviour
     public bool isDamaged { get; set; }
     public bool isCast { get; set; } // 스킬 사용 중
     public bool isInteract { get; set; } // 특성 카드 선택 중
-    public bool isDie { get; set; }
     public bool isJump { get; set; }
     public bool isLand { get; set; } // 착지
     public bool isDead { get; set; }
@@ -82,8 +81,6 @@ public abstract class PlayerBase : MonoBehaviour
     /// </summary>
     protected void CharacterAxisRotate()
     {
-        //if(isAttack || isDodge || isJump) return;
-
         // 카메라의 회전값을 가져온다
         Quaternion cameraRot = Camera.main.transform.rotation;
         // y축 회전값만 필요하므로 x,z 회전량은 0으로 만든다.
@@ -100,51 +97,46 @@ public abstract class PlayerBase : MonoBehaviour
     public void Move()
     {
         if(isAttack || isDodge || isCast) return;
-        
+
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(hDir, 0, vDir).normalized;
 
         if(vDir != 0 || hDir != 0)
-        {
             CharacterAxisRotate();
-        }
 
         // 플레이어 캐릭터는 키보드로 받은 방향을 바라본다.
         transform.LookAt(transform.position + moveDir);
         moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
 
-        if(moveDir == Vector3.zero)
+        if(moveDir == Vector3.zero) // 정지상태라면
         {
-            animator.SetBool("Move", false);
             isMove = false;
+            animator.SetBool("Move", false);
         }
-        else
+        else // 정지상태가 아니라면
         {
-            isMove = true;
             if(!isJump)
+            {
+                isMove = true;
                 animator.SetBool("Move", true);
+            }
             MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
             transform.position += moveDir * moveSpeed * Time.deltaTime;
         }
-
     }
     #endregion
     #region 행동:점프
     protected virtual void Jump()
     {
         if(isAttack || isDodge || isCast) return;
-        if(!isJump) animator.SetBool("Jump", false);
-        if(!enableMultipleJump)
+
+        if(!isJump) animator.SetBool("Jump", false); // 점프 상태가 아니라면 점프 애니메이션 끄기
+
+        if(!enableMultipleJump) // 다중 점프가 불가능한 상태라면
         {
-            if(!isJump && jumpKey)
+            if(!isJump && jumpKey) // 점프중이 아닌데 점프키가 눌렸다면
             {
-                if(isMove)
-                {
-                    isMove = false;
-                    animator.SetBool("Move", false);
-                }
-                animator.SetTrigger("Jump");
                 rbody.velocity = Vector3.up * jumpPower;
                 isJump = true;
             }
@@ -153,28 +145,30 @@ public abstract class PlayerBase : MonoBehaviour
         {
             if(jumpedCnt < possibleJumpNum && jumpKey)
             {
-                if(isMove)
-                {
-                    isMove = false;
-                    animator.SetBool("Move", false);
-                }
-                isJump = true;
-                animator.SetBool("Jump", true);
+                animator.SetTrigger("JumpTrigger");
                 rbody.velocity = Vector3.up * jumpPower;
                 ++jumpedCnt;
             }
         }
     }
 
-    public void OnCollisionEnter(Collision collision)
+    protected void CheckPlayerLand()
     {
-        if(collision.gameObject.tag == floorTag)
+        RaycastHit groundHit;
+        if(GroundCheck(out groundHit)) // 밑으로 Raycast를 쏘아서 땅을 한번더 확인
         {
-            //Land();
             isJump = false;
             jumpedCnt = 0;
             MoveSpeed = MoveSpeed;
         }
+        else
+            isJump = true;
+    }
+    bool GroundCheck(out RaycastHit hit)
+    {
+        //CharacterController의 isGrounded는 이전 프레임 때 Move등의 함수로 땅 쪽으로 향하였을 때 접지가 되어야만 true를 리턴한다.
+        //이는 경사로를 내려가거나 울퉁불퉁한 지면을 다닐때 수시로 false값을 반환하므로 Raycast로 땅을 한번 더 체크하여 안정성을 강화한다.
+        return Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f);
     }
     #endregion
 
