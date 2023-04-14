@@ -101,7 +101,7 @@ namespace SwordManState
         {
             p.isAttack = true;
             p.attackIndex = 3;
-            p.stateDuration = 3.5f;
+            p.stateDuration = 3.2f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
             //Debug.Log("플레이어 공격" + p.attackIndex + "실행!");

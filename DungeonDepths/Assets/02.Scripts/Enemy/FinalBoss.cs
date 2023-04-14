@@ -13,7 +13,6 @@ public class FinalBoss : MonoBehaviour
     [SerializeField] Transform targetTransform;
     [SerializeField] bool isDead;
    
-    public bool shouldCombo;
     //public bool[] precedingAttacks = new bool[3];
 
     bool isSecondPhase;
@@ -24,7 +23,6 @@ public class FinalBoss : MonoBehaviour
 
     void Awake()
     {
-
         finalBossTransform = GetComponent<Transform>();
         targetTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
         stateMachine = new StateMachine<FinalBoss>();
@@ -43,11 +41,6 @@ public class FinalBoss : MonoBehaviour
         //StartCoroutine(GetDelay());
         stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
     }
-    IEnumerator GetDelay()
-    {
-        yield return new WaitForSeconds(1.0f);
-        stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
-    } 
 
     private void Update()
     {
@@ -66,6 +59,10 @@ public class FinalBoss : MonoBehaviour
     //    return new Vector3(Mathf.Sign(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     //}
 
+    void GetHit()
+    {
+
+    }
     //보스와 플레이어 사이의 거리를 구해서 반환
     public float CheckDistance()
     {

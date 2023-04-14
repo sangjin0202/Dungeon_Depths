@@ -46,6 +46,7 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
 
     void Update()
     {
+        CheckPlayerLand();
         GetInput();
         
         Move();
@@ -65,7 +66,7 @@ public class PlayerSwordMan : PlayerBase, IAttack, ISkill, IDodge
     }
     void CheckAttackKey()
     {
-        if(isMove || isJump || isDodge || isCast) return;
+        if(isJump || isDodge || isCast) return;
 
         if(attackKey)
         {
