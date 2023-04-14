@@ -4,7 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - cd: {instanceID: 0}
+  - parent: {instanceID: 0}
+  - cardDatas: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

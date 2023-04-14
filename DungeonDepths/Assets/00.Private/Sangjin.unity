@@ -560,7 +560,7 @@ MonoBehaviour:
     parent: {fileID: 883085323}
   - name: Card
     prefab: {fileID: 3873407540520952760, guid: 72cf66dd2806f4d4391d80be77ccc1be, type: 3}
-    count: 4
+    count: 31
     parent: {fileID: 4565005970632315154}
   willGrow: 1
 --- !u!4 &779974815
