@@ -34,14 +34,17 @@ public class BossGolem : BossBaseFSM
     {
         SwordHitBox.OnEnemiesHit += this.GetHit;
     }
+
     public void OnMeleeAttackOneCollision()
     {
         MeleeHitBox1.SetActive(true);
     }
+
     public void OnMeleeAttackTwoCollision()
     {
         MeleeHitBox2.SetActive(true);
     }
+
     public override void GetHit(float _damage)
     {
         BossCurHp -= _damage;
@@ -51,7 +54,7 @@ public class BossGolem : BossBaseFSM
     }
     void Update()
     {
-        Debug.Log(stateMachine.CurrentState);
+        //Debug.Log(stateMachine.CurrentState);
         stateMachine.Execute();
     }
 }

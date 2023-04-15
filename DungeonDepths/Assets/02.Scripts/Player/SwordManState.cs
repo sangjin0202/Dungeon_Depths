@@ -13,7 +13,6 @@ namespace SwordManState
             p.numOfClicks = 0;
             p.stateDuration = 0;
             p.prevAtkTime = 0;
-            //p.shouldCombo = false;
             p.attackIndex = 0;
         }
         public override void Execute(PlayerSwordMan p)
@@ -24,6 +23,8 @@ namespace SwordManState
         {
 
         }
+
+
     }
     #endregion
 
@@ -37,7 +38,6 @@ namespace SwordManState
             p.stateDuration = 1f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
-            //Debug.Log("플레이어 공격" + p.attackIndex + "실행!");
         }
         public override void Execute(PlayerSwordMan p)
         {
@@ -45,12 +45,10 @@ namespace SwordManState
             {
                 p.numOfClicks = 0;
                 p.isAttack = false;
-                //Debug.Log(p.numOfClicks);
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
             else if(p.numOfClicks >= 2)
             {
-                //Debug.Log(p.numOfClicks);
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Combo));
             }
         }
@@ -71,19 +69,16 @@ namespace SwordManState
             p.stateDuration = 1.5f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
-            //Debug.Log("플레이어 공격" + p.attackIndex + "실행!");
         }
         public override void Execute(PlayerSwordMan p)
         {
             if(Time.time - p.prevAtkTime >= p.stateDuration)
             {
                 p.numOfClicks = 0;
-                //Debug.Log(p.numOfClicks);
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
             else if(p.numOfClicks == 3)
             {
-                //Debug.Log(p.numOfClicks);
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Finish));
             }
         }
@@ -104,14 +99,12 @@ namespace SwordManState
             p.stateDuration = 3.2f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
-            //Debug.Log("플레이어 공격" + p.attackIndex + "실행!");
         }
         public override void Execute(PlayerSwordMan p)
         {
             if(Time.time - p.prevAtkTime >= p.stateDuration)
             {
                 p.numOfClicks = 0;
-                //Debug.Log(p.numOfClicks);
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
         }
