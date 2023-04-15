@@ -33,23 +33,6 @@ public class WayPoints : MonoBehaviour
 		}
     }
 
-    public void MoveNextPoint()
-    {
-        index = (index + 1) % worldList.Count;
-        destinationPoint = worldList[index];
-    }
-
-    public bool CheckDestination(float _stopDistance, Vector3 _targetPos) // 도달지점검사
-	{
-        float _stopDistanceDouble = _stopDistance * _stopDistance;
-        Vector3 _dir = destinationPoint - _targetPos;
-		if (_dir.sqrMagnitude < _stopDistanceDouble)
-		{
-            return true;
-		}
-        return false;
-	}
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
@@ -69,11 +52,27 @@ public class WayPoints : MonoBehaviour
                     transform.TransformPoint(localList[i]),
                     transform.TransformPoint(localList[i + 1]));
             }
-			for (int i = 0; i < localList.Count; i++)
-			{
-                Gizmos.DrawSphere(localList[i], 0.1f);
+            for (int i = 0; i < localList.Count; i++)
+            {
+                Gizmos.DrawSphere(transform.TransformPoint(localList[i]), 0.5f);
             }
         }
     }
+    public void MoveNextPoint()
+    {
+        index = (index + 1) % worldList.Count;
+        destinationPoint = worldList[index];
+    }
+
+    public bool CheckDestination(float _stopDistance, Vector3 _targetPos) // 도달지점검사
+	{
+        float _stopDistanceDouble = _stopDistance * _stopDistance;
+        Vector3 _dir = destinationPoint - _targetPos;
+		if (_dir.sqrMagnitude < _stopDistanceDouble)
+		{
+            return true;
+		}
+        return false;
+	}
 
 }
