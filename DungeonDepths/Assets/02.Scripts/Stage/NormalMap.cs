@@ -1,13 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalMap : MapEntity
+public class NormalMap : Map
 {
     public List<Vector3> boxSpawnPoints = new List<Vector3>();    // 보물 상자 스폰 Points
     public List<Vector3> EnemySpawnPoints = new List<Vector3>();  // 몬스터 스폰 Points    
     [SerializeField]
-    private MapCore core; public MapCore Core { get; private set; }//코어
+    private MapCore core; 
+    public MapCore Core     //코어
+    { 
+        get; 
+        private set; 
+    }   
 
     public override void Awake()
     {

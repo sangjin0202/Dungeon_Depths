@@ -9,23 +9,17 @@ public class MeleeAttackMonster : MonsterBase
         base.Awake();
         Init();
     }
-    void Update()
+    protected override void Update()
     {
-        sm.Execute();
-
+        base.Update();
     }
     public override void Init()
     {
-        damage = 10;
-        attackDistance = 3f;
-        traceDistance = 10f;
-        moveSpeed = 3f;
-        rotSpeed = 90f;
-        attackSpeed = 0.5f;
-        curHp = maxHp;
-    }
-    public override void GetHit()
-    {
-        //ToDo 주은
+        AttackDistance = 3f;
+        TraceDistance = 10f;
+        // damage 설정 함수 호출
+        // moveSpeed 설정 함수 호출
+        // attackSpeed 설정 함수 호출
+        //monsterStats.CurHP = monsterStats.MaxHP;
     }
 }
