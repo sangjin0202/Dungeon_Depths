@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Stage1_OldPort
   m_EditorClassIdentifier: 
   mapName: OldPort
-  position: {x: 0, y: 0, z: 0}
-  type: 0
+  position: {x: 0, y: 0, z: 200}
+  type: 1
   theme: 2
-  difficulty: 0
-  totalBoxNum: 4
+  difficulty: 1
+  totalBoxNum: 3
