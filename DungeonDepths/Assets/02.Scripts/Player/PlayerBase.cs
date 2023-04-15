@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-//using PlayerState;
-public abstract class PlayerBase : MonoBehaviour
+public class PlayerBase : MonoBehaviour
 {
-
     //구본혁
     /*TODO
      * 특성카드 적용 구현
@@ -20,9 +16,7 @@ public abstract class PlayerBase : MonoBehaviour
     public bool isDamaged { get; set; }
     public bool isCast { get; set; } // 스킬 사용 중
     public bool isInteract { get; set; } // 특성 카드 선택 중
-    public bool isDie { get; set; }
     public bool isJump { get; set; }
-    public bool isLand { get; set; } // 착지
     public bool isDead { get; set; }
     #endregion
 
@@ -41,40 +35,17 @@ public abstract class PlayerBase : MonoBehaviour
     protected int jumpedCnt;
     protected float jumpPower { get; set; }
     protected int possibleJumpNum { get; set; }
-    protected bool enableMultipleJump { get; set; }
     protected Rigidbody rbody { get; set; }
     #endregion
 
     protected float hDir, vDir;
     protected Vector3 moveDir;
-    float xRot, yRot;
 
-    #region 조작 키
-    public bool runKey { get; private set; }
-    public bool dodgeKey { get; set; }
-    public bool jumpKey { get; private set; }
-    public bool attackKey { get; private set; }
-    public bool skillOneKey { get; private set; }
-    public bool skillTwoKey { get; private set; }
-    #endregion
-
-    string floorTag = "Floor";
-
-
-    #region 입력 받기
-    protected virtual void GetInput()
+    protected virtual void Update()
     {
-        hDir = Input.GetAxisRaw("Horizontal");
-        vDir = Input.GetAxisRaw("Vertical");
-        runKey = Input.GetButton("Run");
-        jumpKey = Input.GetButtonDown("Jump");
-
-        attackKey = Input.GetMouseButtonDown(0);
-
-        skillOneKey = Input.GetButtonDown("Skill1");
-        skillTwoKey = Input.GetButtonDown("Skill2");
+        Move();
+        Jump();
     }
-    #endregion
 
     #region 행동:회전
     /// <summary>
@@ -82,8 +53,6 @@ public abstract class PlayerBase : MonoBehaviour
     /// </summary>
     protected void CharacterAxisRotate()
     {
-        //if(isAttack || isDodge || isJump) return;
-
         // 카메라의 회전값을 가져온다
         Quaternion cameraRot = Camera.main.transform.rotation;
         // y축 회전값만 필요하므로 x,z 회전량은 0으로 만든다.
@@ -91,116 +60,83 @@ public abstract class PlayerBase : MonoBehaviour
 
         //캐릭터의 회전값에 카메라의 회전값을 대입한다.
         transform.rotation = cameraRot;
-
         moveDir = transform.TransformDirection(moveDir);
-        //transform.LookAt(transform.position + moveDir);
     }
     #endregion
     #region 행동:이동
     public void Move()
     {
         if(isAttack || isDodge || isCast) return;
-        
+
+        hDir = Input.GetAxisRaw("Horizontal");
+        vDir = Input.GetAxisRaw("Vertical");
+
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(hDir, 0, vDir).normalized;
 
         if(vDir != 0 || hDir != 0)
-        {
             CharacterAxisRotate();
-        }
 
         // 플레이어 캐릭터는 키보드로 받은 방향을 바라본다.
         transform.LookAt(transform.position + moveDir);
-        moveSpeed = runKey ? MoveSpeed * 2 : MoveSpeed;
+        moveSpeed = Input.GetButton("Run") ? MoveSpeed * 2 : MoveSpeed;
 
-        if(moveDir == Vector3.zero)
+        if(moveDir == Vector3.zero) // 정지상태라면
         {
-            animator.SetBool("Move", false);
             isMove = false;
+            animator.SetBool("Move", isMove);
         }
-        else
+        else // 정지상태가 아니라면
         {
-            isMove = true;
             if(!isJump)
-                animator.SetBool("Move", true);
+            {
+                isMove = true;
+                animator.SetBool("Move", isMove);
+            }
+
             MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
             transform.position += moveDir * moveSpeed * Time.deltaTime;
         }
-
     }
     #endregion
     #region 행동:점프
     protected virtual void Jump()
     {
+        if(rbody.velocity.y < 0)
+            CheckPlayerLand(); 
         if(isAttack || isDodge || isCast) return;
-        if(!isJump) animator.SetBool("Jump", false);
-        if(!enableMultipleJump)
+
+        if(Input.GetButtonDown("Jump") && jumpedCnt < possibleJumpNum) // 점프중이 아닌데 점프키가 눌렸다면
         {
-            if(!isJump && jumpKey)
-            {
-                if(isMove)
-                {
-                    isMove = false;
-                    animator.SetBool("Move", false);
-                }
-                animator.SetTrigger("Jump");
-                rbody.velocity = Vector3.up * jumpPower;
-                isJump = true;
-            }
-        }
-        else
-        {
-            if(jumpedCnt < possibleJumpNum && jumpKey)
-            {
-                if(isMove)
-                {
-                    isMove = false;
-                    animator.SetBool("Move", false);
-                }
-                isJump = true;
-                animator.SetBool("Jump", true);
-                rbody.velocity = Vector3.up * jumpPower;
-                ++jumpedCnt;
-            }
+            isJump = true;
+            rbody.velocity = Vector3.up * jumpPower;
+            animator.SetTrigger("JumpTrigger");
+            ++jumpedCnt;
         }
     }
 
-    public void OnCollisionEnter(Collision collision)
+    protected void CheckPlayerLand()
     {
-        if(collision.gameObject.tag == floorTag)
+        RaycastHit groundHit;
+        if(Physics.Raycast(transform.position, Vector3.down, out groundHit, 0.3f)) // 밑으로 Raycast를 쏘아서 땅을 한번더 확인
         {
-            //Land();
             isJump = false;
             jumpedCnt = 0;
-            MoveSpeed = MoveSpeed;
         }
+
     }
     #endregion
-
-    #region 행동:피격
-    public abstract void GetHit(float _damage);
-    #endregion
-
-    #region 행동:사망
-    protected abstract void Die();
-    #endregion
+    
     public void GetCard()
     { // 선택한 특성카드 적용
 
     }
 }
-interface IAttack
+interface IPlayerActions
 {
     public void Attack();
-}
-
-interface ISkill
-{
     public void UseSkill();
-}
-
-interface IDodge
-{
     public void Dodge();
 }
+

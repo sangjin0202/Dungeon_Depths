@@ -6,25 +6,23 @@ public class FinalBoss : MonoBehaviour
     public enum FinalBossStates { Idle, AttackIdle, Trace, MeleeAttack1, MeleeAttack2, MeleeAttack3, Die };
     public StateMachine<FinalBoss> stateMachine;
     public Animator animator;
-    public float comboDuration = 1.2f;
+    public float comboDuration = 2.5f;
     [SerializeField] float moveSpeed = 6.5f;
     [SerializeField] float rotationSpeed = 3f;
     [SerializeField] Transform finalBossTransform;
     [SerializeField] Transform targetTransform;
     [SerializeField] bool isDead;
-   
-    public bool shouldCombo;
-    //public bool[] precedingAttacks = new bool[3];
 
-    bool isSecondPhase;
+    public bool isSecondPhase;
     float meleeAttackRange = 5f;
     float meleeAttackAngle = 60f;
 
+    float hpMax = 1000, hpCur;
     readonly int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
 
     void Awake()
     {
-
+        hpCur = hpMax;
         finalBossTransform = GetComponent<Transform>();
         targetTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
         stateMachine = new StateMachine<FinalBoss>();
@@ -40,14 +38,8 @@ public class FinalBoss : MonoBehaviour
         stateMachine.AddState((int)FinalBossStates.MeleeAttack2, new FinalBossState.MeleeAttack2());
         stateMachine.AddState((int)FinalBossStates.MeleeAttack3, new FinalBossState.MeleeAttack3());
 
-        //StartCoroutine(GetDelay());
         stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
     }
-    IEnumerator GetDelay()
-    {
-        yield return new WaitForSeconds(1.0f);
-        stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
-    } 
 
     private void Update()
     {
@@ -65,6 +57,23 @@ public class FinalBoss : MonoBehaviour
     //    angle += transform.eulerAngles.y;
     //    return new Vector3(Mathf.Sign(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     //}
+
+    public void GetHit(float _damage)
+    {
+        hpCur -= _damage;
+        if(hpCur <= hpMax * 0.6)
+        {
+            isSecondPhase = true;
+            //animator.SetTrigger("Stun");
+        }
+        else if(hpCur <= 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        //animator.SetTrigger("Die");
+    }
 
     //보스와 플레이어 사이의 거리를 구해서 반환
     public float CheckDistance()
@@ -118,39 +127,38 @@ public class FinalBoss : MonoBehaviour
     public bool IsPlayerInAttackSight(float _dist, out int _attackIndex)
     {
         //Debug.Log("보스 공격 시야 확인");
-        RaycastHit hit;
+        //RaycastHit hit;
         Ray ray = new Ray(finalBossTransform.position, finalBossTransform.forward);
         Vector3 dir = (targetTransform.position - finalBossTransform.position).normalized;
-        Debug.DrawRay(finalBossTransform.position, finalBossTransform.forward);
         // 근접공격1 사거리 내에 들어와있다면
         if(_dist < meleeAttackRange)
         {
             float dot = Vector3.Dot(finalBossTransform.forward, dir);
             float theta = Mathf.Acos(dot);
             float angle = Mathf.Rad2Deg * theta;
-            
+
             //if(Physics.Raycast(ray, out hit, meleeAttackRange) && hit.collider.CompareTag("Player"))
-            if(angle <= meleeAttackAngle / 3)
+            if(angle <=  meleeAttackAngle / 5)
             {
                 _attackIndex = 1;
                 return true;
             }
+            //else if(angle >= -meleeAttackAngle && isSecondPhase && angle <= 0)
+            //{
+            //    _attackIndex = 3;
+            //    return true;
+            //}
             else if(angle <= meleeAttackAngle * 2)
             {
                 _attackIndex = 2;
                 return true;
             }
-            //else if(angle <= meleeAttackAngle && isSecondPhase)
-            //{
-            //    attackIndex = 3;
-            //    return true;
-            //}
             else Rotation();
         }
         _attackIndex = 0;
         return false;
     }
-    
+
     public bool ShouldCombo(out int comboIndex)
     {
         Debug.Log("콤보어택 검사");

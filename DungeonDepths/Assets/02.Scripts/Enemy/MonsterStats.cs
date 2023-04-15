@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterStats
-{
+{ 
     protected int maxHP;
     protected int curHP;
+    protected int damage;
+    protected float moveSpeed;
+    protected float attackSpeed; 
+
+    //TODO 주은 | 스탯 별 증가 감소 함수 구현
+
     public int MaxHP 
     {
         get => maxHP;
@@ -25,18 +31,16 @@ public class MonsterStats
                 return false;
         }
     }
-    public MonsterStats(int _maxHp)
+    public int Damage
     {
-
+        get => damage;
     }
-
-    public void InitStats(int _difficulty)
-    {
-        maxHP = (int)(maxHP * _difficulty);
-        curHP = maxHP;
+    public float MoveSpeed 
+    { 
+        get => moveSpeed; 
     }
-    public void InitStatsAsZero()
+    public float AttackSpeed
     {
-        curHP = 0;
+        get => attackSpeed;
     }
 }

@@ -12,18 +12,17 @@ namespace FinalBossState
 
         public override void Enter(FinalBoss f)
         {
-
             Debug.Log("대기 상태 시작");
             if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle))
-                stateDuration = 2f;
+                stateDuration = 1f;
             else
                 stateDuration = 3f;
-            
             stateEnterTime = Time.time;
             f.animator.SetFloat("MoveSpeed", 0);
-            //f.shouldCombo = false;
             for(int i = 1; i <= 3; i++)
                 f.animator.SetBool("Combo" + i, false);
+
+
         }
         public override void Execute(FinalBoss f)
         {
@@ -45,14 +44,20 @@ namespace FinalBossState
     {
         int comboIndex;
         float firstAtkTime;
+        float decisionTime;
         public override void Enter(FinalBoss f)
         {
             firstAtkTime = Time.time;
+            if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack1))
+                decisionTime = 0.8f;
+            //else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack2))
+            else
+                decisionTime = 0.5f;
         }
         public override void Execute(FinalBoss f)
         {
             // 0.7초 + @ 동안 딜레이
-            if(Time.time - firstAtkTime < 0.8f) return;
+            if(Time.time - firstAtkTime < decisionTime) return;
 
             //f.Rotation();
 
@@ -73,6 +78,8 @@ namespace FinalBossState
                 else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack2))
                     f.animator.SetBool("Combo2", true);
                 //else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack3))
+                else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack3))
+                    f.animator.SetBool("Combo3", true);
                 else
                     f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
                 //f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
@@ -124,7 +131,7 @@ namespace FinalBossState
         //float firstAtkTime;
         public override void Enter(FinalBoss f)
         {
-            Debug.Log("공격1 시작");
+            //Debug.Log("공격1 시작");
             // 공격 모션 실행
             f.animator.SetTrigger("Attack1Trigger");
             // 첫타 공격모션이 실행된 시간을 기록한다.
@@ -154,7 +161,7 @@ namespace FinalBossState
         //int comboIndex;
         public override void Enter(FinalBoss f)
         {
-            Debug.Log("공격2 시작");
+            //Debug.Log("공격2 시작");
             f.animator.SetTrigger("Attack2Trigger");
             //f.precedingAttacks[1] = true;
         }
@@ -174,9 +181,11 @@ namespace FinalBossState
     {
         public override void Enter(FinalBoss f)
         {
+            f.animator.SetTrigger("Attack3Trigger");
         }
         public override void Execute(FinalBoss f)
         {
+            f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle));
         }
         public override void Exit(FinalBoss f)
         {

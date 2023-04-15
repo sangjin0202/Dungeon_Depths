@@ -1,44 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
 {
     #region Monster Stats
-    protected int damage;                   public int Damage { get { return damage; }}
-    protected float attackDistance;         public float AttackDistance { get { return attackDistance; } }
-    protected float traceDistance;          public float TraceDistance { get { return traceDistance; } }
-    protected float traceDisOffset = 2f;
-    protected float stopDistance = 0.2f;
-
-    protected float moveSpeed;              public float MoveSpeed { get { return moveSpeed; } }
-    protected float rotSpeed;               public float RotSpeed { get { return rotSpeed; } }
-    protected float attackSpeed = 2f;       public float AttackSpeed { get { return attackSpeed; } }    // 공격 쿨
-    protected float searchSpeed = 1f;       public float SearchSpeed { get { return searchSpeed; } }  // 탐색 쿨
-    protected int maxHp = 100;              public int MaxHp { get { return maxHp; } }
-    protected int curHp;                    public int CurHp { get { return curHp; } set { if (curHp <= 0) curHp = 0; } }
+    protected MonsterStats stats;
+    private float attackDistance;
+    private float traceDistance;
+    private float traceDisOffset = 2f;
+    private float stopDistance = 0.2f;
+    private float rotSpeed = 90f;
+    private float searchSpeed = 1f;
+    public float TraceDistance
+    {
+        get => traceDistance;
+        set => traceDistance = value;
+    }
+    public float AttackDistance
+    {
+        get => attackDistance;
+        set => attackDistance = value;
+    }
     #endregion
-    #region state관련 변수
-    public enum eMonsterState { Idle, Patrol, Trace, Attack, Die } // 접근 제한자 설정
     public WayPoints wayPoints;
-
     private GameObject target;
-
-    protected StateMachine<MonsterBase> sm;
     protected GameObject curTarget;
     protected Animator anim;
+    #region state관련 변수
+    public enum eMonsterState { Idle, Patrol, Trace, Attack, Die }
+    private StateMachine<MonsterBase> sm;
 
     public float PrevTime { get; set; } = 0f;
     public float IdleTime { get; set; } = 0f;
     public float LastAttackTime { get; set; } = 0f;
     public float LastSearchTime { get; set; } = 0f;
-    public Animator Anim { get => anim; }
+    public Animator Anim 
+    {
+        get => anim; 
+    }
        
     #endregion
     protected virtual void Awake()
     {
+        target = GameObject.FindWithTag("Player");
         wayPoints = GetComponent<WayPoints>();
-        target = GameObject.Find("Player");
         anim = GetComponent<Animator>();
         #region state 설정
         sm = new StateMachine<MonsterBase>();
@@ -51,8 +55,11 @@ public abstract class MonsterBase : MonoBehaviour
         #endregion
 
     }
+    protected virtual void Update()
+    {
+        sm.Execute();
+    }
     public abstract void Init();
-    public abstract void GetHit();  // 맞는거
     public void CheckIdleState()
     {
         if (curTarget != null)
@@ -96,16 +103,17 @@ public abstract class MonsterBase : MonoBehaviour
                 //ToDo 주은. Player가 Damage받는거 호출해오기
                 Vector3 dir = curTarget.transform.position - transform.position;
                 transform.rotation = Quaternion.LookRotation(dir);
-                LastAttackTime = Time.time + attackSpeed;
+                LastAttackTime = Time.time + stats.AttackSpeed;
             }
+            else
+                sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
         }
-        else
-            sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
+        
     }
     public void MoveAndRotate(Vector3 _targetPos)
     {
         Vector3 dir = _targetPos - transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, _targetPos, moveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _targetPos, stats.MoveSpeed * Time.deltaTime);
         Quaternion rot = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotSpeed * Time.deltaTime);
     }
