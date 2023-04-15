@@ -35,7 +35,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         MoveSpeed = 3.5f;
         AttackDelay = 1f;
         AttackRange = 2f;
-        jumpPower = 7f;
+        jumpPower = 8f;
         possibleJumpNum = 2; //점프 최대 2번
         rbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
