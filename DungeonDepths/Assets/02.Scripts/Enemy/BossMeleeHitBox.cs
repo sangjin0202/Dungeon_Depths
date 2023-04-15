@@ -27,7 +27,7 @@ public class BossMeleeHitBox : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Debug.Log("보스 공격 성공 : " + other.name);
-            player.GetHit(damage);
+            //player.GetHit(damage);
         }
     }
 }
