@@ -13,7 +13,6 @@ public class CardManager : MonoBehaviour
 
 	public void Awake()
 	{
-		SetData();
 	}
 
 	private void Start()
@@ -21,9 +20,14 @@ public class CardManager : MonoBehaviour
 		InitCardData();
 	}
 
-	private void InitCardData() // 풀매니저에서 동적할당한 프리팹에 (스크립터블 오브젝트에서 옮긴 리스트)데이터 옮겨주기
+	private void InitCardData() 
 	{
-		for (int i = 0; i < cardList.Count; i++)
+		foreach (var _data in cardDatas.cardDataList) // 스크립터블 오브젝트 데이터를 리스트로 옮겨 담은 후
+		{
+			cardList.Add(_data);
+		}
+
+		for (int i = 0; i < cardList.Count; i++) // 풀매니저에서 동적할당한 프리팹에 (스크립터블 오브젝트에서 옮긴 리스트)데이터 옮겨주기
 		{
 			GameObject _list = parent.transform.GetChild(i).gameObject;
 			var _cardObjList = _list.GetComponent<Card>();
@@ -36,11 +40,4 @@ public class CardManager : MonoBehaviour
 		}
 	}
 
-	private void SetData() // 스크립터블 데이터를 리스트로 옮기기
-	{
-		foreach (var _data in cardDatas.cardDataList)
-		{
-			cardList.Add(_data);
-		}
-	}
 }
