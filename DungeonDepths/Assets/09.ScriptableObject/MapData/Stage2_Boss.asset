@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stage2_Boss
   m_EditorClassIdentifier: 
   mapName: Nature_Boss
-  position: {x: 0, y: 0, z: 0}
+  position: {x: 500, y: 0, z: 500}
   type: 2
   theme: 1
   difficulty: 3

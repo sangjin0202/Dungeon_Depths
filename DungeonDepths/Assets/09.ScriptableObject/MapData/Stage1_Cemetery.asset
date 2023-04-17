@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Stage1_Cemetery
   m_EditorClassIdentifier: 
   mapName: 
-  position: {x: 0, y: 0, z: 0}
-  type: 0
-  theme: 0
-  difficulty: 0
+  position: {x: -200, y: 0, z: -200}
+  type: 1
+  theme: 2
+  difficulty: 2
   totalBoxNum: 0

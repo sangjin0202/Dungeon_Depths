@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FinalBoss
   m_EditorClassIdentifier: 
   mapName: 
-  position: {x: 0, y: 0, z: 0}
-  type: 0
+  position: {x: -500, y: 0, z: -500}
+  type: 2
   theme: 0
-  difficulty: 0
+  difficulty: 3
   totalBoxNum: 0

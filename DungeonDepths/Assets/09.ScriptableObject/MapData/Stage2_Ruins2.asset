@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stage2_Ruins2
   m_EditorClassIdentifier: 
   mapName: Ruins
-  position: {x: 100, y: 0, z: 100}
+  position: {x: 300, y: 0, z: 300}
   type: 1
   theme: 1
   difficulty: 1

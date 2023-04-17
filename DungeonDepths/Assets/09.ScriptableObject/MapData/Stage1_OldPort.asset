@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stage1_OldPort
   m_EditorClassIdentifier: 
   mapName: OldPort
-  position: {x: 0, y: 0, z: 200}
+  position: {x: 700, y: 0, z: 700}
   type: 1
   theme: 2
   difficulty: 1
