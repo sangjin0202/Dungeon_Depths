@@ -16,6 +16,8 @@ public class MapData : ScriptableObject
     private MapDifficulty difficulty;   //난이도
     [SerializeField]
     private int totalBoxNum;            //맵에 존재하는 총 보물 상자 수
+    [SerializeField]
+    private int totalMonsterNum;        //맵에 소환되는 총 몬스터 수
 
     public string MapName
     {
@@ -46,5 +48,10 @@ public class MapData : ScriptableObject
     {
         get => totalBoxNum;
         set => totalBoxNum = value;
+    }
+    public int TotalMonsterNum
+    {
+        get => totalMonsterNum;
+        set => totalMonsterNum = value;
     }
 }
