@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa2da5b9f2770b44bb149705cb3b322, type: 3}
   m_Name: FinalBoss
   m_EditorClassIdentifier: 
-  mapName: 
+  mapName: "\uCD5C\uC885 \uBCF4\uC2A4"
   position: {x: -500, y: 0, z: -500}
   type: 2
   theme: 0

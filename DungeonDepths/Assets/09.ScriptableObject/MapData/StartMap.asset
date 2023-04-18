@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa2da5b9f2770b44bb149705cb3b322, type: 3}
   m_Name: StartMap
   m_EditorClassIdentifier: 
-  mapName: StartZone
+  mapName: "\uC2DC\uC791 \uB9F5"
   position: {x: 0, y: 0, z: 0}
   type: 4
   theme: 0

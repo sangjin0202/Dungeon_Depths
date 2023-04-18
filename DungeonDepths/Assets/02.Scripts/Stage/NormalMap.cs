@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class NormalMap : Map
 {
+    [SerializeField]
+    private MapCore core;
     public List<Vector3> boxSpawnPoints = new List<Vector3>();    // 보물 상자 스폰 Points
     public List<Vector3> EnemySpawnPoints = new List<Vector3>();  // 몬스터 스폰 Points    
-    [SerializeField]
-    private MapCore core; 
     public MapCore Core     //코어
     { 
         get; 
