@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumTypes;
 
 public class Portal : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class Portal : MonoBehaviour
 	{
 		if(other.CompareTag(playerTag))
 		{
-			//UI.띄우기 (매니저에서 함수호출)
+			UIManager.Instance.OnWindow(Window.MAP);
 		}
 	}
 	

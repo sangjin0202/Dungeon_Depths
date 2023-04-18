@@ -7,6 +7,7 @@ public class MapCore : MonoBehaviour
 	//TODO 주은. 파괴 이벤트 테스트 중
 	public delegate void EventHandler();
 	public event EventHandler OnEvent;
+	// 포탈 생성 여기서 하도록
 
 	private void OnEnable()	// 활성화될 때 초기화되도록
     {
@@ -24,10 +25,9 @@ public class MapCore : MonoBehaviour
 		Debug.Log("MapCore에서 이벤트 발생 : " + IsDestroyed);
 		//gameObject.SetActive(false);
 	}
-
     private void OnDisable()
     {
 		//임시 테스트
 		OnEvent();
-    }
+	}
 }
