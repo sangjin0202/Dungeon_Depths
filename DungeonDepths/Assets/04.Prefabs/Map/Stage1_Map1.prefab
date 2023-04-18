@@ -427,10 +427,12 @@ MonoBehaviour:
   - {x: -21, y: 16, z: 13}
   EnemySpawnPoints:
   - {x: -6, y: 0.3, z: -33}
-  - {x: 7, y: 0.3, z: -6.5}
+  - {x: -7, y: 0.3, z: -6.5}
   - {x: -6, y: 0.3, z: 23.5}
   - {x: 14, y: 0.3, z: 10}
   - {x: -14, y: 6, z: -3.7}
+  - {x: -17.2, y: 0.3, z: 13}
+  - {x: 6.2, y: 0.3, z: 17.3}
 --- !u!114 &2831724745540154425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,7 +445,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f1a9a72b3dac042b9997b37eb68a0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localList: []
+  localList:
+  - {x: 6.2235107, y: 0.2999878, z: 17.323975}
   destinationPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &4112113205951088422
 GameObject:
@@ -5570,7 +5573,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6358646535247891839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.31, y: 0.55, z: -20.758}
+  m_LocalPosition: {x: 13.02, y: 2.96, z: -19.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

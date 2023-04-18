@@ -18,3 +18,4 @@ MonoBehaviour:
   theme: 2
   difficulty: 1
   totalBoxNum: 3
+  totalMonsterNum: 7

@@ -10,6 +10,10 @@ public class StageManager : MonoSingleton<StageManager>
     Map curMap;
     GameObject player;
 
+    public Map CurMap
+    {
+        get => curMap;
+    }
     public List<Map> GetMapInfoList()
     {
         return mapInfoList;
@@ -17,7 +21,13 @@ public class StageManager : MonoSingleton<StageManager>
     public void Awake()
     {
         player = GameObject.FindWithTag("Player").gameObject;
+    }
+
+    public void Start()
+    {
         InitMapList();
+        Debug.Log("StageManager Start()");
+
     }
 
     void InitMapList()
@@ -46,6 +56,14 @@ public class StageManager : MonoSingleton<StageManager>
         curMap.gameObject.SetActive(false);
         curMap = _selectedMap;
         player.transform.position = curMap.StartPosition.position;
+
+        MonsterManager.Instance.SpawnMonsters(EnumTypes.MonsterID.Chomper, curMap.gameObject.GetComponent<NormalMap>().GetWorldSpawnPoints(), curMap.mapData.TotalMonsterNum);
+
+        curMap.gameObject.GetComponent<NormalMap>().SpawnBoxes();
     }
 
+    public void ClearStage() // TODO 추후 수정 : 이벤트 함수로 구현할지
+    {
+        MonsterManager.Instance.DeactiveMonsterList();
+    }
 }

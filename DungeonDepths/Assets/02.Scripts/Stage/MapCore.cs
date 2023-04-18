@@ -22,7 +22,7 @@ public class MapCore : MonoBehaviour
 	{
 		//TODO 주은
 		IsDestroyed = true;
-		Debug.Log("MapCore에서 이벤트 발생 : " + IsDestroyed);
+		//Debug.Log("MapCore에서 이벤트 발생 : " + IsDestroyed);
 		//gameObject.SetActive(false);
 	}
     private void OnDisable()

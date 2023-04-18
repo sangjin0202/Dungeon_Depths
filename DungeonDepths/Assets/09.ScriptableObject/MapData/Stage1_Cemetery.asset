@@ -17,4 +17,5 @@ MonoBehaviour:
   type: 1
   theme: 2
   difficulty: 2
-  totalBoxNum: 0
+  totalBoxNum: 3
+  totalMonsterNum: 5
