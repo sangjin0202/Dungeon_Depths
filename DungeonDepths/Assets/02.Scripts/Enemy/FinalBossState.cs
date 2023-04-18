@@ -13,23 +13,19 @@ namespace FinalBossState
         public override void Enter(FinalBoss f)
         {
             Debug.Log("대기 상태 시작");
-            if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle))
-                stateDuration = 1f;
-            else
-                stateDuration = 3f;
             stateEnterTime = Time.time;
             f.animator.SetFloat("MoveSpeed", 0);
+            if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle))
+                stateDuration = 1.2f;
+            else
+                stateDuration = 3f;
             for(int i = 1; i <= 3; i++)
                 f.animator.SetBool("Combo" + i, false);
-
-
         }
         public override void Execute(FinalBoss f)
         {
             Debug.Log("대기 상태 중");
             if(Time.time - stateEnterTime < stateDuration) return;
-            //f.Rotation();
-            //f.Trace();
             f.CheckTraceState();
         }
         public override void Exit(FinalBoss f)
@@ -43,8 +39,7 @@ namespace FinalBossState
     class AttackIdle : State<FinalBoss>
     {
         int comboIndex;
-        float firstAtkTime;
-        float decisionTime;
+        float firstAtkTime, decisionTime;
         public override void Enter(FinalBoss f)
         {
             firstAtkTime = Time.time;
@@ -61,35 +56,24 @@ namespace FinalBossState
 
             //f.Rotation();
 
-            // 콤보 공격을 할수 있는 시간 내에
-            // 여전히 플레이어가 사거리 안에 있고
+            // 콤보 공격을 할수 있는 시간 내에, 여전히 플레이어가 사거리 안에 있고
             // 이를 보스가 포착했다면
             if(Time.time - firstAtkTime <= f.comboDuration && f.ShouldCombo(out comboIndex))
             {
-                //if(f.ShouldCombo(out comboIndex))
-                //{
-                //if(f.precedingAttacks[comboIndex - 1])
-                //{
-
                 //Debug.Log("콤보 공격 : " + comboIndex);
                 //f.animator.SetTrigger("Combo" + comboIndex);
                 if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack1))
                     f.animator.SetBool("Combo1", true);
                 else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack2))
                     f.animator.SetBool("Combo2", true);
-                //else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack3))
                 else if(f.stateMachine.PreviousState == f.stateMachine.GetState((int)FinalBoss.FinalBossStates.MeleeAttack3))
                     f.animator.SetBool("Combo3", true);
                 else
                     f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
-                //f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
-                //f.precedingAttacks[comboIndex - 1] = false;
-                //}
-                //}
             }
             else
             {
-                Debug.Log("콤보 유지 실패");
+                //Debug.Log("보스 콤보 유지 실패");
                 f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
             }
         }
@@ -104,7 +88,7 @@ namespace FinalBossState
         public override void Enter(FinalBoss f)
         {
             Debug.Log("추격상태 시작");
-            f.animator.SetFloat("MoveSpeed", 6.5f);
+            f.animator.SetFloat("MoveSpeed", 9f);
         }
         public override void Execute(FinalBoss f)
         {
@@ -127,28 +111,15 @@ namespace FinalBossState
     /// </summary>
     class MeleeAttack1 : State<FinalBoss>
     {
-        //int comboIndex;
-        //float firstAtkTime;
         public override void Enter(FinalBoss f)
         {
             //Debug.Log("공격1 시작");
             // 공격 모션 실행
             f.animator.SetTrigger("Attack1Trigger");
-            // 첫타 공격모션이 실행된 시간을 기록한다.
-            // firstAtkTime = Time.time;
-            //f.precedingAttacks[0] = true;
         }
         public override void Execute(FinalBoss f)
         {
-            //Debug.Log("공격1 실행중");
             f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle));
-            //if(Time.time - firstAtkTime <= f.comboDuration)
-            //{
-            //    if(f.ShouldCombo(out comboIndex))
-            //        Debug.Log("콤보 공격 : " + comboIndex);
-            //        f.animator.SetTrigger("Combo" + comboIndex);
-            //}
-            //f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Idle));
         }
 
         public override void Exit(FinalBoss f)
@@ -158,18 +129,13 @@ namespace FinalBossState
     }
     class MeleeAttack2 : State<FinalBoss>
     {
-        //int comboIndex;
         public override void Enter(FinalBoss f)
         {
             //Debug.Log("공격2 시작");
             f.animator.SetTrigger("Attack2Trigger");
-            //f.precedingAttacks[1] = true;
         }
         public override void Execute(FinalBoss f)
         {
-            //if(f.ShouldCombo(out comboIndex))
-            //    f.animator.SetTrigger("Combo" + comboIndex);
-            //else f.animator.SetBool("isAttack2", false);
             f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.AttackIdle));
         }
         public override void Exit(FinalBoss f)
@@ -193,6 +159,27 @@ namespace FinalBossState
         }
     }
 
+    class RangeAttack : State<FinalBoss>
+    {
+        float stateEnterTime, stateDuration = 2f;
+        public override void Enter(FinalBoss f)
+        {
+            stateEnterTime = Time.time;
+            f.animator.SetTrigger("RangeAttack");
+            f.prevRangeAtkTime = Time.time;
+        }
+
+        public override void Execute(FinalBoss f)
+        {
+            if(Time.time - stateEnterTime >= stateDuration)
+                f.stateMachine.ChangeState(f.stateMachine.GetState((int)FinalBoss.FinalBossStates.Trace));
+        }
+
+        public override void Exit(FinalBoss f)
+        {
+
+        }
+    }
 
     class Die : State<FinalBoss>
     {
