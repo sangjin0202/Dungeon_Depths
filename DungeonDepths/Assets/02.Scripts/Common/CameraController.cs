@@ -6,53 +6,68 @@ public class CameraController : MonoBehaviour
 {
 	public Vector3 delta = new Vector3(0f, 2f, 5f);    // 카메라 offset 값 : 위치 조절용
 	public GameObject player = null;
-	public Camera mainCamera;
-	public Transform cameraPivotTr;
+	//public Camera mainCamera;
 	Vector3 offset;
 	float zoomSpeed = 10f;
 	float rotationX = 0.0f;         // X축 회전값
 	float rotationY = 0.0f;         // Y축 회전값
 	float speed = 100.0f;           // 회전속도
-
+	string playerTag = "Player";
 	void Awake()
 	{
-		player = GameObject.FindWithTag("Player").gameObject;
+		//mainCamera = GetComponent<Camera>();
+		player = GameObject.FindWithTag(playerTag).gameObject;
 		
-	}
-	void Start()
-	{
 		transform.position = player.transform.position + delta;
 		transform.LookAt(player.transform.position + Vector3.up * 1f);
-		offset = transform.position - player.transform.position;
+		offset = player.transform.position - transform.position;
 	}
+	//void Start()
+	//{
+	//	transform.position = player.transform.position + delta;
+	//	transform.LookAt(player.transform.position + Vector3.up * 1f);
+	//	offset = transform.position - player.transform.position;
+	//}
 	void LateUpdate()
 	{
-		transform.position = player.transform.position + offset;
+        // offset 만큼 거리를 두고 플레이어를 쫓아간다.
+        transform.position = player.transform.position + offset;
 		Rotate();
 		Zoom();
-		offset = transform.position - player.transform.position;
+		//offset = transform.position - player.transform.position;
+		offset = player.transform.position - transform.position;
+
+
+		RaycastHit hit;
+		if(Physics.Raycast(transform.position, offset, out hit) && !hit.collider.CompareTag(playerTag))
+		{
+			Debug.Log("카메라가 찍는 물체의 태그 : " + hit.collider.name);
+			transform.position = player.transform.position + new Vector3(0, 1.5f, -0.8f);
+		}
 	}
 	void Zoom()
 	{
 		float distance = Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
-		float newDeltaMagnitude = delta.magnitude - distance;
-		newDeltaMagnitude = Mathf.Clamp(newDeltaMagnitude, 2f, 10f);
+        float newDeltaMagnitude = delta.magnitude - distance;
+        newDeltaMagnitude = Mathf.Clamp(newDeltaMagnitude, 2f, 10f);
 
-		delta = delta.normalized * newDeltaMagnitude;
-	}
+        delta = delta.normalized * newDeltaMagnitude;
+
+
+    }
 	void Rotate()
 	{
-		// 마우스가 눌러지면,
-		// 마우스 변화량을 얻고, 그 값에 델타타임과 속도를 곱해서 회전값 구하기
+		// x,y축 방향으로의 마우스 회전변화량을 얻고, 그 값에 델타타임과 속도를 곱한다.
 		float _rotationX = Input.GetAxis("Mouse X") * Time.deltaTime * speed;
 		float _rotationY = Input.GetAxis("Mouse Y") * Time.deltaTime * speed;
 
-		// 회전량에 현재 x축 회전값(rotationY)을 더하여 최소값과 최대값을 제한
+		// 각각 카메라의 x축 회전, y축 회전 값을 저장할 변수에 변화량을 더해준다.
 		rotationX += _rotationX;
 		rotationY -= _rotationY;
+		// y축 방향으로의 카메라 회전에 상한값과 하한값을 추가한다.
 		rotationY = Mathf.Clamp(rotationY, 5f, 70f);
 
-		// 각 축으로 회전
+		// 카메라의 회전을 반영해준다. 
 		transform.rotation = Quaternion.Euler(rotationY, rotationX, 0f);
 
 		// 카메라 위치 조정

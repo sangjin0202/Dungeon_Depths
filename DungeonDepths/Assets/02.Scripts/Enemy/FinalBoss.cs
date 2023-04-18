@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FinalBoss : MonoBehaviour
 {
-    public enum FinalBossStates { Idle, AttackIdle, Trace, MeleeAttack1, MeleeAttack2, MeleeAttack3, Die };
+    public enum FinalBossStates { Idle, AttackIdle, Trace, MeleeAttack1, MeleeAttack2, MeleeAttack3, RangeAttack, Die };
     public StateMachine<FinalBoss> stateMachine;
     public Animator animator;
     public float comboDuration = 2.5f;
-    [SerializeField] float moveSpeed = 6.5f;
+    [SerializeField] float moveSpeed = 9f;
     [SerializeField] float rotationSpeed = 3f;
     [SerializeField] Transform finalBossTransform;
     [SerializeField] Transform targetTransform;
     [SerializeField] bool isDead;
 
     public bool isSecondPhase;
-    float meleeAttackRange = 5f;
+    public float prevRangeAtkTime;
+    float bossRangeAtkDelay = 15f;
+
+    float meleeAttackRange = 3f;
     float meleeAttackAngle = 60f;
 
     float hpMax = 1000, hpCur;
@@ -37,6 +40,7 @@ public class FinalBoss : MonoBehaviour
         stateMachine.AddState((int)FinalBossStates.MeleeAttack1, new FinalBossState.MeleeAttack1());
         stateMachine.AddState((int)FinalBossStates.MeleeAttack2, new FinalBossState.MeleeAttack2());
         stateMachine.AddState((int)FinalBossStates.MeleeAttack3, new FinalBossState.MeleeAttack3());
+        stateMachine.AddState((int)FinalBossStates.RangeAttack, new FinalBossState.RangeAttack());
 
         stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
     }
@@ -46,17 +50,6 @@ public class FinalBoss : MonoBehaviour
         //Debug.Log("최종보스 현재 상태 : " + stateMachine.CurrentState);
         stateMachine.Execute();
     }
-
-    //public Vector3 MeleeCirclePoint(float angle)
-    //{
-    //    angle += transform.eulerAngles.y;
-    //    return new Vector3(Mathf.Sign(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-    //}
-    //public Vector3 RangeCirclePoint(float angle)
-    //{
-    //    angle += transform.eulerAngles.y;
-    //    return new Vector3(Mathf.Sign(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-    //}
 
     public void GetHit(float _damage)
     {
@@ -108,17 +101,21 @@ public class FinalBoss : MonoBehaviour
     public void CheckAttackState()
     {
         Debug.Log("공격상태 확인");
+        //if(Time.time - prevAttackTime < bossAttackDelay) return;
         float dist = CheckDistance();
         int attackIndex;
         //Debug.Log("플레이어와의 거리 : " + dist);
         if(IsPlayerInAttackSight(dist, out attackIndex))
         {
+            //prevAttackTime = Time.time;
             if(attackIndex == 1)
                 stateMachine.ChangeState(stateMachine.GetState((int)FinalBossStates.MeleeAttack1));
             else if(attackIndex == 2)
                 stateMachine.ChangeState(stateMachine.GetState((int)FinalBossStates.MeleeAttack2));
             else if(attackIndex == 3)
                 stateMachine.ChangeState(stateMachine.GetState((int)FinalBossStates.MeleeAttack3));
+            else if(attackIndex == 4)
+                stateMachine.ChangeState(stateMachine.GetState((int)FinalBossStates.RangeAttack));
         }
         else Rotation();
     }
@@ -128,32 +125,46 @@ public class FinalBoss : MonoBehaviour
     {
         //Debug.Log("보스 공격 시야 확인");
         //RaycastHit hit;
-        Ray ray = new Ray(finalBossTransform.position, finalBossTransform.forward);
+        //Ray ray = new Ray(finalBossTransform.position, finalBossTransform.forward);
         Vector3 dir = (targetTransform.position - finalBossTransform.position).normalized;
-        // 근접공격1 사거리 내에 들어와있다면
-        if(_dist < meleeAttackRange)
+        // 근접공격 사거리 내에 들어와있다면
+        if(_dist <= meleeAttackRange)
         {
             float dot = Vector3.Dot(finalBossTransform.forward, dir);
             float theta = Mathf.Acos(dot);
             float angle = Mathf.Rad2Deg * theta;
 
             //if(Physics.Raycast(ray, out hit, meleeAttackRange) && hit.collider.CompareTag("Player"))
-            if(angle <=  meleeAttackAngle / 5)
+            if(angle <= meleeAttackAngle / 6)
             {
                 _attackIndex = 1;
                 return true;
             }
-            //else if(angle >= -meleeAttackAngle && isSecondPhase && angle <= 0)
-            //{
-            //    _attackIndex = 3;
-            //    return true;
-            //}
+            else if(angle <= meleeAttackAngle && isSecondPhase)
+            {
+                _attackIndex = 3;
+                return true;
+            }
             else if(angle <= meleeAttackAngle * 2)
             {
                 _attackIndex = 2;
                 return true;
             }
             else Rotation();
+        }
+        else if(_dist < 10f)
+        {
+            _attackIndex = 0;
+            return false;
+        }
+        else if(_dist <= meleeAttackRange * 5 && isSecondPhase)
+        {
+            Debug.Log("원거리 공격 확인");
+            if(Time.time - prevRangeAtkTime >= bossRangeAtkDelay)
+            {
+                _attackIndex = 4;
+                return true;
+            }
         }
         _attackIndex = 0;
         return false;
