@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa2da5b9f2770b44bb149705cb3b322, type: 3}
   m_Name: Stage2_Ruins1
   m_EditorClassIdentifier: 
-  mapName: Ruins
-  position: {x: 100, y: 0, z: 100}
+  mapName: "\uC720\uC801 \uBB38 \uBC16"
+  position: {x: -300, y: 0, z: 300}
   type: 1
   theme: 1
   difficulty: 2

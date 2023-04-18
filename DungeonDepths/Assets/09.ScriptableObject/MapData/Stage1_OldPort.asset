@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa2da5b9f2770b44bb149705cb3b322, type: 3}
   m_Name: Stage1_OldPort
   m_EditorClassIdentifier: 
-  mapName: OldPort
-  position: {x: 0, y: 0, z: 200}
+  mapName: "\uC624\uB798\uB41C \uD56D\uAD6C"
+  position: {x: 700, y: 0, z: 700}
   type: 1
   theme: 2
   difficulty: 1

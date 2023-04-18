@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa2da5b9f2770b44bb149705cb3b322, type: 3}
   m_Name: Stage1_Cemetery
   m_EditorClassIdentifier: 
-  mapName: 
-  position: {x: 0, y: 0, z: 0}
-  type: 0
-  theme: 0
-  difficulty: 0
+  mapName: "\uACF5\uB3D9 \uBB18\uC9C0"
+  position: {x: -200, y: 0, z: -200}
+  type: 1
+  theme: 2
+  difficulty: 2
   totalBoxNum: 0
