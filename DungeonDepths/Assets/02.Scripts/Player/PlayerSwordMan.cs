@@ -40,7 +40,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         rbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-        Debug.Log("공격력 : "+ AttackPower);
+        //Debug.Log("공격력 : "+ AttackPower);
     }
 
     protected override void Update()
