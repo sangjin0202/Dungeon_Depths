@@ -1,15 +1,35 @@
 using UnityEngine;
+using EnumTypes;
 
 public abstract class MonsterBase : MonoBehaviour
 {
     #region Monster Stats
-    protected MonsterStats stats;
+    public MonsterStatData stat;
+    private float damage;
+    private float maxHP;
+    private float curHP;
     private float attackDistance;
     private float traceDistance;
-    private float traceDisOffset = 2f;
     private float stopDistance = 0.2f;
     private float rotSpeed = 90f;
     private float searchSpeed = 1f;
+
+    public float Damage
+    {
+        get => damage;
+        set => damage = value;
+    }
+    public float CurHP
+    {
+        get => curHP;
+        set => curHP = value;
+    }
+    public float MaxHP
+    {
+        get => maxHP;
+        set => maxHP = value;
+    }
+    public bool IsDead { get; set;}
     public float TraceDistance
     {
         get => traceDistance;
@@ -25,6 +45,8 @@ public abstract class MonsterBase : MonoBehaviour
     private GameObject target;
     protected GameObject curTarget;
     protected Animator anim;
+    protected GameObject hitBox;
+
     #region state관련 변수
     public enum eMonsterState { Idle, Patrol, Trace, Attack, Die }
     private StateMachine<MonsterBase> sm;
@@ -42,8 +64,9 @@ public abstract class MonsterBase : MonoBehaviour
     protected virtual void Awake()
     {
         target = GameObject.FindWithTag("Player");
-        wayPoints = GetComponent<WayPoints>();
         anim = GetComponent<Animator>();
+        wayPoints = GetComponent<WayPoints>();
+        hitBox = transform.GetChild(0).gameObject;
         #region state 설정
         sm = new StateMachine<MonsterBase>();
         sm.AddState((int)eMonsterState.Idle, new MonsterState.Idle());
@@ -51,15 +74,48 @@ public abstract class MonsterBase : MonoBehaviour
         sm.AddState((int)eMonsterState.Trace, new MonsterState.Trace());
         sm.AddState((int)eMonsterState.Attack, new MonsterState.Attack());
         sm.AddState((int)eMonsterState.Die, new MonsterState.Die());
-        sm.InitState(this, sm.GetState((int)eMonsterState.Idle));
         #endregion
-
+    }
+    private void OnEnable()
+    {
+        sm.InitState(this, sm.GetState((int)eMonsterState.Idle));
+        IsDead = false;
     }
     protected virtual void Update()
     {
         sm.Execute();
     }
-    public abstract void Init();
+    public abstract void Init(MapDifficulty _mapDifficulty);
+    //protected void Attack()
+    //{
+    //    curTarget.SendMessage("SetTakedDamage", Damage);
+    //}
+    public void GetDamage(float _damage)
+    {
+        CurHP -= _damage;
+        if (CurHP <= 0)
+        { 
+            CurHP = 0;
+            sm.ChangeState(sm.GetState((int)eMonsterState.Die));
+        }
+        Debug.Log(CurHP);
+    }
+    public void OnAttackCollision()
+    {
+        hitBox.SetActive(true);
+    }
+    public void OffAttackCollision()
+    {
+        hitBox.SetActive(false);
+    }
+    private void OnTriggerEnter(Collider _other)
+    {
+        if (_other.CompareTag("Player"))
+        {
+            _other.SendMessage("SetTakedDamage", Damage);
+        }
+    }
+
     public void CheckIdleState()
     {
         if (curTarget != null)
@@ -81,17 +137,17 @@ public abstract class MonsterBase : MonoBehaviour
     }
     public void CheckTraceState()
     {
-        if (CheckRadius(curTarget.transform.position, attackDistance))
+        SearchTarget();
+
+        if (curTarget == null)
+                sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
+        else if (CheckRadius(curTarget.transform.position, attackDistance))
         { 
             sm.ChangeState(sm.GetState((int)eMonsterState.Attack));
         }
         else if (CheckRadius(curTarget.transform.position, traceDistance))
         {
             MoveAndRotate(curTarget.transform.position);
-        }
-        else if (!CheckRadius(curTarget.transform.position, traceDistance) && curTarget == null)
-        { 
-            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
         }
     }
     public void CheckAttackState()
@@ -103,17 +159,16 @@ public abstract class MonsterBase : MonoBehaviour
                 //ToDo 주은. Player가 Damage받는거 호출해오기
                 Vector3 dir = curTarget.transform.position - transform.position;
                 transform.rotation = Quaternion.LookRotation(dir);
-                LastAttackTime = Time.time + stats.AttackSpeed;
+                LastAttackTime = Time.time + stat.AttackSpeed;
             }
-            else
-                sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
         }
-        
+        else
+            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
     }
     public void MoveAndRotate(Vector3 _targetPos)
     {
         Vector3 dir = _targetPos - transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, _targetPos, stats.MoveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _targetPos, stat.MoveSpeed * Time.deltaTime);
         Quaternion rot = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotSpeed * Time.deltaTime);
     }
@@ -131,7 +186,7 @@ public abstract class MonsterBase : MonoBehaviour
         LastSearchTime = Time.time + searchSpeed;
 
         // 거리 범위 내의 플레이어 검색
-        if (CheckRadius(target.transform.position, traceDistance + traceDisOffset))
+        if (CheckRadius(target.transform.position, traceDistance))
         {
             curTarget = target;
         }

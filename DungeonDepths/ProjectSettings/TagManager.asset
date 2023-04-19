@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Floor
   - SpawnPoint
-  - Monster
   - Portal1
   - Portal2
   - Portal3
@@ -16,6 +15,7 @@ TagManager:
   - node3
   - node4
   - Boss
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -27,7 +27,7 @@ TagManager:
   - Enemy
   - Player
   - 
-  - 
+  - EnvironmentObject
   - 
   - 
   - 

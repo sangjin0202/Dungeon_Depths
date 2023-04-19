@@ -27,7 +27,7 @@ public class PlayerBase : MonoBehaviour
     public float AttackDelay { get; set; }
     public float AttackRange { get; set; }
     #endregion
-
+    public float takedDamage;
     #region 점프 관련
     protected int jumpedCnt;
     protected float jumpPower { get; set; }
@@ -41,6 +41,7 @@ public class PlayerBase : MonoBehaviour
     {
         Move();
         Jump();
+        GetDamage();
     }
 
     #region 행동:회전
@@ -120,7 +121,30 @@ public class PlayerBase : MonoBehaviour
         }
     }
     #endregion
-    
+    public void SetTakedDamage(float _damage)
+    {
+        takedDamage += _damage;
+    }
+    void GetDamage()
+    {
+        float _takedDamage = takedDamage;
+        takedDamage = 0;
+        if (_takedDamage > 0)
+        { 
+            HpCur -= _takedDamage;
+            Debug.Log(HpCur);
+            if (HpCur <= 0)
+            { 
+                Die();
+                //UI띄우고 게임 pause
+            }
+        }
+    }
+    protected void Die()
+    {
+        Debug.Log("플레이어 사망!");
+        isDead = true;
+    }
     public void GetCard()
     { // 선택한 특성카드 적용
 

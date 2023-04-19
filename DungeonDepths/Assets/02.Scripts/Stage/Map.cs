@@ -21,7 +21,6 @@ public class Map : MonoBehaviour
     {
         //Debug.Log("IsClear 초기 : " + isClear);
         startPosition = transform.GetChild(0).GetComponent<Transform>();
-        Debug.Log("BaseAwake()");
         gameObject.transform.position = mapData.Position;   // 맵 위치 초기화
         // 초기화
     }

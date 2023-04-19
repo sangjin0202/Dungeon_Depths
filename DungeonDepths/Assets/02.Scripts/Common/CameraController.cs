@@ -38,12 +38,29 @@ public class CameraController : MonoBehaviour
 		offset = player.transform.position - transform.position;
 
 
-		RaycastHit hit;
-		if(Physics.Raycast(transform.position, offset, out hit) && !hit.collider.CompareTag(playerTag))
+		Vector3 direction = (player.transform.position - transform.position);
+		RaycastHit[] hits = Physics.RaycastAll(transform.position, direction.normalized + Vector3.up * 1.2f, direction.magnitude,
+							1 << LayerMask.NameToLayer("EnvironmentObject"));
+
+		//Debug.DrawRay(transform.position, direction + Vector3.up * 1.2f, Color.red, 1f);
+
+		for (int i = 0; i < hits.Length; i++)
 		{
-			Debug.Log("카메라가 찍는 물체의 태그 : " + hit.collider.name);
-			transform.position = player.transform.position + new Vector3(0, 1.5f, -0.8f);
+			TransparentObject[] obj = hits[i].transform.GetComponentsInChildren<TransparentObject>();
+
+			for (int j = 0; j < obj.Length; j++)
+			{
+				//Debug.Log("Transparent배열 : "+obj[j].name);
+				obj[j]?.BecomeTransparent();
+			}
 		}
+
+		//RaycastHit hit;
+		//if(Physics.Raycast(transform.position, offset, out hit) && !hit.collider.CompareTag(playerTag))
+		//{
+		//	Debug.Log("카메라가 찍는 물체의 태그 : " + hit.collider.name);
+		//	transform.position = player.transform.position + new Vector3(0, 1.5f, -0.8f);
+		//}
 	}
 	void Zoom()
 	{

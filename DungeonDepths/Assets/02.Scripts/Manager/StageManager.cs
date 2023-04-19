@@ -26,7 +26,6 @@ public class StageManager : MonoSingleton<StageManager>
     public void Start()
     {
         InitMapList();
-        Debug.Log("StageManager Start()");
 
     }
 
@@ -50,7 +49,7 @@ public class StageManager : MonoSingleton<StageManager>
         // 포탈을 이용한 플레이어 위치 재설정
 	}
 
-    public void SetStartPos(Map _selectedMap)
+    public void StartStageMap(Map _selectedMap)
     {
         UIManager.Instance.OffWindow(Window.MAP);
         curMap.gameObject.SetActive(false);
