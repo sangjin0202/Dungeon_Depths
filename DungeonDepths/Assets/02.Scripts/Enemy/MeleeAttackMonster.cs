@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 
 public class MeleeAttackMonster : MonsterBase
@@ -7,19 +6,22 @@ public class MeleeAttackMonster : MonsterBase
     protected override void Awake()
     {
         base.Awake();
-        Init();
+        TraceDistance = 10f;
+        AttackDistance = 3f;
     }
     protected override void Update()
     {
         base.Update();
     }
-    public override void Init()
+    private void OnTriggerEnter(Collider other)
     {
-        AttackDistance = 3f;
-        TraceDistance = 10f;
-        // damage 설정 함수 호출
-        // moveSpeed 설정 함수 호출
-        // attackSpeed 설정 함수 호출
-        //monsterStats.CurHP = monsterStats.MaxHP;
+        
+    }
+
+    public override void Init(MapDifficulty _mapDifficulty)
+    {
+        Damage = stat.Damage * (float)_mapDifficulty * 0.5f;
+        MaxHP = stat.MaxHP * (float)_mapDifficulty * 0.5f;
+        CurHP = MaxHP;
     }
 }

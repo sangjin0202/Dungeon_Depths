@@ -32,7 +32,6 @@ public class BossGolem : BossBaseFSM
     }
     private void OnEnable()
     {
-        SwordHitBox.OnEnemiesHit += this.GetHit;
     }
 
     public void OnMeleeAttackOneCollision()

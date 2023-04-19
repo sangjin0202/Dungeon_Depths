@@ -32,7 +32,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
         HpMax = 100f;
         HpCur = 100f;
-        AttackPower = 10f;
+        AttackPower = 100f;
         MoveSpeed = 3.5f;
         AttackDelay = 1f;
         AttackRange = 2f;
@@ -139,9 +139,5 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         if(HpCur <= 0) Die();
     }
 
-    protected void Die()
-    {
-        Debug.Log("플레이어 사망!");
-        isDead = true;
-    }
+    
 }

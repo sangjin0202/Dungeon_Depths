@@ -7,11 +7,11 @@ namespace MonsterState
         public override void Enter(MonsterBase m)
         {
             m.PrevTime = Time.time;
-            m.SearchTarget();
         }
         public override void Execute(MonsterBase m)
         {
             m.IdleTime = Time.time - m.PrevTime;
+            m.SearchTarget();
             m.CheckIdleState();
         }
         public override void Exit(MonsterBase m) { }
@@ -60,15 +60,30 @@ namespace MonsterState
             m.CheckAttackState();
             // 공격하는 거
         }
-        public override void Exit(MonsterBase m) { }
+        public override void Exit(MonsterBase m) 
+        { 
+            m.Anim.SetBool("IsAttack", false);
+        }
     }
     class Die : State<MonsterBase>
     {
+        float delay;
         public override void Enter(MonsterBase m) 
         {
-            m.Anim.SetBool("IsDie",true);
+            m.Anim.SetTrigger("DieTrigger");
+            m.IsDead = true;
+            Debug.Log("죽음");
+            delay = Time.time;
         }
-        public override void Execute(MonsterBase m) { }
-        public override void Exit(MonsterBase m) { }
+        public override void Execute(MonsterBase m) 
+        {
+            if(Time.time - delay >= 3f)
+            {
+                m.gameObject.SetActive(false);
+            }
+        }
+        public override void Exit(MonsterBase m) 
+        { 
+        }
     }
 }

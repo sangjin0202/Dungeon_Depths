@@ -46,7 +46,7 @@ public class MapInfoUI : MonoBehaviour
     public void OnClickSelectBtn()
     {
         selectedMap.gameObject.SetActive(true);
-        StageManager.Instance.SetStartPos(selectedMap);
+        StageManager.Instance.StartStageMap(selectedMap);
     }
 
 

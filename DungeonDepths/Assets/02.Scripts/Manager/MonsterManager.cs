@@ -36,6 +36,7 @@ public class MonsterManager : MonoSingleton<MonsterManager>
                 _randomCount[_index] = true;
 
                 var _newMonster = PoolManager.Instance.Instantiate(_monsterID.ToString(), _points[_index], Quaternion.identity);
+                _newMonster.transform.GetComponent<MonsterBase>().Init(StageManager.Instance.CurMap.mapData.Difficulty);
                 _curMonsterNum++;
                 aliveMonsterList.Add(_newMonster);
             }

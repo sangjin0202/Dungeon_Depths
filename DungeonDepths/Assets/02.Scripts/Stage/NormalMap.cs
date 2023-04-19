@@ -75,8 +75,6 @@ public class NormalMap : Map
     }
     public override void Awake()
     {
-        Debug.Log("NormalMap Awake()");
-
         base.Awake();
         core = GetComponentInChildren<MapCore>();
         /* TODO ¡÷¿∫

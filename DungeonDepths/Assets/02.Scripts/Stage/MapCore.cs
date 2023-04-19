@@ -28,6 +28,6 @@ public class MapCore : MonoBehaviour
     private void OnDisable()
     {
 		//임시 테스트
-		OnEvent();
+		//OnEvent();
 	}
 }
