@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Chomper
   m_EditorClassIdentifier: 
   maxHP: 150
-  damage: 10
+  damage: 100
   moveSpeed: 4
-  curHP: 150
   attackSpeed: 2
