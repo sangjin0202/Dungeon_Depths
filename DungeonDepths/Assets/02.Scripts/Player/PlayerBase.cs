@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class PlayerBase : MonoBehaviour
 {
     //구본혁
@@ -14,7 +15,9 @@ public class PlayerBase : MonoBehaviour
     public bool isCast { get; set; } // 스킬 사용 중
     public bool isInteract { get; set; } // 특성 카드 선택 중
     public bool isJump { get; set; }
+    public bool canRebirth { get; set; }
     public bool isDead { get; set; }
+
     #endregion
 
     #region 플레이어 스테이터스
@@ -39,6 +42,8 @@ public class PlayerBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (GameManager.Instance.IsPause) return;
+        
         Move();
         Jump();
         GetDamage();
@@ -84,11 +89,16 @@ public class PlayerBase : MonoBehaviour
         }
         else // 정지상태가 아니라면
         {
-            if(!isJump)
-            {
-                isMove = true;
+            //if(!isJump) // 점프중이 아니라면 
+            //{
+            //    isMove = true;
+            //    animator.SetBool("Move", isMove);
+            //}
+            isMove = true;
+            if (isJump)
+                animator.SetBool("Move", !isMove);
+            else
                 animator.SetBool("Move", isMove);
-            }
 
             MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
@@ -132,18 +142,33 @@ public class PlayerBase : MonoBehaviour
         if (_takedDamage > 0)
         { 
             HpCur -= _takedDamage;
-            Debug.Log(HpCur);
+            Debug.Log("플레이어 체력 " + HpCur);
             if (HpCur <= 0)
-            { 
+            {
+                HpCur = 0f;
                 Die();
-                //UI띄우고 게임 pause
             }
         }
     }
     protected void Die()
     {
-        Debug.Log("플레이어 사망!");
-        isDead = true;
+        animator.SetTrigger("Die");
+        if (CanRebirth())
+            return;
+        else
+            GameManager.Instance.IsGameOver = true;
+        
+    }
+    protected bool CanRebirth()
+    {
+        if (canRebirth)
+        {
+            HpCur = HpMax;
+            canRebirth = false;
+            return true;
+        }
+        else return false;
+        
     }
     public void GetCard()
     { // 선택한 특성카드 적용

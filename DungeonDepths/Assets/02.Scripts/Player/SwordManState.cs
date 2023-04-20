@@ -96,7 +96,7 @@ namespace SwordManState
         {
             p.isAttack = true;
             p.attackIndex = 3;
-            p.stateDuration = 2f;
+            p.stateDuration = 2.4f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
