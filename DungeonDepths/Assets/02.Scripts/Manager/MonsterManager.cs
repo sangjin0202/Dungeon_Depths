@@ -4,7 +4,7 @@ using EnumTypes;
 public class MonsterManager : MonoSingleton<MonsterManager>
 {
     List<GameObject> aliveMonsterList = new List<GameObject>();
-    private float respawnTime = 5f;
+    //private float respawnTime = 5f;
     private float prevTime;
     private float curTime;
 
