@@ -13,11 +13,6 @@ public class MeleeAttackMonster : MonsterBase
     {
         base.Update();
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
-
     public override void Init(MapDifficulty _mapDifficulty)
     {
         Damage = stat.Damage * (float)_mapDifficulty * 0.5f;

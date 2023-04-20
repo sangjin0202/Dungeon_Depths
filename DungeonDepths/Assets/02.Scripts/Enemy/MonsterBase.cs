@@ -67,6 +67,7 @@ public abstract class MonsterBase : MonoBehaviour
         anim = GetComponent<Animator>();
         wayPoints = GetComponent<WayPoints>();
         hitBox = transform.GetChild(0).gameObject;
+        hitBox.SetActive(false);
         #region state ¼³Á¤
         sm = new StateMachine<MonsterBase>();
         sm.AddState((int)eMonsterState.Idle, new MonsterState.Idle());
@@ -107,13 +108,6 @@ public abstract class MonsterBase : MonoBehaviour
     public void OffAttackCollision()
     {
         hitBox.SetActive(false);
-    }
-    private void OnTriggerEnter(Collider _other)
-    {
-        if (_other.CompareTag("Player"))
-        {
-            _other.SendMessage("SetTakedDamage", Damage);
-        }
     }
 
     public void CheckIdleState()
