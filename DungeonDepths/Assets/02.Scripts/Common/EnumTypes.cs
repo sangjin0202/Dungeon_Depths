@@ -5,5 +5,5 @@ namespace EnumTypes
     public enum MapDifficulty { NONE = 0, EASY, NORMAL, HARD }    //난이도 -> (int)형으로 받아와서 몬스터 스탯값에 곱해주거나 해야할듯 
     public enum MonsterID { Chomper, SPITTER, BEHOLDER, MIMIC}
 
-    public enum Window { MAINMENU, GAMEOVER, OPTION, MAP}
+    public enum Window { MAINMENU, GAMEOVER, OPTION, MAP, LOADING}
 }
