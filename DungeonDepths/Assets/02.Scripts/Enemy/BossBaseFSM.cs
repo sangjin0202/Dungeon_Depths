@@ -6,7 +6,7 @@ public abstract class BossBaseFSM : MonoBehaviour
     public enum BossStates { Idle, Trace, FastTrace, MeleeAttack, RangeAttack, Die };
     public StateMachine<BossBaseFSM> stateMachine;
     public Animator Animator { get; private set; }
-    
+    protected Rigidbody rbody;
     #region 보스 스테이터스
     public float BossMaxHp { get; set; }
     public float BossCurHp { get; set; }
