@@ -37,6 +37,7 @@ public class PlayerBase : MonoBehaviour
     public bool CanCounter { get; set; }
     public bool EarthQuake { get; set; }
     // 특성카드
+    public bool somethingInFront;
     public bool IsDead { get; set; }
 
 
@@ -65,21 +66,20 @@ public class PlayerBase : MonoBehaviour
 
     protected Vector3 moveDir;
 
+
     protected virtual void Update()
     {
-        if (GameManager.Instance.IsPause) return;
+        if(GameManager.Instance.IsPause) return;
 
         Move();
         Jump();
         GetDamage();
 
-        if (HpCur < 100f && IsRegen && Time.time - lastHitTimer >= 5f)
+        if(HpCur < 100f && IsRegen && Time.time - lastHitTimer >= 5f)
         {
             StartCoroutine(Regeneration());
         }
-
-        
-    }
+            }
 
     #region 행동:회전
 
@@ -102,39 +102,41 @@ public class PlayerBase : MonoBehaviour
     #region 행동:이동
     public void Move()
     {
-        if (IsAttack || IsDodge || IsCast) return;
+        if(IsAttack || IsDodge || IsCast) return;
 
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
-        if (moveDir != Vector3.zero)
+        if(moveDir != Vector3.zero)
             CharacterAxisRotate();
 
-        // 플레이어 캐릭터는 키보드로 받은 방향을 바라본다.
+        // 플레이어 캐릭터는 키보드로 입력 받은 방향을 바라본다.
         transform.LookAt(transform.position + moveDir);
         moveSpeed = Input.GetButton("Run") ? MoveSpeed * 2 : MoveSpeed;
 
-        if (moveDir == Vector3.zero) // 정지상태라면
+        //for(int i = 1; i <= 3; i++)
+        //{
+        //    animator.ResetTrigger("Attack" + i);
+        //}
+
+        if(moveDir == Vector3.zero) // 정지상태라면
         {
             IsMove = false;
             animator.SetBool("Move", IsMove);
         }
         else // 정지상태가 아니라면
         {
-            //if(!isJump) // 점프중이 아니라면 
-            //{
-            //    isMove = true;
-            //    animator.SetBool("Move", isMove);
-            //}
+            if(IsAttack) return;
             IsMove = true;
-            if (IsJump)
+            if(IsJump)
                 animator.SetBool("Move", !IsMove);
             else
                 animator.SetBool("Move", IsMove);
 
             MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
-            transform.position += moveDir * moveSpeed * Time.deltaTime;
+            if(!somethingInFront)
+                transform.position += moveDir * moveSpeed * Time.deltaTime;
             //rbody.MovePosition(transform.position + moveDir * moveSpeed * Time.deltaTime);
         }
     }
@@ -143,19 +145,19 @@ public class PlayerBase : MonoBehaviour
     protected virtual void Jump()
     {
         // 플레이어가 떨어지는 상태라면 플레이어와 바닥사이의 거리를 Raycast를 통해 측정한다.
-        if (rbody.velocity.y < 0)
+        if(rbody.velocity.y < 0)
         {
             RaycastHit groundHit;
-            if (Physics.Raycast(transform.position, Vector3.down, out groundHit, 0.3f)) // 밑으로 Raycast를 쏴서 땅을 한번더 확인
+            if(Physics.Raycast(transform.position, Vector3.down, out groundHit, 0.3f)) // 밑으로 Raycast를 쏴서 땅을 한번더 확인
             {
                 IsJump = false;
                 jumpedCnt = 0;
             }
         }
-        if (IsAttack || IsDodge || IsCast) return;
+        if(IsAttack || IsDodge || IsCast) return;
 
         // 점프 버튼이 눌렸고, 점프 가능한 횟수보다 점프한 횟수가 적다면
-        if (Input.GetButtonDown("Jump") && jumpedCnt < possibleJumpNum)
+        if(Input.GetButtonDown("Jump") && jumpedCnt < possibleJumpNum)
         {
             IsJump = true;
             rbody.velocity = Vector3.up * jumpPower;
@@ -173,9 +175,9 @@ public class PlayerBase : MonoBehaviour
         float _takedDamage = takedDamage;
         //_takedDamage -= Defense;
         takedDamage = 0;
-        if (_takedDamage > 0)
+        if(_takedDamage > 0)
         {
-            if (hasBarrier > _takedDamage)
+            if(hasBarrier > _takedDamage)
             {
                 hasBarrier -= _takedDamage;
             }
@@ -189,7 +191,7 @@ public class PlayerBase : MonoBehaviour
             }
             CheckBerserkMode();
             Debug.Log("플레이어 체력 " + HpCur);
-            if (HpCur <= 0)
+            if(HpCur <= 0)
             {
                 HpCur = 0f;
                 Die();
@@ -199,10 +201,10 @@ public class PlayerBase : MonoBehaviour
 
     private void CheckBerserkMode()
     {
-        if (IsBerserk && HpCur <= HpMax * 0.25f)
+        if(IsBerserk && HpCur <= HpMax * 0.25f)
         {
-            if (!onBerserk)
-            { 
+            if(!onBerserk)
+            {
                 AttackPower += 10f;
                 onBerserk = true;
             }
@@ -223,7 +225,7 @@ public class PlayerBase : MonoBehaviour
     protected void Die()
     {
         animator.SetTrigger("Die");
-        if (CanRebirth())
+        if(CanRebirth())
             return;
         else
             GameManager.Instance.IsGameOver = true;
@@ -231,7 +233,7 @@ public class PlayerBase : MonoBehaviour
     }
     protected bool CanRebirth()
     {
-        if (IsRebirth)
+        if(IsRebirth)
         {
             HpCur = HpMax;
             IsRebirth = false;
