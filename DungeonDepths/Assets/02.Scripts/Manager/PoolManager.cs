@@ -12,8 +12,8 @@ public class ObjectData // 나중에 리소스매니저나 폴더에서 가져오기
 }
 public class PoolManager : MonoSingleton<PoolManager>
 {
-    
-    private void Awake()
+
+    void Awake()
     {
         Init();
     }

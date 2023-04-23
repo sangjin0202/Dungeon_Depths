@@ -132,7 +132,7 @@ public class TransparentObject : MonoBehaviour
                 Color color = renderers[i].material.color;
                 color.a += Time.deltaTime;
                 renderers[i].material.color = color;
-                Debug.Log("알파값 변경");
+                //Debug.Log("알파값 변경");
             }
 
             if (isComplete)

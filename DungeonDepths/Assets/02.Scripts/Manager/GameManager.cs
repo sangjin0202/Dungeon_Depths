@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using EnumTypes;
 
-public class GameManager : MonoSingleton<GameManager>
+public class GameManager : SingletonDontDestroy<GameManager>
 {
+    public Class CurPlayerClass { get; set; }
     [SerializeField]
     private bool isPlaying = false;
     private bool isPause;
@@ -22,18 +23,7 @@ public class GameManager : MonoSingleton<GameManager>
         get => isGameOver;
         set => isGameOver = value;
     }
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+
     private void Update()
     {
         if (isPlaying)
@@ -49,7 +39,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(!isPause)
+            if (!isPause)
                 UIManager.Instance.OnWindow(Window.OPTION);
             else
                 UIManager.Instance.OffWindow(Window.OPTION);
