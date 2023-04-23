@@ -16,10 +16,8 @@ public class Chest : MonoBehaviour
         if(_other.CompareTag("Player"))
         {
             // UI 띄우기 상호작용;
-            Debug.Log("상자가까이 감");
             if (Input.GetButtonDown("Interaction") && !isOpen)
             {
-                Debug.Log("상호작용");
                 OpenChest();
                 Invoke("DisableChest", 2f);
             }
@@ -30,7 +28,10 @@ public class Chest : MonoBehaviour
     {
         isOpen = true;
         anim.SetTrigger("Open");
-        // 인보크로 특성카드 UI 1개띄우고 습득시키기~
+        var _card = CardManager.Instance.NormalCard();
+        CardManager.Instance.GetCard(_card);
+        StartCoroutine(UIManager.Instance.ShowCardInfo(_card));
+        UIManager.Instance.ShowSelectCardInfo();
     }
 
     public void DisableChest()
