@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using EnumTypes;
+using UnityEngine.EventSystems;
 
-public class UIManager : MonoSingleton<UIManager>
+public class UIManager : SingletonDontDestroy<UIManager>
 {
     [SerializeField]
     List<GameObject> windowList = new List<GameObject>();
     GameObject curWindow;
-
-    void Awake()
+    public List<GameObject> WindowList
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        get => windowList;
+    }
+    public GameObject CurWindow
+    {
+        get => curWindow;
+    }
+
+    protected override void OnAwake()
+    {
         InitWindowList();
     }
     void InitWindowList()   // √ ±‚»≠
@@ -70,7 +70,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     }
 
-    IEnumerator LoadingWindow() 
+    IEnumerator LoadingWindow()
     {
         windowList[(int)Window.LOADING].SetActive(true);
         yield return null;
@@ -81,9 +81,47 @@ public class UIManager : MonoSingleton<UIManager>
 
     }
 
-    public void ShowCardInfo(CardData _cardData)
+    public IEnumerator ShowCardInfo(CardData _cardData)
     {
-
+        var _card = windowList[(int)Window.GETCARD];
+        SetCardInfo(_cardData, _card);
+        _card.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        _card.SetActive(false);
     }
-    
+
+    public void SetCardInfo(CardData _cardData, GameObject _card)
+    {
+        _card.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = _cardData.Sprite;
+        _card.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _cardData.CardName;
+        if (_cardData.Rarity == CardRarity.NOMAL)
+            _card.transform.GetChild(1).GetChild(1).GetComponent<Image>().gameObject.SetActive(false);
+        else
+            _card.transform.GetChild(1).GetChild(1).GetComponent<Image>().gameObject.SetActive(true);
+        _card.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = _cardData.CardDesc;
+    }
+
+    public void ShowSelectCardInfo()
+    {
+        var _selectCardWindow = windowList[(int)Window.SELECTCARD];
+        OnWindow(Window.SELECTCARD);
+        var _selectedCards = CardManager.Instance.SelectRandomCards(3);
+        for (int i = 0; i < 3; i++)
+        {
+            var _parent = _selectCardWindow.transform.GetChild(1).GetChild(i).gameObject;
+            _parent.GetComponent<Card>().cardData = _selectedCards[i];
+            SetCardInfo(_selectedCards[i], _parent);
+        }
+    }
+
+    public void ChooseCard()
+    {
+        // CardManager.Instance.GetCard(cards[0]);
+        var _clickObject = EventSystem.current.currentSelectedGameObject;
+        CardManager.Instance.GetCard(_clickObject.GetComponent<Card>().cardData);
+        OffWindow(Window.SELECTCARD);
+    }
+
+
+
 }
