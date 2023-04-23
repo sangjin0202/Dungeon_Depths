@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class SwordHitBox : MonoBehaviour
 {
     LayerMask layer;
@@ -20,7 +19,7 @@ public class SwordHitBox : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindWithTag("Player").GetComponent<PlayerBase>();
-        //boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
+        boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
     }
     private void Start()
     {

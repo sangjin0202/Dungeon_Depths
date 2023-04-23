@@ -14,6 +14,10 @@ public class GameManager : SingletonDontDestroy<GameManager>
     private bool isGameOver;
     //TODO 추후 구현
     private bool isGameClear;
+    public bool IsPlaying
+    {
+        get => isPlaying;
+    }
     public bool IsPause
     {
         get => isPause;

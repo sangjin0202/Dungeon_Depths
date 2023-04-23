@@ -38,13 +38,17 @@ public class StageManager : MonoSingleton<StageManager>
     void InitMapList()
     {
         var _map = GameObject.Find("Map").transform;
-        for (int i = 0; i < _map.transform.childCount; i++)
+        for(int i = 0; i < _map.transform.childCount; i++)
         {
             mapInfoList.Add(_map.GetChild(i).GetComponent<Map>());
-            if (i != 0)
+            if(i != 0)
                 mapInfoList[i].gameObject.SetActive(false);
         }
         curMap = mapInfoList[0];
+    }
+    public void StartBossStage(Map _selectedMap)
+    {
+
     }
     public void StartStageMap(Map _selectedMap)
     {
@@ -53,13 +57,27 @@ public class StageManager : MonoSingleton<StageManager>
         curMap = _selectedMap;
         player.transform.position = curMap.StartPosition.position;
 
-        MonsterManager.Instance.SpawnMonsters(EnumTypes.MonsterID.Chomper, curMap.gameObject.GetComponent<NormalMap>().GetWorldSpawnPoints(), curMap.mapData.TotalMonsterNum);
-
-        curMap.gameObject.GetComponent<NormalMap>().SpawnBoxes();
+        if(curMap.mapData.Type == MapType.BOSS)
+        {
+            UIManager.Instance.OnWindowWithoutPause(Window.BOSSHPWINDOW);
+        }
+        else
+        {
+            MonsterManager.Instance.SpawnMonsters(EnumTypes.MonsterID.Chomper, curMap.gameObject.GetComponent<NormalMap>().GetWorldSpawnPoints(), curMap.mapData.TotalMonsterNum);
+            curMap.gameObject.GetComponent<NormalMap>().SpawnBoxes();
+        }
     }
 
     public void ClearStage() // TODO 추후 수정 : 이벤트 함수로 구현할지
     {
-        MonsterManager.Instance.DeactiveMonsterList();
+        if(curMap.mapData.Type == MapType.BOSS)
+        {
+            UIManager.Instance.OffWindowWithoutResume(Window.BOSSHPWINDOW);
+        }
+        else
+        {
+            //UIManager.Instance.OffWindow(Window.BOSSHPWINDOW);
+            MonsterManager.Instance.DeactiveMonsterList();
+        }
     }
 }
