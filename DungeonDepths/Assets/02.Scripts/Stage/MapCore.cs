@@ -1,33 +1,59 @@
+using System.Collections;
 using UnityEngine;
 
 public class MapCore : MonoBehaviour
 {
-	public Transform Position { get; private set; }   
-	public bool IsDestroyed { get; private set; }
-	//TODO 주은. 파괴 이벤트 테스트 중
-	public delegate void EventHandler();
-	public event EventHandler OnEvent;
-	// 포탈 생성 여기서 하도록
+    private int hitCount;
+    public Transform Position { get; private set; }
+    public bool IsDestroyed { get; private set; }
+    [SerializeField]
+    private MeshRenderer[] mesh;
+    //TODO 주은. 파괴 이벤트 테스트 중
+    public delegate void EventHandler();
+    //public event EventHandler OnEvent;
+    // 포탈 생성 여기서 하도록
 
-	private void OnEnable()	// 활성화될 때 초기화되도록
+    private void OnEnable()	// 활성화될 때 초기화되도록
     {
-		IsDestroyed = false;
-		Position = transform;
+        hitCount = 3;
+        IsDestroyed = false;
+        Position = transform;
     }
     private void Start()
     {
-		OnEvent += DestroyedCore;
-	}
-	private void DestroyedCore()
-	{
-		//TODO 주은
-		IsDestroyed = true;
-		//Debug.Log("MapCore에서 이벤트 발생 : " + IsDestroyed);
-		//gameObject.SetActive(false);
-	}
+        mesh = transform.GetComponentsInChildren<MeshRenderer>();
+    }
+    private void OnTriggerEnter(Collider _other)
+    {
+        if (_other.CompareTag("PlayerHitBox"))
+        {
+            if (hitCount == 0)
+                StartCoroutine(DestroyCore());
+            else
+                hitCount--;
+        }
+    }
     private void OnDisable()
     {
-		//임시 테스트
-		//OnEvent();
-	}
+        //임시 테스트
+        //OnEvent();
+        if(IsDestroyed)
+            StageManager.Instance.MovePortal(this.transform.position, this.transform.rotation);
+    }
+    IEnumerator DestroyCore()
+    {
+        for (int i = 10; i >= 0; i--)
+        {
+            float f = i / 10.0f;
+            foreach (var m in mesh)
+            {
+                Color c = m.material.color;
+                c.a = f;
+                m.material.color = c;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        IsDestroyed = true;
+        this.gameObject.SetActive(false);
+    }
 }
