@@ -119,6 +119,7 @@ namespace BossState
     {
         public override void Enter(BossBaseFSM b)
         {
+            b.bossDieTime = Time.time;
             b.isDead = true;
             b.Animator.SetTrigger("Die");
         }

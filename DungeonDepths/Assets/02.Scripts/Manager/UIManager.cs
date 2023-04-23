@@ -40,11 +40,20 @@ public class UIManager : SingletonDontDestroy<UIManager>
         curWindow = windowList[(int)_name];
         GameManager.Instance.Pause();
     }
+    public void OnWindowWithoutPause(Window _name) // Pause 없이 Full Window 켜기
+    {
+        windowList[(int)_name].SetActive(true);
+    }
+    
     public void OffWindow(Window _name) // Full Window 끄기
     {
         windowList[(int)_name].SetActive(false);
         curWindow = null;
         GameManager.Instance.Resume();
+    }
+    public void OffWindowWithoutResume(Window _name) // Full Window 끄기
+    {
+        windowList[(int)_name].SetActive(false);
     }
     public void OnClickCloseBtn()   // UI 종료 버튼
     {
@@ -121,7 +130,4 @@ public class UIManager : SingletonDontDestroy<UIManager>
         CardManager.Instance.GetCard(_clickObject.GetComponent<Card>().cardData);
         OffWindow(Window.SELECTCARD);
     }
-
-
-
 }
