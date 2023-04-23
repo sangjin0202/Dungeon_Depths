@@ -1,5 +1,6 @@
 using UnityEngine;
 using EnumTypes;
+using System.Collections;
 
 public abstract class MonsterBase : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public abstract class MonsterBase : MonoBehaviour
         get => maxHP;
         set => maxHP = value;
     }
-    public bool IsDead { get; set;}
+    public bool IsDead { get; set; }
     public float TraceDistance
     {
         get => traceDistance;
@@ -46,6 +47,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected GameObject curTarget;
     protected Animator anim;
     protected GameObject hitBox;
+    public Collider collider;
 
     #region state관련 변수
     public enum eMonsterState { Idle, Patrol, Trace, Attack, Die }
@@ -55,17 +57,18 @@ public abstract class MonsterBase : MonoBehaviour
     public float IdleTime { get; set; } = 0f;
     public float LastAttackTime { get; set; } = 0f;
     public float LastSearchTime { get; set; } = 0f;
-    public Animator Anim 
+    public Animator Anim
     {
-        get => anim; 
+        get => anim;
     }
-       
+
     #endregion
     protected virtual void Awake()
     {
         target = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         wayPoints = GetComponent<WayPoints>();
+        collider = GetComponent<Collider>();
         hitBox = transform.GetChild(0).gameObject;
         hitBox.SetActive(false);
         #region state 설정
@@ -95,11 +98,27 @@ public abstract class MonsterBase : MonoBehaviour
     {
         CurHP -= _damage;
         if (CurHP <= 0)
-        { 
+        {
             CurHP = 0;
             sm.ChangeState(sm.GetState((int)eMonsterState.Die));
         }
         Debug.Log(CurHP);
+    }
+    public void GetDotDamage()
+    {
+        if (!isCurrupted)
+            StartCoroutine(SetDotDamage());
+    }
+    bool isCurrupted;
+    IEnumerator SetDotDamage()
+    {
+        isCurrupted = true;
+        for (int i = 0; i < 5; i++)
+        {
+            CurHP -= MaxHP * 0.01f;
+            yield return new WaitForSeconds(1.0f);
+        }
+        isCurrupted = false;
     }
     public void OnAttackCollision()
     {
@@ -113,7 +132,7 @@ public abstract class MonsterBase : MonoBehaviour
     public void CheckIdleState()
     {
         if (curTarget != null)
-        { 
+        {
             sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
         }
         else if (IdleTime >= Random.Range(3f, 5f))
@@ -124,8 +143,8 @@ public abstract class MonsterBase : MonoBehaviour
         SearchTarget();
         if (curTarget != null && (CheckRadius(curTarget.transform.position, traceDistance)))
             sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
-        else if (wayPoints.CheckDestination(stopDistance,transform.position))
-        { 
+        else if (wayPoints.CheckDestination(stopDistance, transform.position))
+        {
             sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
         }
     }
@@ -134,9 +153,9 @@ public abstract class MonsterBase : MonoBehaviour
         SearchTarget();
 
         if (curTarget == null)
-                sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
+            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
         else if (CheckRadius(curTarget.transform.position, attackDistance))
-        { 
+        {
             sm.ChangeState(sm.GetState((int)eMonsterState.Attack));
         }
         else if (CheckRadius(curTarget.transform.position, traceDistance))
@@ -187,4 +206,5 @@ public abstract class MonsterBase : MonoBehaviour
         else curTarget = null;
         //Debug.Log("Current Target : " + curTarget);
     }
+
 }
