@@ -16,7 +16,8 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     [Tooltip("기본 공격 히트 박스")] public GameObject hitBox;
     [Tooltip("스킬1 히트 박스")] public GameObject earthQuakeHitBox;
     [Tooltip("스킬1 히트 박스")] public GameObject stingHitBox;
-    [HideInInspector] public int numOfClicks;
+    //[HideInInspector] public int numOfClicks;
+    public bool attackClick;
     [HideInInspector] public float stateDuration;
     [HideInInspector] public float prevAtkTime;
     [HideInInspector] public int attackIndex;
@@ -44,13 +45,18 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         AttackDelay = 1f;
         AttackRange = 2f;
         jumpPower = 8f;
-        possibleJumpNum = 2; //점프 최대 2번
+        possibleJumpNum = 2;
         rbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
         //Debug.Log("공격력 : "+ AttackPower);
     }
-
+    protected void FixedUpdate()
+    {
+        LayerMask layer = 1 << 6;
+        somethingInFront = Physics.Raycast(transform.position, moveDir, 3f, layer);
+        if(somethingInFront) Debug.Log("바로 앞에 보스가 있음!");
+    }
     protected override void Update()
     {
         base.Update();
@@ -64,22 +70,38 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
     void CheckAttackKey()
     {
-        if (IsJump || IsDodge || IsCast) return;
+        if(IsJump || IsDodge || IsCast) return;
 
-        if (Input.GetMouseButtonDown(0))
+        attackClick = Input.GetMouseButtonDown(0);
+        
+        if(attackClick)
+        {
+            if(IsMove)
+            {
+                IsMove = false;
+                animator.SetBool("Move", IsMove);
+            }
             Attack();
+        }
     }
 
+    //public void Attack()
+    //{
+    //    if(numOfClicks == 0)
+    //    {
+    //        stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
+    //    }
+    //    numOfClicks++;
+    //    numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
+    //}
     public void Attack()
     {
-        if (numOfClicks == 0)
-        {
+        //공격을 하지 않는 상태라면 첫번째 공격을 실행한다.
+        if(stateMachine.CurrentState == stateMachine.GetState((int)SwordManStates.None))
             stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
-        }
-        numOfClicks++;
-        numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
     }
 
+    
     public void OnAttackCollision()
     {
         hitBox.SetActive(true);
@@ -95,15 +117,15 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
     public void UseSkill()
     {
-        if (IsMove || IsJump || IsDodge || IsCast || IsAttack) return;
+        if(IsMove || IsJump || IsDodge || IsCast || IsAttack) return;
 
-        if (Input.GetButtonDown("Skill1"))
+        if(Input.GetButtonDown("Skill1"))
         {
             IsCast = true;
             animator.SetTrigger("SkillOne");
             StartCoroutine(OffCast("SkillOne"));
         }
-        else if (Input.GetButtonDown("Skill2"))
+        else if(Input.GetButtonDown("Skill2"))
         {
             IsCast = true;
             animator.SetTrigger("SkillTwo");
@@ -113,7 +135,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
     IEnumerator OffCast(string skillTag)
     {
-        if (skillTag == "SkillOne")
+        if(skillTag == "SkillOne")
         {
             yield return new WaitForSeconds(3.0f);
             IsCast = false;
@@ -128,12 +150,12 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     public void Dodge()
     {
 
-        if (IsAttack || IsJump || IsCast) return; // 공격중이거나 점프중이라면
+        if(IsAttack || IsJump || IsCast) return; // 공격중이거나 점프중이라면
 
 
-        if (Input.GetMouseButton(1))
+        if(Input.GetMouseButton(1))
         {
-            if (IsMove) // 움직이는 중이였다면
+            if(IsMove) // 움직이는 중이였다면
             {
                 animator.SetBool("Move", false);
                 IsMove = false;
@@ -155,6 +177,6 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         HpCur -= _damage;
         HpCur = Mathf.Clamp(HpCur, 0, HpMax);
         Debug.Log("현재 체력 : " + HpCur);
-        if (HpCur <= 0) Die();
+        if(HpCur <= 0) Die();
     }
 }

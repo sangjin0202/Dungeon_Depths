@@ -10,14 +10,12 @@ namespace SwordManState
         public override void Enter(PlayerSwordMan p)
         {
             p.IsAttack = false;
-            p.numOfClicks = 0;
-            p.stateDuration = 0;
             p.prevAtkTime = 0;
             p.attackIndex = 0;
         }
         public override void Execute(PlayerSwordMan p)
         {
-
+          
         }
         public override void Exit(PlayerSwordMan p)
         {
@@ -34,27 +32,28 @@ namespace SwordManState
         public override void Enter(PlayerSwordMan p)
         {
             p.IsAttack = true;
+            p.attackClick = false;
             p.attackIndex = 1;
-            p.stateDuration = 1f;
+            p.stateDuration = 0.7f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
         public override void Execute(PlayerSwordMan p)
         {
-            if(Time.time - p.prevAtkTime >= p.stateDuration)
+            if(Time.time - p.prevAtkTime > 0.7)
             {
-                p.numOfClicks = 0;
-                p.IsAttack = false;
+                Debug.Log("콤보 유지 실패!");
+                //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
-            else if(p.numOfClicks >= 2)
+            else if(p.attackClick)
             {
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Combo));
             }
         }
         public override void Exit(PlayerSwordMan p)
         {
-            
+
         }
     }
     #endregion
@@ -65,26 +64,27 @@ namespace SwordManState
         public override void Enter(PlayerSwordMan p)
         {
             p.IsAttack = true;
+            p.attackClick = false;
             p.attackIndex = 2;
-            p.stateDuration = 1.5f;
+            p.stateDuration = 1f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
         public override void Execute(PlayerSwordMan p)
         {
-            if(Time.time - p.prevAtkTime >= p.stateDuration)
+            if(Time.time - p.prevAtkTime > p.stateDuration)
             {
-                p.numOfClicks = 0;
+                //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
-            else if(p.numOfClicks == 3)
+            else if(p.attackClick)
             {
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Finish));
             }
         }
         public override void Exit(PlayerSwordMan p)
         {
-            
+
         }
     }
     #endregion
@@ -95,8 +95,9 @@ namespace SwordManState
         public override void Enter(PlayerSwordMan p)
         {
             p.IsAttack = true;
+            p.attackClick = false;
             p.attackIndex = 3;
-            p.stateDuration = 2.4f;
+            p.stateDuration = 1f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
@@ -104,13 +105,13 @@ namespace SwordManState
         {
             if(Time.time - p.prevAtkTime >= p.stateDuration)
             {
-                p.numOfClicks = 0;
+                //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
         }
         public override void Exit(PlayerSwordMan p)
         {
-           
+
         }
     }
     #endregion
