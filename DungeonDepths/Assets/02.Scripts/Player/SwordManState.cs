@@ -9,7 +9,7 @@ namespace SwordManState
     {
         public override void Enter(PlayerSwordMan p)
         {
-            p.isAttack = false;
+            p.IsAttack = false;
             p.numOfClicks = 0;
             p.stateDuration = 0;
             p.prevAtkTime = 0;
@@ -33,7 +33,7 @@ namespace SwordManState
     {
         public override void Enter(PlayerSwordMan p)
         {
-            p.isAttack = true;
+            p.IsAttack = true;
             p.attackIndex = 1;
             p.stateDuration = 1f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
@@ -44,7 +44,7 @@ namespace SwordManState
             if(Time.time - p.prevAtkTime >= p.stateDuration)
             {
                 p.numOfClicks = 0;
-                p.isAttack = false;
+                p.IsAttack = false;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
             else if(p.numOfClicks >= 2)
@@ -64,7 +64,7 @@ namespace SwordManState
     {
         public override void Enter(PlayerSwordMan p)
         {
-            p.isAttack = true;
+            p.IsAttack = true;
             p.attackIndex = 2;
             p.stateDuration = 1.5f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
@@ -94,7 +94,7 @@ namespace SwordManState
     {
         public override void Enter(PlayerSwordMan p)
         {
-            p.isAttack = true;
+            p.IsAttack = true;
             p.attackIndex = 3;
             p.stateDuration = 2.4f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
