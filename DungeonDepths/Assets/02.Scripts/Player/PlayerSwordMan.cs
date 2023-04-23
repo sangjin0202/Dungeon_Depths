@@ -9,19 +9,26 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     // 더블점프 모션, 피격 모션 해결해야함
     // 공격모션에서 Collider On/Off 구현
     // 찌르기 모션 , 방어 모션, 점프모션 찾을수 있다면 찾기 
-    
+
     public enum SwordManStates { None, Start, Combo, Finish };
     public StateMachine<PlayerSwordMan> stateMachine;
 
-    [Tooltip("히트 박스")] public GameObject hitBox;
+    [Tooltip("기본 공격 히트 박스")] public GameObject hitBox;
+    [Tooltip("스킬1 히트 박스")] public GameObject earthQuakeHitBox;
+    [Tooltip("스킬1 히트 박스")] public GameObject stingHitBox;
     [HideInInspector] public int numOfClicks;
     [HideInInspector] public float stateDuration;
     [HideInInspector] public float prevAtkTime;
     [HideInInspector] public int attackIndex;
-    
+    GameObject blockArea;
+
     void Awake()
     {
-        hitBox = transform.GetChild(6).gameObject;
+        blockArea = transform.GetChild(6).gameObject;
+        hitBox = transform.GetChild(7).gameObject;
+        earthQuakeHitBox = transform.GetChild(8).gameObject;
+        blockArea.SetActive(false);
+        GameManager.Instance.CurPlayerClass = EnumTypes.Class.SWORD;
         stateMachine = new StateMachine<PlayerSwordMan>();
         stateMachine.AddState((int)SwordManStates.None, new SwordManState.None());
         stateMachine.AddState((int)SwordManStates.Start, new SwordManState.Start());
@@ -32,7 +39,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
         HpMax = 100f;
         HpCur = 100f;
-        AttackPower = 100f;
+        AttackPower = 10f;
         MoveSpeed = 3.5f;
         AttackDelay = 1f;
         AttackRange = 2f;
@@ -57,15 +64,15 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
     void CheckAttackKey()
     {
-        if(isJump || isDodge || isCast) return;
+        if (IsJump || IsDodge || IsCast) return;
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
             Attack();
     }
 
     public void Attack()
     {
-        if(numOfClicks == 0)
+        if (numOfClicks == 0)
         {
             stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
         }
@@ -77,20 +84,28 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     {
         hitBox.SetActive(true);
     }
+    public void OnEarthQuakeCollision()
+    {
+        earthQuakeHitBox.SetActive(true);
+    }
+    public void OnStingCollision()
+    {
+        stingHitBox.SetActive(true);
+    }
 
     public void UseSkill()
     {
-        if(isMove || isJump || isDodge || isCast || isAttack) return;
+        if (IsMove || IsJump || IsDodge || IsCast || IsAttack) return;
 
-        if(Input.GetButtonDown("Skill1"))
+        if (Input.GetButtonDown("Skill1"))
         {
-            isCast = true;
+            IsCast = true;
             animator.SetTrigger("SkillOne");
             StartCoroutine(OffCast("SkillOne"));
         }
-        else if(Input.GetButtonDown("Skill2"))
+        else if (Input.GetButtonDown("Skill2"))
         {
-            isCast = true;
+            IsCast = true;
             animator.SetTrigger("SkillTwo");
             StartCoroutine(OffCast("SKillTwo"));
         }
@@ -98,36 +113,40 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
     IEnumerator OffCast(string skillTag)
     {
-        if(skillTag == "SkillOne")
+        if (skillTag == "SkillOne")
         {
             yield return new WaitForSeconds(3.0f);
-            isCast = false;
+            IsCast = false;
         }
         else
         {
             yield return new WaitForSeconds(1.5f);
-            isCast = false;
+            IsCast = false;
         }
     }
 
     public void Dodge()
     {
-        if(isAttack || isJump || isCast) return; // 공격중이거나 점프중이라면
 
-        if(Input.GetMouseButton(1))
+        if (IsAttack || IsJump || IsCast) return; // 공격중이거나 점프중이라면
+
+
+        if (Input.GetMouseButton(1))
         {
-            if(isMove) // 움직이는 중이였다면
+            if (IsMove) // 움직이는 중이였다면
             {
                 animator.SetBool("Move", false);
-                isMove = false;
+                IsMove = false;
             }
-            isDodge = true;
+            IsDodge = true;
             animator.SetBool("Block", true);
+            blockArea.SetActive(true);
         }
         else
         {
-            isDodge = false;
+            IsDodge = false;
             animator.SetBool("Block", false);
+            blockArea.SetActive(false);
         }
     }
 
@@ -136,8 +155,6 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         HpCur -= _damage;
         HpCur = Mathf.Clamp(HpCur, 0, HpMax);
         Debug.Log("현재 체력 : " + HpCur);
-        if(HpCur <= 0) Die();
+        if (HpCur <= 0) Die();
     }
-
-    
 }
