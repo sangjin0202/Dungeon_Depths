@@ -97,12 +97,13 @@ namespace SwordManState
             p.IsAttack = true;
             p.attackClick = false;
             p.attackIndex = 3;
-            p.stateDuration = 1f;
+            p.stateDuration = 1.5f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
         public override void Execute(PlayerSwordMan p)
         {
+            p.animator.SetFloat("MoveSpeed", 1f);
             if(Time.time - p.prevAtkTime >= p.stateDuration)
             {
                 //p.numOfClicks = 0;

@@ -41,7 +41,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         HpMax = 100f;
         HpCur = 100f;
         AttackPower = 10f;
-        MoveSpeed = 3.5f;
+        MoveSpeed += 3.5f;
         AttackDelay = 1f;
         AttackRange = 2f;
         jumpPower = 8f;
@@ -61,6 +61,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     {
         base.Update();
 
+        Debug.Log("플레이어의 이동속도 : " + MoveSpeed);
         CheckAttackKey();
         stateMachine.Execute();
 

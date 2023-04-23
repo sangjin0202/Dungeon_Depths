@@ -106,7 +106,7 @@ public class PlayerBase : MonoBehaviour
 
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-
+            
         if(moveDir != Vector3.zero)
             CharacterAxisRotate();
 
@@ -133,7 +133,7 @@ public class PlayerBase : MonoBehaviour
             else
                 animator.SetBool("Move", IsMove);
 
-            MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 3.5f);
+            MoveSpeed = Mathf.Clamp(MoveSpeed, 0f, 5.5f);
             animator.SetFloat("MoveSpeed", moveSpeed, 0.0f, Time.deltaTime);
             if(!somethingInFront)
                 transform.position += moveDir * moveSpeed * Time.deltaTime;
