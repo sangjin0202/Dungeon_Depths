@@ -2,42 +2,101 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using EnumTypes;
 
-public enum CardRarity { NOMAL, RARE };
-public class CardManager : MonoBehaviour
+public class CardManager : MonoSingleton<CardManager>
 {
-	public List<GameObject> cardObjList = new List<GameObject>(); // 프리팹 리스트
-	public GameObject parent; // 프리팹 부모
-	public List<CardData> cardList = new List<CardData>(); // 스크립터블 오브젝트에서 뽑아온 데이터 리스트
-	public CardDatas cardDatas; // 스크립터블 오브젝트
+    //public GameObject parent; // 프리팹 부모
+    [SerializeField]
+    CardDatas cardDatas; // 스크립터블 오브젝트
+    Transform cardParent;
 
-	public void Awake()
-	{
-	}
+    public GameObject cardPrefab;
+    public GameObject player;
+    [SerializeField]
+    private List<CardData> normalCardList = new List<CardData>();
+    [SerializeField]
+    private List<CardData> rareCardList = new List<CardData>();
+    private List<CardData> playerCardList = new List<CardData>();
+    public void Awake()
+    {
+        
+    }
+    private void Start()
+    {
+        cardParent = GameObject.Find("Windows").transform.GetChild(2).GetChild(5).GetChild(0).transform;
+        InitCardData();
 
-	private void Start()
-	{
-		InitCardData();
-	}
+        for (int i = 0; i < cardDatas.cardDataList.Count; i++)
+        {
+            GetCard(cardDatas.cardDataList[i]);
+        }
+    }
+    void InitCardData()
+    {
+        foreach (var _data in cardDatas.cardDataList) // 스크립터블 오브젝트 데이터를 리스트로 옮겨 담은 후
+        {
+            if (_data.Rarity == CardRarity.NOMAL)
+                normalCardList.Add(_data);
+            else if(GameManager.Instance.CurPlayerClass == _data.CardClass || _data.CardClass == Class.NONE)
+                rareCardList.Add(_data);
+        }
+    }
+    public CardData NormalCard() // 보물상자 카드뽑기
+    {
+        var _index = Random.Range(0, normalCardList.Count);
+        var _card = normalCardList[_index];
+        return _card;
 
-	private void InitCardData() 
-	{
-		foreach (var _data in cardDatas.cardDataList) // 스크립터블 오브젝트 데이터를 리스트로 옮겨 담은 후
-		{
-			cardList.Add(_data);
-		}
+    }
+    public CardData RareCard() // 레어카드 한장 뽑기
+    {
+        var _index = Random.Range(0, rareCardList.Count);
+        var _card = rareCardList[_index];
+        return _card;
+    }
+    public CardData RandomCard()
+    {
+        var _random = Random.Range(0, 10);
+        if (_random < 2)
+            return RareCard();
+        else
+            return NormalCard();
+    }
+    public List<CardData> SelectRandomCards(int _cardNum)
+    {
+        var _selectedCards = new List<CardData>();
+        var _cardData = CardManager.Instance.RandomCard();
 
-		for (int i = 0; i < cardList.Count; i++) // 풀매니저에서 동적할당한 프리팹에 (스크립터블 오브젝트에서 옮긴 리스트)데이터 옮겨주기
-		{
-			GameObject _list = parent.transform.GetChild(i).gameObject;
-			var _cardObjList = _list.GetComponent<Card>();
-			_cardObjList.cardData.CardName = cardList[i].CardName;
-			_cardObjList.cardData.CardDesc = cardList[i].CardDesc;
-			_cardObjList.cardData.Rarity = cardList[i].Rarity;
-			_cardObjList.cardData.Value = cardList[i].Value;
-			_cardObjList.cardData.Sprite = cardList[i].Sprite;
-			cardObjList.Add(_list);
-		}
-	}
+        _selectedCards.Add(_cardData);
+        while (_selectedCards.Count <= _cardNum)
+        {
+            _cardData = CardManager.Instance.RandomCard();
+            if (!_selectedCards.Contains(_cardData))
+                _selectedCards.Add(_cardData);
+        }
+        return _selectedCards;
+    }
+    public void GetCard(CardData _card) // 실제 습득 카드
+    {
+        InstantiateCard(_card);
+        playerCardList.Add(_card);
+        if(_card.Rarity == CardRarity.NOMAL)
+            normalCardList.Remove(_card);
+        else
+            rareCardList.Remove(_card);
+        // 능력 함수 호출
 
+        AbilityEffect aa = new AbilityEffect();
+        aa.StatBoostEffect(player.GetComponent<PlayerBase>(), _card);
+    }
+    public void InstantiateCard(CardData _cardData)
+    {
+        var _cardObj = Instantiate(cardPrefab, cardParent);
+        _cardObj.name = _cardData.CardName;
+        var _card = _cardObj.GetComponent<Card>();
+        _card.cardData = _cardData;
+    }
 }
+
+
