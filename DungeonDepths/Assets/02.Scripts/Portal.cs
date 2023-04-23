@@ -6,23 +6,24 @@ using EnumTypes;
 public class Portal : MonoBehaviour
 {
     string playerTag = "Player";
-	
-    private void Awake()
+	bool isInteraction;
+    private void Update()
     {
-		
-	}
+        if (Input.GetButtonDown("Interaction"))
+        { 
+            if(isInteraction)
+                UIManager.Instance.OnWindow(Window.MAP);
+        }
+    }
 
-	void OnEnable()
+    private void OnTriggerEnter(Collider _other)
 	{
-		
+		if(_other.CompareTag(playerTag))
+			isInteraction = true;
 	}
+    private void OnTriggerExit(Collider other)
+    {
+		isInteraction = false;
+    }
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if(other.CompareTag(playerTag))
-		{
-			UIManager.Instance.OnWindow(Window.MAP);
-		}
-	}
-	
 }

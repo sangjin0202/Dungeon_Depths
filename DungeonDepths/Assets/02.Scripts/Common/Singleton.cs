@@ -34,3 +34,30 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 }
+
+public class SingletonDontDestroy<T> : MonoBehaviour where T : SingletonDontDestroy<T>
+{
+    public static T Instance { get; set; }
+    protected virtual void OnAwake() { }
+    protected virtual void OnStart() { }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = (T)this;
+            OnAwake();
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        OnStart();
+    }
+}
+

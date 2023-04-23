@@ -16,6 +16,10 @@ TagManager:
   - node4
   - Boss
   - Enemy
+  - Card
+  - Portal
+  - BlockArea
+  - Monster
   layers:
   - Default
   - TransparentFX

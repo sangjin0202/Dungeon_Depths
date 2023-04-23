@@ -9,16 +9,16 @@ public class BossGolem : BossBaseFSM
     protected override void Awake()
     {
         base.Awake();
-        
+        Rbody = GetComponent<Rigidbody>();
         MeleeHitBox1 = transform.GetChild(2).gameObject;
         MeleeHitBox2 = transform.GetChild(3).gameObject;
         MeleeHitBox1.SetActive(false);
         MeleeHitBox2.SetActive(false); 
         
-        BossMaxHp = 10000;
+        BossMaxHp = 500;
         BossCurHp = BossMaxHp;
         MoveSpeed = 3.5f;
-        RotSpeed = 3f;
+        RotSpeed = 1.5f;
         AttackDamage = 30f;
         
         TargetTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
@@ -55,5 +55,7 @@ public class BossGolem : BossBaseFSM
     {
         //Debug.Log(stateMachine.CurrentState);
         stateMachine.Execute();
+        //rbody.velocity = Vector3.zero;
+        //rbody.angularVelocity = Vector3.zero;
     }
 }
