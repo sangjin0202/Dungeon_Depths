@@ -40,6 +40,7 @@ public class PlayerBase : MonoBehaviour
     public bool somethingInFront;
     public bool IsDead { get; set; }
 
+    public bool moveKeyDown;
 
     #endregion
 
@@ -64,13 +65,15 @@ public class PlayerBase : MonoBehaviour
 
     #endregion
 
+    public float stateDuration { get; set; } // 소드맨 콤보 공격 상태 지속 시간
     protected Vector3 moveDir;
-
 
     protected virtual void Update()
     {
         if(GameManager.Instance.IsPause) return;
-
+        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+            moveKeyDown = true;
+        
         Move();
         Jump();
         GetDamage();
@@ -79,7 +82,7 @@ public class PlayerBase : MonoBehaviour
         {
             StartCoroutine(Regeneration());
         }
-            }
+    }
 
     #region 행동:회전
 
@@ -102,31 +105,27 @@ public class PlayerBase : MonoBehaviour
     #region 행동:이동
     public void Move()
     {
-        if(IsAttack || IsDodge || IsCast) return;
+        if(IsDodge || IsCast || !moveKeyDown) return;
 
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-            
+        
         if(moveDir != Vector3.zero)
             CharacterAxisRotate();
-
+        
         // 플레이어 캐릭터는 키보드로 입력 받은 방향을 바라본다.
         transform.LookAt(transform.position + moveDir);
         moveSpeed = Input.GetButton("Run") ? MoveSpeed * 2 : MoveSpeed;
 
-        //for(int i = 1; i <= 3; i++)
-        //{
-        //    animator.ResetTrigger("Attack" + i);
-        //}
-
         if(moveDir == Vector3.zero) // 정지상태라면
         {
             IsMove = false;
+            moveKeyDown = false;
             animator.SetBool("Move", IsMove);
         }
-        else // 정지상태가 아니라면
+        else// 정지상태가 아니라면
         {
-            if(IsAttack) return;
+            //if(!IsMove) return;
             IsMove = true;
             if(IsJump)
                 animator.SetBool("Move", !IsMove);
@@ -139,6 +138,7 @@ public class PlayerBase : MonoBehaviour
                 transform.position += moveDir * moveSpeed * Time.deltaTime;
             //rbody.MovePosition(transform.position + moveDir * moveSpeed * Time.deltaTime);
         }
+
     }
     #endregion
     #region 행동:점프

@@ -11,7 +11,7 @@ using EnumTypes;
 public class AbilityEffect// : AbilityEffect
 {
     float moveSpeedCoefficient = 2f;
-    float attackSpeedCoefficient = 0.5f;
+    float attackSpeedCoefficient = 1.15f;
     float attackRangeCoefficient = 1f;
     float attackPowerCoefficient = 10f;
     int jumpNum = 1;
@@ -40,7 +40,9 @@ public class AbilityEffect// : AbilityEffect
                 _player.MoveSpeed += moveSpeedCoefficient;
                 break;
             case CardID.CARD_FRENZY:
-                _player.AttackDelay -= attackSpeedCoefficient;
+                //_player.AttackDelay -= attackSpeedCoefficient;
+                _player.animator.SetFloat("AttackSpeed", attackSpeedCoefficient);
+                _player.stateDuration -= 0.2f;
                 break;
             case CardID.CARD_SNIPER:
                 _player.AttackRange += attackRangeCoefficient;

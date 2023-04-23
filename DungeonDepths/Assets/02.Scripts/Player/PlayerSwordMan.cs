@@ -18,7 +18,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     [Tooltip("스킬1 히트 박스")] public GameObject stingHitBox;
     //[HideInInspector] public int numOfClicks;
     public bool attackClick;
-    [HideInInspector] public float stateDuration;
+
     [HideInInspector] public float prevAtkTime;
     [HideInInspector] public int attackIndex;
     GameObject blockArea;
@@ -61,10 +61,10 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     {
         base.Update();
 
-        Debug.Log("플레이어의 이동속도 : " + MoveSpeed);
+        Debug.Log("이동 여부 : " + moveKeyDown);
+        //Debug.Log("플레이어의 이동속도 : " + MoveSpeed);
         CheckAttackKey();
         stateMachine.Execute();
-
         UseSkill();
         Dodge();
     }
@@ -74,11 +74,12 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         if(IsJump || IsDodge || IsCast) return;
 
         attackClick = Input.GetMouseButtonDown(0);
-        
+
         if(attackClick)
         {
             if(IsMove)
             {
+                moveKeyDown = false;
                 IsMove = false;
                 animator.SetBool("Move", IsMove);
             }
@@ -102,7 +103,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
             stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
     }
 
-    
+
     public void OnAttackCollision()
     {
         hitBox.SetActive(true);

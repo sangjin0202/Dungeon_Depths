@@ -115,7 +115,7 @@ public abstract class BossBaseFSM : MonoBehaviour
         Vector3 dir = TargetTransform.position - BossTransform.position;
         if(_dist <= MeleeRange) // 플레이어가 근접 사거리 내에 있다면
         {
-            if(Physics.Raycast(BossTransform.position, BossTransform.forward, out hit, MeleeRange) && hit.collider.CompareTag("Player"))
+            if(Physics.Raycast(BossTransform.position, BossTransform.forward, out hit, MeleeRange) && (hit.collider.CompareTag("Player") || hit.collider.CompareTag("BlockArea")))
             {
                 stateMachine.ChangeState(stateMachine.GetState((int)BossStates.MeleeAttack));
             }
@@ -131,7 +131,7 @@ public abstract class BossBaseFSM : MonoBehaviour
         else if(_dist <= BeamRange)
         {
             int random = Random.Range(0, 100);
-            if(Physics.Raycast(BossTransform.position, BossTransform.forward, out hit, BeamRange) && hit.collider.name == "PlayerSwordMan")
+            if(Physics.Raycast(BossTransform.position, BossTransform.forward, out hit, BeamRange) && (hit.collider.CompareTag("Player") || hit.collider.CompareTag("BlockArea")))
             {
                 if(random <= 4 && Time.time - PrevAtkTime >= AttackDelay)
                 {

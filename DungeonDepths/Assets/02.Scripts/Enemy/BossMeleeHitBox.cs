@@ -10,7 +10,7 @@ public class BossMeleeHitBox : MonoBehaviour
     {
         StartCoroutine(AutoDisable());
     }
-    private void Awake()
+    private void Start()
     {
         boss = transform.GetComponentInParent<BossGolem>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerBase>();
@@ -23,11 +23,12 @@ public class BossMeleeHitBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("충돌체 검출 : " + other.name);
         float damage = boss.AttackDamage;
         if(other.CompareTag("Player"))
         {
             Debug.Log("보스 공격 성공 : " + other.name);
-            //player.GetHit(damage);
+            player.SetTakedDamage(damage);
         }
     }
 }
