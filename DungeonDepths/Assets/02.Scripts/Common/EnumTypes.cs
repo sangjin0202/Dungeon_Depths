@@ -3,12 +3,12 @@ namespace EnumTypes
     public enum MapType { KEY, NORMAL, BOSS, FINALBOSS, START }   //맵 종류 : 버튼마다 이미지가 달라야함
     public enum MapTheme { NONE, NATURE, DARK }                   //Stage 테마 : 이걸로 어느 스테이지의 맵인지 구분
     public enum MapDifficulty { NONE = 0, EASY, NORMAL, HARD }    //난이도 -> (int)형으로 받아와서 몬스터 스탯값에 곱해주거나 해야할듯 
-    public enum MonsterID { Chomper, SPITTER, BEHOLDER, MIMIC}
-    public enum Window { MAINMENU, GAMEOVER, OPTION, MAP, LOADING, GETCARD, SELECTCARD, BOSSHPWINDOW }
+    public enum MonsterID { Chomper, SPITTER, BEHOLDER, MIMIC }
+    public enum Window { BOSSHPBAR, PLAYERSTATE, STAGETITLE, GETCARD, SELECTCARD, MAINMENU, GAMEOVER, MAP, OPTION, LOADING }
     public enum CardRarity { NOMAL, RARE };
     public enum Class { NONE, SWORD, GUN, MAGIC };
-    public enum CardID 
-    { 
+    public enum CardID
+    {
         CARD_SPRINT,        // 이속 증가
         CARD_FRENZY,        // 공속 증가
         CARD_SNIPER,        // 공격 범위(사거리) 증가
@@ -38,7 +38,6 @@ namespace EnumTypes
         CARD_ROLL,          // (총잡이) 구르기 할때 섬광탄 투척
         CARD_FLASHBANG,     // (총잡이) 섬광탄 넓이 증가
         CARD_GENOCIDE,      // (총잡이) 난사시 이동, 범위, 지속시간 증가
-        CARD_PET         
+        CARD_PET
     };
-
 }

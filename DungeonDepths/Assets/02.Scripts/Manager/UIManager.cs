@@ -8,17 +8,20 @@ using UnityEngine.EventSystems;
 public class UIManager : SingletonDontDestroy<UIManager>
 {
     [SerializeField]
-    List<GameObject> windowList = new List<GameObject>();
-    GameObject curWindow;
+    private List<GameObject> windowList = new List<GameObject>();
+    Stack<GameObject> curWindows = new Stack<GameObject>();
     public List<GameObject> WindowList
     {
         get => windowList;
     }
     public GameObject CurWindow
     {
-        get => curWindow;
+        get => curWindows.Peek();
     }
-
+    public Stack<GameObject> CurWindows
+    {
+        get => curWindows;
+    }
     protected override void OnAwake()
     {
         InitWindowList();
@@ -31,65 +34,52 @@ public class UIManager : SingletonDontDestroy<UIManager>
             windowList.Add(windows.GetChild(i).gameObject);
             windowList[i].SetActive(false);
         }
-        curWindow = windowList[0];
-        curWindow.SetActive(true);
+        curWindows.Push(windowList[(int)Window.MAINMENU]);
+        curWindows.Peek().SetActive(true);
     }
-    public void OnWindow(Window _name) // Full Window 켜기
+    public void OnWindowWithPause(Window _name) 
     {
-        windowList[(int)_name].SetActive(true);
-        curWindow = windowList[(int)_name];
+        OnWindow(_name);
         GameManager.Instance.Pause();
     }
-    public void OnWindowWithoutPause(Window _name) // Pause 없이 Full Window 켜기
+    public void OnWindow(Window _name) 
     {
-        windowList[(int)_name].SetActive(true);
+        if (curWindows.Contains(windowList[(int)_name])) return;
+        curWindows.Push(windowList[(int)_name]);
+        curWindows.Peek().SetActive(true);
     }
     
-    public void OffWindow(Window _name) // Full Window 끄기
+    public void OffWindowWithResume() 
     {
-        windowList[(int)_name].SetActive(false);
-        curWindow = null;
+        OffWindow();
         GameManager.Instance.Resume();
     }
-    public void OffWindowWithoutResume(Window _name) // Full Window 끄기
+    public void OffWindow() 
     {
-        windowList[(int)_name].SetActive(false);
-    }
-    public void OnClickCloseBtn()   // UI 종료 버튼
-    {
-        if (curWindow != null)
-            curWindow.SetActive(false);
-        GameManager.Instance.Resume();
+        curWindows.Pop().SetActive(false);
     }
     public void OnClickOptionBtn()  // 옵션
     {
-        OnWindow(Window.OPTION);
+        OnWindowWithPause(Window.OPTION);
     }
     public void OnClickRestartBtn()   // 게임 오버-> restart 버튼 
     {
-        OffWindow(Window.GAMEOVER);
+        CloseAllWindows();
         GameManager.Instance.LoadMenuScene();
-        OnWindow(Window.MAINMENU);
+        OnWindowWithPause(Window.MAINMENU);
     }
     public void OnClickMainMenuPlayBtn() // 메인메뉴에서 플레이 하는 버튼
     {
-        OffWindow(Window.MAINMENU);
+        OffWindowWithResume();
         StartCoroutine(LoadingWindow());
         GameManager.Instance.LoadPlayScene();
-
     }
-
     IEnumerator LoadingWindow()
     {
         windowList[(int)Window.LOADING].SetActive(true);
         yield return null;
         windowList[(int)Window.LOADING].SetActive(false);
     }
-    public void ShowMapInfo()
-    {
-
-    }
-
     public IEnumerator ShowCardInfo(CardData _cardData)
     {
         var _card = windowList[(int)Window.GETCARD];
@@ -98,7 +88,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
         yield return new WaitForSeconds(1.5f);
         _card.SetActive(false);
     }
-
     public void SetCardInfo(CardData _cardData, GameObject _card)
     {
         _card.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = _cardData.Sprite;
@@ -109,11 +98,10 @@ public class UIManager : SingletonDontDestroy<UIManager>
             _card.transform.GetChild(1).GetChild(1).GetComponent<Image>().gameObject.SetActive(true);
         _card.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = _cardData.CardDesc;
     }
-
     public void ShowSelectCardInfo()
     {
         var _selectCardWindow = windowList[(int)Window.SELECTCARD];
-        OnWindow(Window.SELECTCARD);
+        OnWindowWithPause(Window.SELECTCARD);
         var _selectedCards = CardManager.Instance.SelectRandomCards(3);
         for (int i = 0; i < 3; i++)
         {
@@ -122,12 +110,16 @@ public class UIManager : SingletonDontDestroy<UIManager>
             SetCardInfo(_selectedCards[i], _parent);
         }
     }
-
     public void ChooseCard()
     {
         // CardManager.Instance.GetCard(cards[0]);
         var _clickObject = EventSystem.current.currentSelectedGameObject;
         CardManager.Instance.GetCard(_clickObject.GetComponent<Card>().cardData);
-        OffWindow(Window.SELECTCARD);
+        OffWindowWithResume();
+    }
+    public void CloseAllWindows()
+    {
+        while (curWindows.Count != 0)
+            OffWindow();
     }
 }
