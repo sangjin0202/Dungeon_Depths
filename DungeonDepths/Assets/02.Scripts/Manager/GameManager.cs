@@ -43,10 +43,7 @@ public class GameManager : SingletonDontDestroy<GameManager>
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isPause)
-                UIManager.Instance.OnWindow(Window.OPTION);
-            else
-                UIManager.Instance.OffWindow(Window.OPTION);
+           UIManager.Instance.OnWindowWithPause(Window.OPTION);
         }
     }
     public void Pause()
@@ -67,10 +64,11 @@ public class GameManager : SingletonDontDestroy<GameManager>
     }
     public void GameOver()
     {
-        UIManager.Instance.OnWindow(Window.GAMEOVER);
+        UIManager.Instance.OnWindowWithPause(Window.GAMEOVER);
     }
     public void LoadMenuScene()
     {
+        CardManager.Instance.ClearPlayerCardList();
         SceneManager.LoadScene(0);
         isGameOver = false;
     }

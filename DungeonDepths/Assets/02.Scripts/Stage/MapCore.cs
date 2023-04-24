@@ -28,18 +28,17 @@ public class MapCore : MonoBehaviour
     {
         if (_other.CompareTag("PlayerAA"))
         {
-            if (hitCount == 0)
+            if (--hitCount == 0)
                 StartCoroutine(DestroyCore());
-            else
-                hitCount--;
         }
     }
     private void OnDisable()
     {
-        //임시 테스트
-        //OnEvent();
-        if(IsDestroyed)
+        if (IsDestroyed)
+        {
+            StageManager.Instance.ClearStage();
             StageManager.Instance.MovePortal(this.transform.position, this.transform.rotation);
+        }
     }
     IEnumerator DestroyCore()
     {
