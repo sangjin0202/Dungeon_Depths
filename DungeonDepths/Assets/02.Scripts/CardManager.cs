@@ -17,20 +17,16 @@ public class CardManager : MonoSingleton<CardManager>
     private List<CardData> normalCardList = new List<CardData>();
     [SerializeField]
     private List<CardData> rareCardList = new List<CardData>();
-    private List<CardData> playerCardList = new List<CardData>();
+    [SerializeField]
+    private List<GameObject> playerCardList = new List<GameObject>();
     public void Awake()
     {
-        
+
     }
     private void Start()
     {
-        cardParent = GameObject.Find("Windows").transform.GetChild(2).GetChild(5).GetChild(0).transform;
+        cardParent = UIManager.Instance.WindowList[(int)Window.OPTION].transform.GetChild(5).GetChild(0).transform;
         InitCardData();
-
-        for (int i = 0; i < cardDatas.cardDataList.Count; i++)
-        {
-            GetCard(cardDatas.cardDataList[i]);
-        }
     }
     void InitCardData()
     {
@@ -38,7 +34,7 @@ public class CardManager : MonoSingleton<CardManager>
         {
             if (_data.Rarity == CardRarity.NOMAL)
                 normalCardList.Add(_data);
-            else if(GameManager.Instance.CurPlayerClass == _data.CardClass || _data.CardClass == Class.NONE)
+            else if (GameManager.Instance.CurPlayerClass == _data.CardClass || _data.CardClass == Class.NONE)
                 rareCardList.Add(_data);
         }
     }
@@ -80,15 +76,14 @@ public class CardManager : MonoSingleton<CardManager>
     public void GetCard(CardData _card) // 실제 습득 카드
     {
         InstantiateCard(_card);
-        playerCardList.Add(_card);
-        if(_card.Rarity == CardRarity.NOMAL)
+        if (_card.Rarity == CardRarity.NOMAL)
             normalCardList.Remove(_card);
         else
             rareCardList.Remove(_card);
         // 능력 함수 호출
 
-        AbilityEffect aa = new AbilityEffect();
-        aa.StatBoostEffect(player.GetComponent<PlayerBase>(), _card);
+        AbilityEffect _abilityEffect = new AbilityEffect();
+        _abilityEffect.StatBoostEffect(player.GetComponent<PlayerBase>(), _card);
     }
     public void InstantiateCard(CardData _cardData)
     {
@@ -96,6 +91,14 @@ public class CardManager : MonoSingleton<CardManager>
         _cardObj.name = _cardData.CardName;
         var _card = _cardObj.GetComponent<Card>();
         _card.cardData = _cardData;
+        playerCardList.Add(_cardObj);
+    }
+    public void ClearPlayerCardList()
+    {
+        foreach (var _card in playerCardList)
+            Destroy(_card);
+        playerCardList.Clear();
+
     }
 }
 
