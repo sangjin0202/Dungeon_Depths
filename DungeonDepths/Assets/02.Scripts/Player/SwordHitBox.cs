@@ -9,8 +9,9 @@ public class SwordHitBox : MonoBehaviour
     [SerializeField] Collider[] colliders;
     [SerializeField] float swordDamage;
     [SerializeField] PlayerBase player;
+    BoxCollider hitBoxSize;
     //This function is called when the object becomes enabled and active.
-    
+
     private void OnEnable()
     {
         StartCoroutine(AutoDisable());
@@ -18,6 +19,7 @@ public class SwordHitBox : MonoBehaviour
 
     private void Awake()
     {
+        hitBoxSize = this.GetComponent<BoxCollider>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerBase>();
         boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
     }
@@ -26,6 +28,7 @@ public class SwordHitBox : MonoBehaviour
         //boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         //Debug.Log("칼 공격력 : " + swordDamage);
         this.gameObject.SetActive(false);
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -74,14 +77,20 @@ public class SwordHitBox : MonoBehaviour
     private void CheckCritical()
     {
         if (this.gameObject.name == "SwordHitBox") swordDamage = player.AttackPower;
-        else if (this.gameObject.name == "Skill1HitBox") swordDamage = player.AttackPower * 3;
-        //else if (this.gameObject.name == "Skill2HitBox") swordDamage = player.AttackPower * 2;
+        else if (this.gameObject.name == "Skill1HitBox") swordDamage = player.AttackPower * 5;
+        else if (this.gameObject.name == "Skill2HitBox") swordDamage = player.AttackPower * 3;
         if (Random.Range(0, 10) < 3 && player.Amplify)
             swordDamage *= 2f;
         Debug.Log("칼 데미지" + swordDamage);
     }
 
-    
+    // 소드맨 히트박스 확장 함수
+    // 특성카드 먹으면 호출 
+    private void ExpandHitBox()
+    {
+        if(this.gameObject.name == "SwordHitBox")
+            hitBoxSize.size *= 2f;
+    }
     private IEnumerator AutoDisable()
     {
         yield return new WaitForSeconds(0.2f);

@@ -119,9 +119,14 @@ namespace BossState
     {
         public override void Enter(BossBaseFSM b)
         {
-            b.bossDieTime = Time.time;
             b.isDead = true;
             b.Animator.SetTrigger("Die");
+            b.Rbody.isKinematic = true;
+            b.GetComponent<CapsuleCollider>().enabled = false;
+
+            UIManager.Instance.ShowSelectCardInfo();
+            StageManager.Instance.ClearStage();
+            StageManager.Instance.MovePortal(b.transform.position, b.transform.rotation);
         }
         public override void Execute(BossBaseFSM b)
         {

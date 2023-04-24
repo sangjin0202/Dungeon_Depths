@@ -26,6 +26,7 @@ public class PlayerBase : MonoBehaviour
     public bool IsLifeSteal { get; set; }
 
     public float lastHitTimer;
+    private float lastHealTimer;
     public bool IsRegen { get; set; }
 
     public bool Amplify { get; set; }
@@ -52,7 +53,6 @@ public class PlayerBase : MonoBehaviour
 
     private float moveSpeed;
     public float MoveSpeed { get; set; }
-    public float SkillDelay { get; set; }
     public float AttackDelay { get; set; }
     public float AttackRange { get; set; }
     #endregion
@@ -68,19 +68,41 @@ public class PlayerBase : MonoBehaviour
     public float stateDuration { get; set; } // 소드맨 콤보 공격 상태 지속 시간
     protected Vector3 moveDir;
 
+    //Q스킬 전체 쿨타임
+    public float firstSkillCoolDown { get; set; }
+    public float afterFirstSkill { get; set; }
+
+    //E스킬 전체 쿨타임
+    public float secondSkillCoolDown { get; set; }
+    public float afterSecondSkill { get; set; }
+
+    public float dodgeSkillCoolDown { get; set; }
+    public float afterDodgeSkill { get; set; }
+    protected PlayerUI playerUI;
+    protected virtual void Awake()
+    {
+        playerUI = UIManager.Instance.WindowList[(int)Window.PLAYERSTATE].GetComponent<PlayerUI>();
+    }
     protected virtual void Update()
     {
-        if(GameManager.Instance.IsPause) return;
+        
+
+        playerUI.UpdatePlayerUI(this);
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
             moveKeyDown = true;
-        
+
         Move();
         Jump();
         GetDamage();
 
         if(HpCur < 100f && IsRegen && Time.time - lastHitTimer >= 5f)
         {
-            StartCoroutine(Regeneration());
+            if(Time.time - lastHealTimer >= 1f)
+            {
+                HpCur += 10f;
+                lastHealTimer = Time.time;
+                Mathf.Clamp(HpCur, 0f, HpMax);
+            }
         }
     }
 
@@ -109,10 +131,10 @@ public class PlayerBase : MonoBehaviour
 
         // x축과 z축의 입력값을 방향으로 설정한다.
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        
+
         if(moveDir != Vector3.zero)
             CharacterAxisRotate();
-        
+
         // 플레이어 캐릭터는 키보드로 입력 받은 방향을 바라본다.
         transform.LookAt(transform.position + moveDir);
         moveSpeed = Input.GetButton("Run") ? MoveSpeed * 2 : MoveSpeed;
@@ -168,7 +190,10 @@ public class PlayerBase : MonoBehaviour
     #endregion
     public void SetTakedDamage(float _damage)
     {
-        takedDamage += _damage;
+        if(_damage - Defense <= 0)
+            takedDamage = 0f;
+        else
+            takedDamage += _damage - Defense;
     }
     void GetDamage()
     {
@@ -214,13 +239,6 @@ public class PlayerBase : MonoBehaviour
                 onBerserk = false;
             }
         }
-    }
-
-    IEnumerator Regeneration()
-    {
-        HpCur += 10f;
-        Mathf.Clamp(HpCur, 0f, HpMax);
-        yield return new WaitForSeconds(1.0f);
     }
     protected void Die()
     {

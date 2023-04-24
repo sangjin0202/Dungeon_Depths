@@ -43,7 +43,6 @@ public class CardManager : MonoSingleton<CardManager>
         var _index = Random.Range(0, normalCardList.Count);
         var _card = normalCardList[_index];
         return _card;
-
     }
     public CardData RareCard() // 레어카드 한장 뽑기
     {
@@ -62,12 +61,12 @@ public class CardManager : MonoSingleton<CardManager>
     public List<CardData> SelectRandomCards(int _cardNum)
     {
         var _selectedCards = new List<CardData>();
-        var _cardData = CardManager.Instance.RandomCard();
+        var _cardData = RandomCard();
 
         _selectedCards.Add(_cardData);
         while (_selectedCards.Count <= _cardNum)
         {
-            _cardData = CardManager.Instance.RandomCard();
+            _cardData = RandomCard();
             if (!_selectedCards.Contains(_cardData))
                 _selectedCards.Add(_cardData);
         }

@@ -5,8 +5,9 @@ namespace EnumTypes
     public enum MapDifficulty { NONE = 0, EASY, NORMAL, HARD }    //난이도 -> (int)형으로 받아와서 몬스터 스탯값에 곱해주거나 해야할듯 
     public enum MonsterID { Chomper, SPITTER, BEHOLDER, MIMIC }
     public enum Window { BOSSHPBAR, PLAYERSTATE, STAGETITLE, GETCARD, SELECTCARD, MAINMENU, GAMEOVER, MAP, OPTION, LOADING }
-    public enum CardRarity { NOMAL, RARE };
-    public enum Class { NONE, SWORD, GUN, MAGIC };
+    public enum Option { FULLHD, CAMERASHAKE, SOUND, MOUSE, STATUS}
+    public enum CardRarity { NOMAL, RARE }
+    public enum Class { NONE, SWORD, GUN, MAGIC }
     public enum CardID
     {
         CARD_SPRINT,        // 이속 증가
@@ -39,5 +40,5 @@ namespace EnumTypes
         CARD_FLASHBANG,     // (총잡이) 섬광탄 넓이 증가
         CARD_GENOCIDE,      // (총잡이) 난사시 이동, 범위, 지속시간 증가
         CARD_PET
-    };
+    }
 }

@@ -50,8 +50,8 @@ public class GameManager : SingletonDontDestroy<GameManager>
     {
         if (!isPause)
         {
-            Time.timeScale = 0f;
             isPause = true;
+            Time.timeScale = 0f;
         }
     }
     public void Resume()
@@ -77,5 +77,6 @@ public class GameManager : SingletonDontDestroy<GameManager>
         SceneManager.LoadScene(1);
         isPlaying = true;
         Resume();
+        UIManager.Instance.OnWindow(Window.PLAYERSTATE);
     }
 }
