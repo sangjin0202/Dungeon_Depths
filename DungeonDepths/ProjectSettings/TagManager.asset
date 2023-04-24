@@ -20,6 +20,7 @@ TagManager:
   - Portal
   - BlockArea
   - Monster
+  - PlayerAA
   layers:
   - Default
   - TransparentFX

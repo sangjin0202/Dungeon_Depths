@@ -25,7 +25,7 @@ public class NormalMap : Map
         return _pointList;
     }
 
-    List<Vector3> GetBoxSpawnPoints()
+    public List<Vector3> GetWorldBoxSpawnPoints()
     {
         List<Vector3> _pointList = new List<Vector3>();
         foreach (var _point in boxSpawnPoints)
@@ -36,27 +36,7 @@ public class NormalMap : Map
         return _pointList;
     }
 
-    public void SpawnBoxes()
-    {
-        if (boxSpawnPoints.Count < mapData.TotalBoxNum)
-        {
-            // 스크립터블 오브젝트에서 _totalBoxNum 수정
-            Debug.LogError("TotalBoxNum가 points.Count 초과");
-            return;
-        }
-        int _curBoxNum = 0;
-        bool[] _randomCount = new bool[boxSpawnPoints.Count];
-        while (mapData.TotalBoxNum > _curBoxNum)
-        {
-            int _index = Random.Range(0, boxSpawnPoints.Count);
-            if (!_randomCount[_index])
-            {
-                _randomCount[_index] = true;
-                PoolManager.Instance.Instantiate("Chest", GetBoxSpawnPoints()[_index], Quaternion.identity);
-                _curBoxNum++;
-            }
-        }
-    }
+    
 
     private void OnDrawGizmosSelected()
     {

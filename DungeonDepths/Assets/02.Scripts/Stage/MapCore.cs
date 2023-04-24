@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MapCore : MonoBehaviour
 {
+    [SerializeField]
     private int hitCount;
     public Transform Position { get; private set; }
     public bool IsDestroyed { get; private set; }
@@ -25,20 +26,19 @@ public class MapCore : MonoBehaviour
     }
     private void OnTriggerEnter(Collider _other)
     {
-        if (_other.CompareTag("PlayerHitBox"))
+        if (_other.CompareTag("PlayerAA"))
         {
-            if (hitCount == 0)
+            if (--hitCount == 0)
                 StartCoroutine(DestroyCore());
-            else
-                hitCount--;
         }
     }
     private void OnDisable()
     {
-        //임시 테스트
-        //OnEvent();
-        if(IsDestroyed)
+        if (IsDestroyed)
+        {
+            StageManager.Instance.ClearStage();
             StageManager.Instance.MovePortal(this.transform.position, this.transform.rotation);
+        }
     }
     IEnumerator DestroyCore()
     {

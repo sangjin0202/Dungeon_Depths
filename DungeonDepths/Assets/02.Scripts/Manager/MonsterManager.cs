@@ -53,5 +53,6 @@ public class MonsterManager : MonoSingleton<MonsterManager>
         {
             _monster.SetActive(false);
         }
+        aliveMonsterList.Clear();
     }
 }

@@ -31,12 +31,11 @@ public class Chest : MonoBehaviour
         var _card = CardManager.Instance.NormalCard();
         CardManager.Instance.GetCard(_card);
         StartCoroutine(UIManager.Instance.ShowCardInfo(_card));
-        UIManager.Instance.ShowSelectCardInfo();
     }
 
     public void DisableChest()
     {
         isOpen = false;
-        gameObject.SetActive(false);
+        gameObject.transform.parent.gameObject.SetActive(false);
     }
 }

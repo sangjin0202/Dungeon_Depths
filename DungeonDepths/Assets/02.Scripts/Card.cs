@@ -11,21 +11,20 @@ public class Card : MonoBehaviour
 	[SerializeField]
 	Text cardDesc;
 	private Button button;
-	
 
-	private void Start()
+	private void Awake()
 	{
 		cardImg = transform.GetChild(0).transform.GetChild(0).GetComponent<Image>();
-		cardDesc = transform.parent.parent.GetChild(1).GetChild(0).GetComponent<Text>();
 		cardImg.sprite = cardData.Sprite;
+		cardDesc = transform.parent.parent.GetChild(1).GetChild(0).GetComponent<Text>();
         button = GetComponent<Button>(); //버튼 component 가져오기
         button.onClick.AddListener((ShowCardInfo)); //인자가 없을 때 함수 호출
     }
-
 	void ShowCardInfo()
     {
-		if(UIManager.Instance.WindowList[(int)EnumTypes.Window.OPTION] == UIManager.Instance.CurWindow)
+		if (UIManager.Instance.CurWindows.Contains(UIManager.Instance.WindowList[(int)EnumTypes.Window.OPTION]))
+		{
 			cardDesc.text = cardData.CardDesc;
-
+		}
 	}
 }
