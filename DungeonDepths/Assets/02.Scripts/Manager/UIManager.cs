@@ -100,21 +100,28 @@ public class UIManager : SingletonDontDestroy<UIManager>
     }
     public void ShowSelectCardInfo()
     {
+        StartCoroutine(ShowSelect());
+    }
+
+    IEnumerator ShowSelect()
+    {
+        yield return new WaitForSeconds(2.0f);
         var _selectCardWindow = windowList[(int)Window.SELECTCARD];
         OnWindowWithPause(Window.SELECTCARD);
         var _selectedCards = CardManager.Instance.SelectRandomCards(3);
-        for (int i = 0; i < 3; i++)
+        for(int i = 0; i < 3; i++)
         {
             var _parent = _selectCardWindow.transform.GetChild(1).GetChild(i).gameObject;
-            _parent.GetComponent<Card>().cardData = _selectedCards[i];
+            _parent.GetComponent<SelectCard>().cardData = _selectedCards[i];
             SetCardInfo(_selectedCards[i], _parent);
         }
     }
+
     public void ChooseCard()
     {
         // CardManager.Instance.GetCard(cards[0]);
         var _clickObject = EventSystem.current.currentSelectedGameObject;
-        CardManager.Instance.GetCard(_clickObject.GetComponent<Card>().cardData);
+        CardManager.Instance.GetCard(_clickObject.GetComponent<SelectCard>().cardData);
         OffWindowWithResume();
     }
     public void CloseAllWindows()

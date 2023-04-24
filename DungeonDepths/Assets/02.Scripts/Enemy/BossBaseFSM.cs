@@ -28,7 +28,6 @@ public abstract class BossBaseFSM : MonoBehaviour
     public float MeleeRange { get; set; }
     public float BeamRange { get; set; }
     #endregion
-    public float bossDieTime;
     public bool isDead;
     public float delayTime = 2.5f;
 

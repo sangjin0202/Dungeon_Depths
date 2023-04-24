@@ -18,8 +18,6 @@ public class AbilityEffect// : AbilityEffect
     float defenseCoefficient = 5f;
     float coolDownCoefficient = 0.3f;
 
-
-
     public bool Explode { get; set; }
     public bool IsExecute { get; set; }
     
@@ -57,7 +55,10 @@ public class AbilityEffect// : AbilityEffect
                 _player.Defense += defenseCoefficient;
                 break;
             case CardID.CARD_COOLDOWN:
-                _player.SkillDelay -= _player.SkillDelay * coolDownCoefficient;
+                _player.firstSkillCoolDown -= 3f;
+                _player.secondSkillCoolDown -= 3f;
+                _player.dodgeSkillCoolDown -= 3f;
+                Mathf.Clamp(_player.dodgeSkillCoolDown, 0f, 10f);
                 break;
             case CardID.CARD_REBIRTH:
                 _player.IsRebirth = true;
