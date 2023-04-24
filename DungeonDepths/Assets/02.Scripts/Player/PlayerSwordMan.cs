@@ -61,7 +61,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     {
         base.Update();
 
-        Debug.Log("이동 여부 : " + moveKeyDown);
+        //Debug.Log("이동 여부 : " + moveKeyDown);
         //Debug.Log("플레이어의 이동속도 : " + MoveSpeed);
         CheckAttackKey();
         stateMachine.Execute();
