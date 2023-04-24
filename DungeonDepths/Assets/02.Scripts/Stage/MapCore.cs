@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MapCore : MonoBehaviour
 {
+    [SerializeField]
     private int hitCount;
     public Transform Position { get; private set; }
     public bool IsDestroyed { get; private set; }
@@ -25,7 +26,7 @@ public class MapCore : MonoBehaviour
     }
     private void OnTriggerEnter(Collider _other)
     {
-        if (_other.CompareTag("PlayerHitBox"))
+        if (_other.CompareTag("PlayerAA"))
         {
             if (hitCount == 0)
                 StartCoroutine(DestroyCore());

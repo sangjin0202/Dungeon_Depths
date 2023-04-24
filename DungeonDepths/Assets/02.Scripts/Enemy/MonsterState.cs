@@ -72,7 +72,7 @@ namespace MonsterState
         {
             m.Anim.SetTrigger("DieTrigger");
             m.IsDead = true;
-            m.collider.enabled = false;
+            m.Col.enabled = false;
             Debug.Log("Á×À½");
             delay = Time.time;
         }
@@ -85,7 +85,7 @@ namespace MonsterState
         }
         public override void Exit(MonsterBase m) 
         {
-            m.collider.enabled = true;
+            m.Col.enabled = true;
         }
     }
 }

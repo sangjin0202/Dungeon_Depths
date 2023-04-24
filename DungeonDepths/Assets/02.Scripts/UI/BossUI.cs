@@ -15,6 +15,7 @@ public class BossUI : MonoBehaviour
                 boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         }
         bossHp = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        //TODO 보스 이름 설정 추가
     }
     void Update()
     {
