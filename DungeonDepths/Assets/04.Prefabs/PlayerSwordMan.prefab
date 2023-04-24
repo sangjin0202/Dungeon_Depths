@@ -249,7 +249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1946474553
 Transform:
   m_ObjectHideFlags: 0
@@ -258,8 +258,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946474552}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.662, z: 0}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1930189498027398424}
@@ -494,12 +494,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   lastHitTimer: 0
   somethingInFront: 0
+  moveKeyDown: 0
   takedDamage: 0
   hitBox: {fileID: 0}
   earthQuakeHitBox: {fileID: 0}
   stingHitBox: {fileID: 0}
-  numOfClicks: 0
-  stateDuration: 0
+  attackClick: 0
   prevAtkTime: 0
   attackIndex: 0
 --- !u!54 &279454343
