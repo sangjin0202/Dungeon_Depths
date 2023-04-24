@@ -47,8 +47,12 @@ public abstract class MonsterBase : MonoBehaviour
     protected GameObject curTarget;
     protected Animator anim;
     protected GameObject hitBox;
-    public Collider collider;
+    private  Collider col;
 
+    public Collider Col
+    {
+        get => col;
+    }
     #region state관련 변수
     public enum eMonsterState { Idle, Patrol, Trace, Attack, Die }
     private StateMachine<MonsterBase> sm;
@@ -68,7 +72,7 @@ public abstract class MonsterBase : MonoBehaviour
         target = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         wayPoints = GetComponent<WayPoints>();
-        collider = GetComponent<Collider>();
+        col = GetComponent<Collider>();
         hitBox = transform.GetChild(0).gameObject;
         hitBox.SetActive(false);
         #region state 설정

@@ -31,7 +31,7 @@ public class StageManager : MonoSingleton<StageManager>
     }
     public void MovePortal(Vector3 _targetPos, Quaternion _rot)
     {
-        portal.transform.position = _targetPos;
+        portal.transform.position = _targetPos + new Vector3(0,3,0);
         portal.transform.rotation = _rot;
     }
 
