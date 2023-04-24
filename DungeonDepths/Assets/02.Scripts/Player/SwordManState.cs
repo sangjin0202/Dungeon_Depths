@@ -44,10 +44,10 @@ namespace SwordManState
         {
             if(Time.time - p.prevAtkTime > firstAtkSpeed || p.moveKeyDown)
             {
-                Debug.Log("콤보 유지 실패!");
+                //Debug.Log("콤보 유지 실패!");
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
-            else if(p.attackClick && !p.moveKeyDown)
+            else if(p.attackClick)
             {
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Combo));
             }
@@ -80,7 +80,7 @@ namespace SwordManState
                 //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
-            else if(p.attackClick && !p.moveKeyDown)
+            else if(p.attackClick)
             {
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.Finish));
             }
