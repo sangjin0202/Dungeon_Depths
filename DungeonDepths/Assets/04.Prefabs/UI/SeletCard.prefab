@@ -741,6 +741,7 @@ GameObject:
   - component: {fileID: 8026375541866353057}
   - component: {fileID: 8026375541866353062}
   - component: {fileID: 8026375541866353070}
+  - component: {fileID: 1533470482}
   m_Layer: 5
   m_Name: GetCard2
   m_TagString: Untagged
@@ -852,7 +853,41 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8026375541866353062}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ChooseCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1533470482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026375541866353060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData:
+    cardID: 0
+    rarity: 0
+    cardClass: 0
+    cardName: 
+    cardDesc: 
+    value: 0
+    sprite: {fileID: 0}
+  cardImg: {fileID: 0}
+  cardDesc: {fileID: 0}
 --- !u!1 &8026375542067920582
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,6 +980,7 @@ GameObject:
   - component: {fileID: 8026375542109073913}
   - component: {fileID: 8026375542109073918}
   - component: {fileID: 8026375542109073670}
+  - component: {fileID: 1988973851}
   m_Layer: 5
   m_Name: GetCard1
   m_TagString: Untagged
@@ -1056,7 +1092,41 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8026375542109073918}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ChooseCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1988973851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026375542109073916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData:
+    cardID: 0
+    rarity: 0
+    cardClass: 0
+    cardName: 
+    cardDesc: 
+    value: 0
+    sprite: {fileID: 0}
+  cardImg: {fileID: 0}
+  cardDesc: {fileID: 0}
 --- !u!1 &8026375542227912443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1299,7 +1369,7 @@ GameObject:
   - component: {fileID: 8026375542474974249}
   - component: {fileID: 8026375542474974254}
   m_Layer: 5
-  m_Name: Text-DifficultyTitle
+  m_Name: Text-Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1457,6 +1527,7 @@ GameObject:
   - component: {fileID: 8026375542564488213}
   - component: {fileID: 8026375542564488210}
   - component: {fileID: 8026375542564488209}
+  - component: {fileID: 546879669}
   m_Layer: 5
   m_Name: GetCard3
   m_TagString: Untagged
@@ -1568,7 +1639,41 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8026375542564488210}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ChooseCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &546879669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026375542564488208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData:
+    cardID: 0
+    rarity: 0
+    cardClass: 0
+    cardName: 
+    cardDesc: 
+    value: 0
+    sprite: {fileID: 0}
+  cardImg: {fileID: 0}
+  cardDesc: {fileID: 0}
 --- !u!1 &8026375542690057002
 GameObject:
   m_ObjectHideFlags: 0
@@ -2197,7 +2302,7 @@ GameObject:
   - component: {fileID: 8026375543236723825}
   - component: {fileID: 8026375543236723830}
   m_Layer: 5
-  m_Name: Text-DifficultyTitle
+  m_Name: Text-Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

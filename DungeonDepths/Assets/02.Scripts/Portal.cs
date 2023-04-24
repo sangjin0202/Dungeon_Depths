@@ -12,7 +12,7 @@ public class Portal : MonoBehaviour
         if (Input.GetButtonDown("Interaction"))
         { 
             if(isInteraction)
-                UIManager.Instance.OnWindow(Window.MAP);
+                UIManager.Instance.OnWindowWithPause(Window.MAP);
         }
     }
 
