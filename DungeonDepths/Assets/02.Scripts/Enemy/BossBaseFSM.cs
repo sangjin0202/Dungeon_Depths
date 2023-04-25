@@ -96,7 +96,7 @@ public abstract class BossBaseFSM : MonoBehaviour
         //Quaternion rot = Quaternion.LookRotation(dir);
         //BossTransform.rotation = Quaternion.Lerp(BossTransform.rotation, rot, RotSpeed * Time.deltaTime);
         Vector3 dir = TargetTransform.position - BossTransform.position;
-        dir.y = 0; // y축 방향을 제외한 나머지 축 방향을 0으로 설정합니다.
+        dir.y = 0; // y축 방향을 제외한 나머지 축 방향을 0으로 설정한다.
         if(dir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(dir); // y축 회전값만 있는 쿼터니온을 생성합니다.

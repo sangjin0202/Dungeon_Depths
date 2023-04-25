@@ -21,6 +21,7 @@ TagManager:
   - BlockArea
   - Monster
   - PlayerAA
+  - FinalBoss
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Boss
   - Enemy
   - Player
-  - 
+  - FinalBoss
   - EnvironmentObject
   - 
   - 
