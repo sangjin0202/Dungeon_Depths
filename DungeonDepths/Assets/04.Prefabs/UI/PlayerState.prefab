@@ -395,6 +395,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9444264f176734ab648accc9e30a5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHpBar: {fileID: 0}
+  firstSkillCool: {fileID: 0}
+  secondSkillCool: {fileID: 0}
+  dodgeSkillCool: {fileID: 0}
 --- !u!1 &7693405709043369696
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,7 +546,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0

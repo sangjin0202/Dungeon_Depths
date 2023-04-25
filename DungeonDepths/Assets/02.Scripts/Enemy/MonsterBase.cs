@@ -65,7 +65,6 @@ public abstract class MonsterBase : MonoBehaviour
     {
         get => anim;
     }
-
     #endregion
     protected virtual void Awake()
     {
@@ -86,6 +85,7 @@ public abstract class MonsterBase : MonoBehaviour
     }
     private void OnEnable()
     {
+        wayPoints.SetWayPoints();
         sm.InitState(this, sm.GetState((int)eMonsterState.Idle));
         IsDead = false;
     }
