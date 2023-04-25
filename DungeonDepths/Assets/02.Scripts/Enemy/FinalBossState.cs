@@ -185,7 +185,9 @@ namespace FinalBossState
     {
         public override void Enter(FinalBoss f)
         {
-
+            f.animator.SetTrigger("Die");
+            f.rbody.isKinematic = true;
+            f.collider.enabled = false;
         }
         public override void Execute(FinalBoss f)
         {

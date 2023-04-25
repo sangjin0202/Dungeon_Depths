@@ -12,6 +12,8 @@ public class FinalBoss : MonoBehaviour
     [SerializeField] Transform finalBossTransform;
     [SerializeField] Transform targetTransform;
     [SerializeField] bool isDead;
+    public Rigidbody rbody;
+    public CapsuleCollider collider;
 
     public bool isSecondPhase;
     public float prevRangeAtkTime;
@@ -20,7 +22,7 @@ public class FinalBoss : MonoBehaviour
     float meleeAttackRange = 3f;
     float meleeAttackAngle = 60f;
 
-    float hpMax = 1000, hpCur;
+    float hpMax = 100, hpCur;
     readonly int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
 
     void Awake()
@@ -30,6 +32,8 @@ public class FinalBoss : MonoBehaviour
         targetTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
         stateMachine = new StateMachine<FinalBoss>();
         animator = GetComponent<Animator>();
+        rbody = GetComponent<Rigidbody>();
+        collider = GetComponent<CapsuleCollider>();
 
         animator.SetTrigger("BossEnter");
         isSecondPhase = false;
@@ -41,6 +45,7 @@ public class FinalBoss : MonoBehaviour
         stateMachine.AddState((int)FinalBossStates.MeleeAttack2, new FinalBossState.MeleeAttack2());
         stateMachine.AddState((int)FinalBossStates.MeleeAttack3, new FinalBossState.MeleeAttack3());
         stateMachine.AddState((int)FinalBossStates.RangeAttack, new FinalBossState.RangeAttack());
+        stateMachine.AddState((int)FinalBossStates.Die, new FinalBossState.Die());
 
         stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
     }
@@ -54,18 +59,18 @@ public class FinalBoss : MonoBehaviour
     public void GetHit(float _damage)
     {
         hpCur -= _damage;
-        if(hpCur <= hpMax * 0.6)
+        Debug.Log("최종 보스 현재 체력 : " + hpCur);
+        if(hpCur <= hpMax * 0.6 && !isSecondPhase)
         {
+            animator.SetTrigger("Stun");
             isSecondPhase = true;
-            //animator.SetTrigger("Stun");
         }
         else if(hpCur <= 0)
-            Die();
-    }
-
-    public void Die()
-    {
-        //animator.SetTrigger("Die");
+        {
+            hpCur = 0f;
+            isDead = true;
+            stateMachine.ChangeState(stateMachine.GetState((int)FinalBossStates.Die));
+        }
     }
 
     //보스와 플레이어 사이의 거리를 구해서 반환
@@ -93,8 +98,12 @@ public class FinalBoss : MonoBehaviour
     {
         //Debug.Log("회전");
         Vector3 dir = targetTransform.position - finalBossTransform.position;
-        Quaternion rot = Quaternion.LookRotation(dir);
-        finalBossTransform.rotation = Quaternion.Lerp(finalBossTransform.rotation, rot, rotationSpeed * Time.deltaTime);
+        if(dir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(dir); // y축 회전값만 있는 쿼터니온을 생성합니다.
+            Quaternion finalRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y, 0); // y축 회전값만 유지하도록 합니다.
+            finalBossTransform.rotation = Quaternion.Lerp(finalBossTransform.rotation, finalRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     // 플레이어와의 거리를 확인한후 이를 공격반경 검사 함수에 전달한다.
@@ -135,7 +144,7 @@ public class FinalBoss : MonoBehaviour
             float angle = Mathf.Rad2Deg * theta;
 
             //if(Physics.Raycast(ray, out hit, meleeAttackRange) && hit.collider.CompareTag("Player"))
-            if(angle <= meleeAttackAngle / 6)
+            if(angle <= meleeAttackAngle / 5)
             {
                 _attackIndex = 1;
                 return true;
