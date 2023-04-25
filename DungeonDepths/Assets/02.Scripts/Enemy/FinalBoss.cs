@@ -11,7 +11,7 @@ public class FinalBoss : MonoBehaviour
     [SerializeField] float rotationSpeed = 3f;
     [SerializeField] Transform finalBossTransform;
     [SerializeField] Transform targetTransform;
-    [SerializeField] bool isDead;
+    public bool isDead;
     public Rigidbody rbody;
     public CapsuleCollider collider;
 
@@ -22,7 +22,7 @@ public class FinalBoss : MonoBehaviour
     float meleeAttackRange = 3f;
     float meleeAttackAngle = 60f;
 
-    float hpMax = 100, hpCur;
+    public float hpMax = 100, hpCur;
     readonly int hashMoveSpeed = Animator.StringToHash("MoveSpeed");
 
     void Awake()
@@ -35,7 +35,7 @@ public class FinalBoss : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         collider = GetComponent<CapsuleCollider>();
 
-        animator.SetTrigger("BossEnter");
+        
         isSecondPhase = false;
 
         stateMachine.AddState((int)FinalBossStates.Idle, new FinalBossState.Idle());
@@ -50,6 +50,11 @@ public class FinalBoss : MonoBehaviour
         stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
     }
 
+	private void OnEnable()
+	{
+        animator.SetTrigger("BossEnter");
+        stateMachine.InitState(this, stateMachine.GetState((int)FinalBossStates.Idle));
+    }
     private void Update()
     {
         //Debug.Log("최종보스 현재 상태 : " + stateMachine.CurrentState);

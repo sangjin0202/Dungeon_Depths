@@ -54,7 +54,7 @@ public class StageManager : MonoSingleton<StageManager>
         curMap = _selectedMap;
         player.transform.position = curMap.StartPosition.position;
 
-        if(curMap.mapData.Type == MapType.BOSS)
+        if(curMap.mapData.Type == MapType.BOSS || curMap.mapData.Type == MapType.FINALBOSS)
         {
             UIManager.Instance.OnWindow(Window.BOSSHPBAR);
         }
