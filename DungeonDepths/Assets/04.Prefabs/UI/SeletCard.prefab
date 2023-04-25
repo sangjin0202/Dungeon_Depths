@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 8026375541866353057}
   - component: {fileID: 8026375541866353062}
   - component: {fileID: 8026375541866353070}
-  - component: {fileID: 1533470482}
+  - component: {fileID: 1587859084}
   m_Layer: 5
   m_Name: GetCard2
   m_TagString: Untagged
@@ -866,7 +866,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1533470482
+--- !u!114 &1587859084
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -875,7 +875,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8026375541866353060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Script: {fileID: 11500000, guid: 41047ba18899f4e4ea19c41499f448ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 8026375542109073913}
   - component: {fileID: 8026375542109073918}
   - component: {fileID: 8026375542109073670}
-  - component: {fileID: 1988973851}
+  - component: {fileID: 1704753503}
   m_Layer: 5
   m_Name: GetCard1
   m_TagString: Untagged
@@ -1105,7 +1105,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1988973851
+--- !u!114 &1704753503
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8026375542109073916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Script: {fileID: 11500000, guid: 41047ba18899f4e4ea19c41499f448ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
@@ -1527,7 +1527,7 @@ GameObject:
   - component: {fileID: 8026375542564488213}
   - component: {fileID: 8026375542564488210}
   - component: {fileID: 8026375542564488209}
-  - component: {fileID: 546879669}
+  - component: {fileID: 1716331732}
   m_Layer: 5
   m_Name: GetCard3
   m_TagString: Untagged
@@ -1652,7 +1652,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &546879669
+--- !u!114 &1716331732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1661,7 +1661,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8026375542564488208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5a50ed762a11ea48888ae3fdb330698, type: 3}
+  m_Script: {fileID: 11500000, guid: 41047ba18899f4e4ea19c41499f448ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
