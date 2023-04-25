@@ -12,25 +12,26 @@ public class WayPoints : MonoBehaviour
     List<Vector3> worldList = new List<Vector3>();        // 인스펙터 창에서 설정한 좌표를 월드로 고정시키기 위한 리스트
     int index = -1;
     public Vector3 destinationPoint; // 좌표 도달값
-    void Start()
+
+    public void SetWayPoints()
     {
         worldList.Clear();
 
-		if (Random.Range(0f,1f) <= 0.5f) // 50프로확률로 방향설정   
-		{
-			for (int i = 0; i < localList.Count; i++) //0 번쨰 리스트부터 이동
-			{
+        if (Random.Range(0f, 1f) <= 0.5f) // 50프로확률로 방향설정   
+        {
+            for (int i = 0; i < localList.Count; i++) //0 번쨰 리스트부터 이동
+            {
                 worldList.Add(transform.TransformPoint(localList[i]));
                 //로컬 좌표로 설장한 리스트를 월드좌표로 변경해서 저장
-			}
-		}
+            }
+        }
         else
-		{
-			for (int i = localList.Count -1; i >= 0; i--) //마지막 리스트부터 거꾸로 이동
-			{
+        {
+            for (int i = localList.Count - 1; i >= 0; i--) //마지막 리스트부터 거꾸로 이동
+            {
                 worldList.Add(transform.TransformPoint(localList[i]));
-			}
-		}
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
