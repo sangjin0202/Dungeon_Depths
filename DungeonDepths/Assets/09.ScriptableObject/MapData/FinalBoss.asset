@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: FinalBoss
   m_EditorClassIdentifier: 
   mapName: "\uCD5C\uC885 \uBCF4\uC2A4"
-  position: {x: -500, y: 0, z: -500}
-  type: 2
+  position: {x: -200, y: 0, z: -500}
+  type: 3
   theme: 0
   difficulty: 3
   totalBoxNum: 0
+  totalMonsterNum: 0
