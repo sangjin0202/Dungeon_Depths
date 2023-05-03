@@ -83,17 +83,17 @@ public abstract class MonsterBase : MonoBehaviour
         sm.AddState((int)eMonsterState.Die, new MonsterState.Die());
         #endregion
     }
-    private void OnEnable()
+
+    protected virtual void Update()
+    {
+        sm.Execute();
+    }
+    public virtual void Init(MapDifficulty _mapDifficulty)
     {
         wayPoints.SetWayPoints();
         sm.InitState(this, sm.GetState((int)eMonsterState.Idle));
         IsDead = false;
     }
-    protected virtual void Update()
-    {
-        sm.Execute();
-    }
-    public abstract void Init(MapDifficulty _mapDifficulty);
     //protected void Attack()
     //{
     //    curTarget.SendMessage("SetTakedDamage", Damage);
