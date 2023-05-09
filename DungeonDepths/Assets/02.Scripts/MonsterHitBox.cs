@@ -15,7 +15,7 @@ public class MonsterHitBox : MonoBehaviour
     {
         if (_other.CompareTag("BlockArea"))
         {
-            if (player.CanCounter)  // 방패 + 카운터 = 스턴
+            if (player.HasCounter)  // 방패 + 카운터 = 스턴
             {
                 //스턴
                 Debug.Log("스턴");

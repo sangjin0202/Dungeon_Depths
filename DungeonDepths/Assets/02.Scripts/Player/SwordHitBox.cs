@@ -13,6 +13,7 @@ public class SwordHitBox : MonoBehaviour
 
     private void OnEnable()
     {
+        if(player.HasSniper) ExpandHitBox();
         StartCoroutine(AutoDisable());
     }
 
@@ -28,16 +29,13 @@ public class SwordHitBox : MonoBehaviour
         //boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         //Debug.Log("칼 공격력 : " + swordDamage);
         this.gameObject.SetActive(false);
-
     }
     private void OnTriggerEnter(Collider other)
     {
-
         layer = 1 << 7;
         //Debug.Log("충돌체: " + other.gameObject.name);
         if(other.CompareTag("Enemy"))
         {
-            //other.GetComponent<MonsterBase>().GetHit(5);
             colliders = Physics.OverlapBox(transform.position, GetComponent<BoxCollider>().size / 2, Quaternion.identity, layer);
 
             foreach(Collider _collider in colliders)
@@ -48,7 +46,7 @@ public class SwordHitBox : MonoBehaviour
                 _collider.SendMessage("GetDamage", swordDamage);
                 if(player.HasPoison)
                     _collider.SendMessage("GetDotDamage");
-                if(player.IsLifeSteal)
+                if(player.HasLifeSteal)
                 {
                     player.HpCur += 5f;
                     if(player.HpCur > 100)
@@ -58,7 +56,7 @@ public class SwordHitBox : MonoBehaviour
         }
         else if(other.CompareTag("Boss"))
         {
-            if(player.BossBonus)
+            if(player.HasBossBonus)
                 swordDamage += 10;
             CheckCritical();
             boss.GetHit(swordDamage);
@@ -78,7 +76,7 @@ public class SwordHitBox : MonoBehaviour
         if(this.gameObject.name == "SwordHitBox") swordDamage = player.AttackPower;
         else if(this.gameObject.name == "Skill1HitBox") swordDamage = player.AttackPower * 5;
         else if(this.gameObject.name == "Skill2HitBox") swordDamage = player.AttackPower * 3;
-        if(Random.Range(0, 10) < 3 && player.Amplify)
+        if(Random.Range(0, 10) < 3 && player.HasAmplify)
             swordDamage *= 2f;
         Debug.Log("칼 데미지" + swordDamage);
     }
