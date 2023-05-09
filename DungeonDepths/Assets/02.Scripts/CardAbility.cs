@@ -11,6 +11,7 @@ using EnumTypes;
 public class AbilityEffect// : AbilityEffect
 {
     float moveSpeedCoefficient = 2f;
+    // 공격속도 15프로 증가
     float attackSpeedCoefficient = 1.15f;
     float attackRangeCoefficient = 1f;
     float attackPowerCoefficient = 10f;
@@ -38,7 +39,7 @@ public class AbilityEffect// : AbilityEffect
                 break;
             case CardID.CARD_FRENZY:
                 _player.animator.SetFloat("AttackSpeed", attackSpeedCoefficient);
-                _player.stateDuration -= 0.2f;
+                _player.attackStateDuration -= _player.attackStateDuration * 0.15f;
                 break;
             case CardID.CARD_SNIPER:
                 //_player.AttackRange += attackRangeCoefficient;

@@ -9,17 +9,29 @@ public class SwordHitBox : MonoBehaviour
     [SerializeField] Collider[] colliders;
     [SerializeField] float swordDamage;
     [SerializeField] PlayerBase player;
+    [SerializeField] TrailRenderer slashEffect;
+    [SerializeField] ParticleSystem quakeEffect;
+    [SerializeField] ParticleSystem stingEffect;
+    [SerializeField] bool isExpanded;
     BoxCollider hitBoxSize;
-
     private void OnEnable()
     {
-        if(player.HasSniper) ExpandHitBox();
+        if(player.HasSniper && !isExpanded)
+        {
+            ExpandHitBox();
+            isExpanded = true;
+        }
+
+        if(this.gameObject.name == "SwordHitBox") slashEffect.enabled = true;
+
         StartCoroutine(AutoDisable());
     }
 
     private void Awake()
     {
+        slashEffect = transform.parent.GetChild(3).GetChild(0).GetChild(1).gameObject.GetComponent<TrailRenderer>();
         hitBoxSize = this.GetComponent<BoxCollider>();
+
         player = GameObject.FindWithTag("Player").GetComponent<PlayerBase>();
         boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         //finalBoss = GameObject.FindWithTag("FinalBoss").GetComponent<FinalBoss>();
@@ -29,6 +41,7 @@ public class SwordHitBox : MonoBehaviour
         //boss = GameObject.FindWithTag("Boss").GetComponent<BossBaseFSM>();
         //Debug.Log("Ä® °ø°Ý·Â : " + swordDamage);
         this.gameObject.SetActive(false);
+        slashEffect.enabled = false;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -90,7 +103,8 @@ public class SwordHitBox : MonoBehaviour
     }
     private IEnumerator AutoDisable()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         gameObject.SetActive(false);
+        slashEffect.enabled = false;
     }
 }

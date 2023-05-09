@@ -69,7 +69,7 @@ public class PlayerBase : MonoBehaviour
     public float afterDodgeSkill { get; set; }
     #endregion
 
-    public float stateDuration { get; set; } // 소드맨 콤보 공격 상태 지속 시간
+    public float attackStateDuration { get; set; } // 소드맨 콤보 공격 상태 지속 시간
     protected Vector3 moveDir;
     public Animator animator;
     public float takedDamage;
