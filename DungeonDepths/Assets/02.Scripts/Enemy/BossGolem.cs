@@ -4,17 +4,20 @@ using UnityEngine;
 using UnityEngine.AI;
 public class BossGolem : BossBaseFSM
 {
-    [HideInInspector] public GameObject MeleeHitBox1;
-    [HideInInspector] public GameObject MeleeHitBox2;
+    [HideInInspector] public GameObject meleeHitBox1;
+    [HideInInspector] public GameObject meleeHitBox2;
+    public GameObject laserHitBox;
     protected override void Awake()
     {
         base.Awake();
         Rbody = GetComponent<Rigidbody>();
-        MeleeHitBox1 = transform.GetChild(2).gameObject;
-        MeleeHitBox2 = transform.GetChild(3).gameObject;
-        MeleeHitBox1.SetActive(false);
-        MeleeHitBox2.SetActive(false); 
-        
+        meleeHitBox1 = transform.GetChild(2).gameObject;
+        meleeHitBox2 = transform.GetChild(3).gameObject;
+        laserHitBox = transform.GetChild(4).gameObject;
+        meleeHitBox1.SetActive(false);
+        meleeHitBox2.SetActive(false);
+        laserHitBox.SetActive(false);
+
         BossMaxHp = 500;
         BossCurHp = BossMaxHp;
         MoveSpeed = 3.5f;
@@ -36,14 +39,18 @@ public class BossGolem : BossBaseFSM
 
     public void OnMeleeAttackOneCollision()
     {
-        MeleeHitBox1.SetActive(true);
+        meleeHitBox1.SetActive(true);
     }
 
     public void OnMeleeAttackTwoCollision()
     {
-        MeleeHitBox2.SetActive(true);
+        meleeHitBox2.SetActive(true);
     }
 
+    public void OnLaserAttackCollision()
+    {
+        laserHitBox.SetActive(true);   
+    }
     public override void GetHit(float _damage)
     {
         BossCurHp -= _damage;
