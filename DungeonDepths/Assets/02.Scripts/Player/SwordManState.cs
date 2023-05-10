@@ -29,20 +29,20 @@ namespace SwordManState
     #region 1타
     class Start : State<PlayerSwordMan>
     {
-        float firstAtkSpeed = 0;
+        float waitingTime = 0;
         public override void Enter(PlayerSwordMan p)
         {
-            firstAtkSpeed = p.stateDuration * 0.7f;
+            waitingTime = p.attackStateDuration * 0.7f;
             p.IsAttack = true;
             p.attackClick = false;
             p.attackIndex = 1;
-            p.stateDuration = 0.7f;
+            //p.attackStateDuration = 0.7f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
-            p.prevAtkTime = Time.time;
+            p.prevAtkTime = Time.time; // 첫 번째 공격을 실행한 시간
         }
         public override void Execute(PlayerSwordMan p)
         {
-            if(Time.time - p.prevAtkTime > firstAtkSpeed || p.moveKeyDown)
+            if(Time.time - p.prevAtkTime > waitingTime || p.moveKeyDown)
             {
                 //Debug.Log("콤보 유지 실패!");
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
@@ -62,22 +62,21 @@ namespace SwordManState
     #region 2타
     class Combo : State<PlayerSwordMan>
     {
-        float comboAtkSpeed = 0;
+        float waitingTime = 0;
         public override void Enter(PlayerSwordMan p)
         {
-            comboAtkSpeed = p.stateDuration; 
+            waitingTime = p.attackStateDuration; 
             p.IsAttack = true;
             p.attackClick = false;
             p.attackIndex = 2;
-            p.stateDuration = 1f;
+            //p.attackStateDuration = 1f;
             p.animator.SetTrigger("Attack" + p.attackIndex);
             p.prevAtkTime = Time.time;
         }
         public override void Execute(PlayerSwordMan p)
         {
-            if(Time.time - p.prevAtkTime > comboAtkSpeed || p.moveKeyDown)
+            if(Time.time - p.prevAtkTime > waitingTime || p.moveKeyDown)
             {
-                //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
             else if(p.attackClick)
@@ -95,10 +94,10 @@ namespace SwordManState
     #region 3타
     class Finish : State<PlayerSwordMan>
     {
-        float finishAtkSpeed = 0;
+        float waitingTime = 0;
         public override void Enter(PlayerSwordMan p)
         {
-            finishAtkSpeed = p.stateDuration * 1.5f;
+            waitingTime = p.attackStateDuration * 1.5f;
             p.IsAttack = true;
             p.attackClick = false;
             p.attackIndex = 3;
@@ -107,10 +106,10 @@ namespace SwordManState
         }
         public override void Execute(PlayerSwordMan p)
         {
-            p.animator.SetFloat("MoveSpeed", 1f);
-            if(Time.time - p.prevAtkTime >= finishAtkSpeed || p.moveKeyDown)
+            //p.animator.SetFloat("MoveSpeed", 1f);
+            //if(Time.time - p.prevAtkTime >= waitingTime || p.moveKeyDown)
+            if(Time.time - p.prevAtkTime > waitingTime || p.moveKeyDown)
             {
-                //p.numOfClicks = 0;
                 p.stateMachine.ChangeState(p.stateMachine.GetState((int)PlayerSwordMan.SwordManStates.None));
             }
         }

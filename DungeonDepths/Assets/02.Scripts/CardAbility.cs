@@ -11,6 +11,7 @@ using EnumTypes;
 public class AbilityEffect// : AbilityEffect
 {
     float moveSpeedCoefficient = 2f;
+    // 공격속도 15프로 증가
     float attackSpeedCoefficient = 1.15f;
     float attackRangeCoefficient = 1f;
     float attackPowerCoefficient = 10f;
@@ -20,7 +21,6 @@ public class AbilityEffect// : AbilityEffect
 
     public bool Explode { get; set; }
     public bool IsExecute { get; set; }
-    
     public bool Sting { get; set; }
     public bool Flash { get; set; }
     public bool Meteor { get; set; }
@@ -38,12 +38,12 @@ public class AbilityEffect// : AbilityEffect
                 _player.MoveSpeed += moveSpeedCoefficient;
                 break;
             case CardID.CARD_FRENZY:
-                //_player.AttackDelay -= attackSpeedCoefficient;
                 _player.animator.SetFloat("AttackSpeed", attackSpeedCoefficient);
-                _player.stateDuration -= 0.2f;
+                _player.attackStateDuration -= _player.attackStateDuration * 0.15f;
                 break;
             case CardID.CARD_SNIPER:
-                _player.AttackRange += attackRangeCoefficient;
+                //_player.AttackRange += attackRangeCoefficient;
+                _player.HasSniper = true;
                 break;
             case CardID.CARD_POWER:
                 _player.AttackPower += attackPowerCoefficient;
@@ -61,35 +61,36 @@ public class AbilityEffect// : AbilityEffect
                 Mathf.Clamp(_player.dodgeSkillCoolDown, 0f, 10f);
                 break;
             case CardID.CARD_REBIRTH:
-                _player.IsRebirth = true;
+                _player.HasRebirth = true;
                 break;
             case CardID.CARD_BARRIER:
                 _player.HasBarrier = 100f;
                 break;
             case CardID.CARD_LIFESTEAL:
-                _player.IsLifeSteal = true;
+                _player.HasLifeSteal = true;
                 break;
             case CardID.CARD_REGEN:
-                _player.IsRegen = true;
+                _player.HasRegen = true;
+                _player.lastHitTimer = Time.time;
                 break;
             case CardID.CARD_BERSERK:
-                _player.IsBerserk = true;
+                _player.HasBerserk = true;
                 break;
             case CardID.CARD_EXPLODE:
                 break;
             case CardID.CARD_EXECUTE:
                 break;
             case CardID.CARD_AMPLIFY:
-                _player.Amplify = true;
+                _player.HasAmplify = true;
                 break;
             case CardID.CARD_BOSS:
-                _player.BossBonus = true;
+                _player.HasBossBonus = true;
                 break;
             case CardID.CARD_POISON:
                 _player.HasPoison = true;
                 break;
             case CardID.CARD_SHIELD:
-                _player.CanCounter = true;
+                _player.HasCounter = true;
                 break;
             case CardID.CARD_EARTHQUAKE:
                 _player.EarthQuake = true;

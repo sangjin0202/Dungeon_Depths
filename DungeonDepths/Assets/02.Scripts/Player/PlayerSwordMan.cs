@@ -16,7 +16,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     [Tooltip("기본 공격 히트 박스")] public GameObject hitBox;
     [Tooltip("스킬1 히트 박스")] public GameObject earthQuakeHitBox;
     [Tooltip("스킬1 히트 박스")] public GameObject stingHitBox;
-    //[HideInInspector] public int numOfClicks;
+    
     public bool attackClick;
 
     [HideInInspector] public float prevAtkTime;
@@ -30,6 +30,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         hitBox = transform.GetChild(7).gameObject;
         earthQuakeHitBox = transform.GetChild(8).gameObject;
         stingHitBox = transform.GetChild(9).gameObject;
+        
         blockArea.SetActive(false);
         GameManager.Instance.CurPlayerClass = EnumTypes.Class.SWORD;
         stateMachine = new StateMachine<PlayerSwordMan>();
@@ -40,13 +41,12 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
 
         stateMachine.InitState(this, stateMachine.GetState((int)SwordManStates.None));
 
+        attackStateDuration = 1.5f;
         HpMax = 100f;
         HpCur = 100f;
         Defense = 3f;
         AttackPower = 10f;
         MoveSpeed += 3.5f;
-        AttackDelay = 1f;
-        AttackRange = 2f;
         jumpPower = 8f;
         possibleJumpNum = 2;
         firstSkillCoolDown = 8f;
@@ -70,13 +70,10 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
     {
         if(GameManager.Instance.IsPause) return;
         base.Update();
-        //Debug.Log("이동 여부 : " + moveKeyDown);
-        //Debug.Log("플레이어의 이동속도 : " + MoveSpeed);
         CheckAttackKey();
         stateMachine.Execute();
         UseSkill();
         Dodge();
-
     }
 
     void CheckAttackKey()
@@ -96,16 +93,6 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
             Attack();
         }
     }
-
-    //public void Attack()
-    //{
-    //    if(numOfClicks == 0)
-    //    {
-    //        stateMachine.ChangeState(stateMachine.GetState((int)SwordManStates.Start));
-    //    }
-    //    numOfClicks++;
-    //    numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
-    //}
     public void Attack()
     {
         base.Awake();
