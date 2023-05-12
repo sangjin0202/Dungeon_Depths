@@ -30,7 +30,7 @@ public abstract class BossBaseFSM : MonoBehaviour
     #endregion
     public bool isDead;
     public float delayTime = 2.5f;
-
+    public Vector3 targetPos; 
     protected void FixedUpdate()
     {
         LayerMask layer = 1 << 8;
@@ -132,6 +132,7 @@ public abstract class BossBaseFSM : MonoBehaviour
             int random = Random.Range(0, 100);
             if(Physics.Raycast(BossTransform.position, BossTransform.forward, out hit, BeamRange) && (hit.collider.CompareTag("Player") || hit.collider.CompareTag("BlockArea")))
             {
+                targetPos = TargetTransform.position;
                 if(random <= 4 && Time.time - PrevAtkTime >= AttackDelay)
                 {
                     stateMachine.ChangeState(stateMachine.GetState((int)BossStates.RangeAttack));

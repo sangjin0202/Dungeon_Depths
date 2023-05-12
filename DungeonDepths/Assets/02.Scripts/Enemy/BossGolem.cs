@@ -6,18 +6,21 @@ public class BossGolem : BossBaseFSM
 {
     [HideInInspector] public GameObject meleeHitBox1;
     [HideInInspector] public GameObject meleeHitBox2;
+
+    public Transform firePos;
+    GameObject missilePrefab;
     public GameObject laserHitBox;
+
     protected override void Awake()
     {
         base.Awake();
+        firePos = transform.GetChild(5).GetComponent<Transform>();
+        missilePrefab = Resources.Load<GameObject>("Prefabs/GolemMissile");
         Rbody = GetComponent<Rigidbody>();
         meleeHitBox1 = transform.GetChild(2).gameObject;
         meleeHitBox2 = transform.GetChild(3).gameObject;
         laserHitBox = transform.GetChild(4).gameObject;
-        meleeHitBox1.SetActive(false);
-        meleeHitBox2.SetActive(false);
-        laserHitBox.SetActive(false);
-
+        
         BossMaxHp = 500;
         BossCurHp = BossMaxHp;
         MoveSpeed = 3.5f;
@@ -33,10 +36,6 @@ public class BossGolem : BossBaseFSM
         BeamRange = 20f;
 
     }
-    private void OnEnable()
-    {
-    }
-
     public void OnMeleeAttackOneCollision()
     {
         meleeHitBox1.SetActive(true);
@@ -50,6 +49,16 @@ public class BossGolem : BossBaseFSM
     public void OnLaserAttackCollision()
     {
         laserHitBox.SetActive(true);   
+    }
+
+    public void OnMissileFire() 
+    {
+        GameObject[] missiles = new GameObject[5];
+        for(int i = 0; i < 5; i++)
+        {
+            missiles[i] = Instantiate(missilePrefab, firePos.position, Quaternion.identity);
+        }
+        
     }
     public override void GetHit(float _damage)
     {

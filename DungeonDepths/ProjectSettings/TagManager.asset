@@ -22,6 +22,7 @@ TagManager:
   - Monster
   - PlayerAA
   - FinalBoss
+  - FX
   layers:
   - Default
   - TransparentFX
@@ -34,7 +35,7 @@ TagManager:
   - Player
   - FinalBoss
   - EnvironmentObject
-  - 
+  - EnemyBullet
   - 
   - 
   - 
