@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b44cd8f2463ed74e8239ea54d599f31, type: 3}
   m_Name: Chomper
   m_EditorClassIdentifier: 
-  maxHP: 150
-  damage: 10
+  maxHP: 80
+  damage: 5
   moveSpeed: 4
   attackSpeed: 2

@@ -18,7 +18,6 @@ public class MonsterStatData : ScriptableObject
         get => maxHP;
         set => maxHP = value;
     }
-
     public float Damage
     {
         get => damage;
