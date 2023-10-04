@@ -9,10 +9,6 @@ public class MapCore : MonoBehaviour
     public bool IsDestroyed { get; private set; }
     [SerializeField]
     private MeshRenderer[] mesh;
-    //TODO 주은. 파괴 이벤트 테스트 중
-    public delegate void EventHandler();
-    //public event EventHandler OnEvent;
-    // 포탈 생성 여기서 하도록
 
     private void OnEnable()	// 활성화될 때 초기화되도록
     {
@@ -50,6 +46,8 @@ public class MapCore : MonoBehaviour
                 Color c = m.material.color;
                 c.a = f;
                 m.material.color = c;
+                Debug.Log("fade out" + m);
+                Debug.Log("fade out" + m);
             }
             yield return new WaitForSeconds(0.1f);
         }

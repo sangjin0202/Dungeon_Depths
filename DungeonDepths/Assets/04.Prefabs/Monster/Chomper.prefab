@@ -2915,8 +2915,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stat: {fileID: 11400000, guid: c136dbc2ff3552940980305d5eb1a60c, type: 2}
-  wayPoints: {fileID: 0}
-  collider: {fileID: 0}
 --- !u!114 &7492458301111057064
 MonoBehaviour:
   m_ObjectHideFlags: 0

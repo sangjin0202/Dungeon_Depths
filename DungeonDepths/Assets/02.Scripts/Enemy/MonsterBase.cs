@@ -11,10 +11,8 @@ public abstract class MonsterBase : MonoBehaviour
     private float curHP;
     private float attackDistance;
     private float traceDistance;
-    private float stopDistance = 0.2f;
     private float rotSpeed = 90f;
     private float searchSpeed = 1f;
-
     public float Damage
     {
         get => damage;
@@ -23,7 +21,7 @@ public abstract class MonsterBase : MonoBehaviour
     public float CurHP
     {
         get => curHP;
-        set => curHP = value;
+        set => curHP = Mathf.Max(0, value);
     }
     public float MaxHP
     {
@@ -41,70 +39,65 @@ public abstract class MonsterBase : MonoBehaviour
         get => attackDistance;
         set => attackDistance = value;
     }
+    public float StopDistance { get; private set; } = 0.2f;
     #endregion
-    public WayPoints wayPoints;
+    private WayPoints wayPoints;
     private GameObject target;
-    protected GameObject curTarget;
+    private GameObject curTarget;
     protected Animator anim;
     protected GameObject hitBox;
-    private  Collider col;
-
-    public Collider Col
-    {
-        get => col;
-    }
+    public WayPoints WayPoints { get => wayPoints; }
+    public GameObject CurTarget { get => curTarget; }
+    public Collider MonsterCollider { get; private set; }
+    public Rigidbody MonsterRigidbody { get; private set; }
     #region state관련 변수
-    public enum eMonsterState { Idle, Patrol, Trace, Attack, Die }
-    private StateMachine<MonsterBase> sm;
-
-    public float PrevTime { get; set; } = 0f;
-    public float IdleTime { get; set; } = 0f;
+    public enum eMonsterStates { Idle, Patrol, Trace, Attack, Die }
+    private StateMachine<MonsterBase> stateMachine;
+    public float PrevIdleTime { get; set; } = 0f;   //idle 상태 시작 시간
+    public float IdleTime { get; set; } = 0f;       //idle 상태 지속 시간
     public float LastAttackTime { get; set; } = 0f;
     public float LastSearchTime { get; set; } = 0f;
-    public Animator Anim
-    {
-        get => anim;
-    }
+    public Animator Anim { get => anim; }
     #endregion
     protected virtual void Awake()
     {
         target = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         wayPoints = GetComponent<WayPoints>();
-        col = GetComponent<Collider>();
+        MonsterCollider = GetComponent<Collider>();
+        MonsterRigidbody = GetComponent<Rigidbody>();
         hitBox = transform.GetChild(0).gameObject;
         hitBox.SetActive(false);
         #region state 설정
-        sm = new StateMachine<MonsterBase>();
-        sm.AddState((int)eMonsterState.Idle, new MonsterState.Idle());
-        sm.AddState((int)eMonsterState.Patrol, new MonsterState.Patrol());
-        sm.AddState((int)eMonsterState.Trace, new MonsterState.Trace());
-        sm.AddState((int)eMonsterState.Attack, new MonsterState.Attack());
-        sm.AddState((int)eMonsterState.Die, new MonsterState.Die());
+        stateMachine = new StateMachine<MonsterBase>();
+        stateMachine.AddState((int)eMonsterStates.Idle, new MonsterState.Idle());
+        stateMachine.AddState((int)eMonsterStates.Patrol, new MonsterState.Patrol());
+        stateMachine.AddState((int)eMonsterStates.Trace, new MonsterState.Trace());
+        stateMachine.AddState((int)eMonsterStates.Attack, new MonsterState.Attack());
+        stateMachine.AddState((int)eMonsterStates.Die, new MonsterState.Die());
         #endregion
     }
-
     protected virtual void Update()
     {
-        sm.Execute();
+        stateMachine.Execute();
     }
     public virtual void Init(MapDifficulty _mapDifficulty)
     {
         wayPoints.SetWayPoints();
-        sm.InitState(this, sm.GetState((int)eMonsterState.Idle));
+        stateMachine.InitState(this, stateMachine.GetState((int)eMonsterStates.Idle));
         IsDead = false;
     }
-    //protected void Attack()
-    //{
-    //    curTarget.SendMessage("SetTakedDamage", Damage);
-    //}
+    public void ChangeState(eMonsterStates _newState)
+    {
+        stateMachine.ChangeState(stateMachine.GetState((int)_newState));
+    }
     public void GetDamage(float _damage)
     {
         CurHP -= _damage;
         if (CurHP <= 0)
         {
             CurHP = 0;
-            sm.ChangeState(sm.GetState((int)eMonsterState.Die));
+            stateMachine.ChangeState(stateMachine.GetState((int)eMonsterStates.Die));
         }
         Debug.Log(CurHP);
     }
@@ -132,56 +125,6 @@ public abstract class MonsterBase : MonoBehaviour
     {
         hitBox.SetActive(false);
     }
-
-    public void CheckIdleState()
-    {
-        if (curTarget != null)
-        {
-            sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
-        }
-        else if (IdleTime >= Random.Range(3f, 5f))
-            sm.ChangeState(sm.GetState((int)eMonsterState.Patrol));
-    }
-    public void CheckPatrolState()
-    {
-        SearchTarget();
-        if (curTarget != null && (CheckRadius(curTarget.transform.position, traceDistance)))
-            sm.ChangeState(sm.GetState((int)eMonsterState.Trace));
-        else if (wayPoints.CheckDestination(stopDistance, transform.position))
-        {
-            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
-        }
-    }
-    public void CheckTraceState()
-    {
-        SearchTarget();
-
-        if (curTarget == null)
-            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
-        else if (CheckRadius(curTarget.transform.position, attackDistance))
-        {
-            sm.ChangeState(sm.GetState((int)eMonsterState.Attack));
-        }
-        else if (CheckRadius(curTarget.transform.position, traceDistance))
-        {
-            MoveAndRotate(curTarget.transform.position);
-        }
-    }
-    public void CheckAttackState()
-    {
-        if (CheckRadius(curTarget.transform.position, attackDistance)) // 공격 거리 체크
-        {
-            if (Time.time > LastAttackTime) // 공격 주기 체크
-            {
-                //ToDo 주은. Player가 Damage받는거 호출해오기
-                Vector3 dir = curTarget.transform.position - transform.position;
-                transform.rotation = Quaternion.LookRotation(dir);
-                LastAttackTime = Time.time + stat.AttackSpeed;
-            }
-        }
-        else
-            sm.ChangeState(sm.GetState((int)eMonsterState.Idle));
-    }
     public void MoveAndRotate(Vector3 _targetPos)
     {
         Vector3 dir = _targetPos - transform.position;
@@ -189,7 +132,7 @@ public abstract class MonsterBase : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotSpeed * Time.deltaTime);
     }
-    bool CheckRadius(Vector3 _targetPoint, float _radius)  //타겟 위치, 비교 거리
+    public bool CheckRadius(Vector3 _targetPoint, float _radius)  //타겟 위치, 비교 거리
     {
         Vector3 dir = _targetPoint - transform.position;
         float radiusSqr = _radius * _radius;        // r^2 : 반경 넓이 비교
