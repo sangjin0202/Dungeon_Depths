@@ -45,7 +45,7 @@ public class PlayerSwordMan : PlayerBase, IPlayerActions
         HpMax = 100f;
         HpCur = 100f;
         Defense = 3f;
-        AttackPower = 10f;
+        AttackPower = 50f;
         MoveSpeed += 3.5f;
         jumpPower = 8f;
         possibleJumpNum = 2;
