@@ -3142,7 +3142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8639041112322403568, guid: 5adc7a27b639b264eaaa63d987c71cd0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.138
+      value: 2.68
       objectReference: {fileID: 0}
     - target: {fileID: 8639041112322403568, guid: 5adc7a27b639b264eaaa63d987c71cd0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3150,7 +3150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8639041112322403568, guid: 5adc7a27b639b264eaaa63d987c71cd0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.728
+      value: -7.53
       objectReference: {fileID: 0}
     - target: {fileID: 8639041112322403568, guid: 5adc7a27b639b264eaaa63d987c71cd0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4508,6 +4508,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 08da63bfa4bb66b44b51b6198915e514, type: 3}
   - {fileID: 21300000, guid: e68b12bfca2eeed47ac521896a754052, type: 3}
   - {fileID: 21300000, guid: 74b1f4e922bc10c44a4cd03a5ae16555, type: 3}
+  mapDifficulty: {fileID: 0}
   buttonList:
   - {fileID: 1771585844}
   - {fileID: 1229985770}
